@@ -1,0 +1,7 @@
+node_modules/
+dist/
+build/
+.dart_tool/
+.ephemeral/
+.flutter-plugins
+.flutter-plugins-dependencies

@@ -1,0 +1,170 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model address {
+  id                   Int          @id @default(autoincrement())
+  user_id              Int
+  name                 String       @db.VarChar(100)
+  street               String       @db.VarChar(255)
+  city                 String       @db.VarChar(100)
+  state                String       @db.VarChar(100)
+  zip_code             String       @db.VarChar(20)
+  country              String       @db.VarChar(100)
+  phone                String       @db.VarChar(50)
+  user                 user         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  order                order[]
+  user_default_address user[]       @relation("user_default_address")
+}
+
+model cart_item {
+  id         Int     @id @default(autoincrement())
+  user_id    Int
+  product_id Int
+  quantity   Int
+  product    product @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user       user    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([user_id, product_id])
+}
+
+model credit_card {
+  id                       Int          @id @default(autoincrement())
+  user_id                  Int
+  card_holder_name         String       @db.VarChar(255)
+  card_number              String       @db.VarChar(30)
+  expiry_date              String       @db.VarChar(10)
+  cvv                      String       @db.VarChar(10)
+  processor                String       @db.VarChar(50)
+  user                     user         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  order                    order[]
+  user_default_credit_card user[]       @relation("user_default_credit_card")
+}
+
+model favorite {
+  user_id    Int
+  product_id Int
+  product    product @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user       user    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([user_id, product_id])
+}
+
+model notification_preference {
+  id            Int     @id @default(autoincrement())
+  user_id       Int     @unique
+  allow_general Boolean @default(true)
+  allow_order   Boolean @default(true)
+  allow_email   Boolean @default(true)
+  user          user    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model order_item {
+  id                Int     @id @default(autoincrement())
+  order_id          Int
+  product_id        Int
+  quantity          Int
+  price_at_purchase Decimal @db.Decimal(10, 2)
+  order             order   @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  product           product @relation(fields: [product_id], references: [id], onUpdate: NoAction)
+}
+
+model order {
+  id                    Int          @id @default(autoincrement())
+  user_id               Int
+  address_id            Int
+  card_id               Int
+  shipping_method       String       @default("Standard") @db.VarChar(100)
+  total_amount          Decimal      @db.Decimal(10, 2)
+  status                String       @default("placed") @db.VarChar(50)
+  date_placed           DateTime     @default(now()) @db.Timestamp(6)
+  date_confirmed        DateTime?    @db.Timestamp(6)
+  date_shipped          DateTime?    @db.Timestamp(6)
+  date_out_for_delivery DateTime?    @db.Timestamp(6)
+  date_delivered        DateTime?    @db.Timestamp(6)
+  order_item            order_item[]
+  address               address      @relation(fields: [address_id], references: [id], onUpdate: NoAction)
+  credit_card           credit_card  @relation(fields: [card_id], references: [id], onUpdate: NoAction)
+  user                  user         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  transaction           transaction[]
+}
+
+model review {
+  id         Int      @id @default(autoincrement())
+  product_id Int
+  user_id    Int
+  rating     Decimal  @db.Decimal(3, 2)
+  comment    String
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  product    product  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user       user     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model transaction {
+  id             Int      @id @default(autoincrement())
+  user_id        Int
+  order_id       Int
+  amount         Decimal  @db.Decimal(10, 2)
+  status         String   @default("success") @db.VarChar(50)
+  payment_method String   @db.VarChar(50)
+  created_at     DateTime @default(now()) @db.Timestamp(6)
+  order          order    @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user           user     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model user {
+  id                       Int                      @id @default(autoincrement())
+  name                     String                   @db.VarChar(255)
+  email                    String                   @unique @db.VarChar(255)
+  phone                    String                   @db.VarChar(50)
+  password                 String                   @db.VarChar(255)
+  image_path               String                   @default("assets/blank_profile_picture.png")
+  default_address_id       Int?
+  default_credit_card_id   Int?
+  address                  address[]
+  cart_item                cart_item[]
+  credit_card              credit_card[]
+  favorite                 favorite[]
+  notification_preference  notification_preference?
+  order                    order[]
+  review                   review[]
+  transaction              transaction[]
+  default_address          address?                 @relation("user_default_address", fields: [default_address_id], references: [id], onUpdate: NoAction)
+  default_credit_card      credit_card?             @relation("user_default_credit_card", fields: [default_credit_card_id], references: [id], onUpdate: NoAction)
+}
+
+model category {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(100)
+  image_path String
+  color      BigInt
+  product    product[]
+}
+
+model product {
+  id                Int          @id @default(autoincrement())
+  category_id       Int
+  name              String       @db.VarChar(255)
+  image_path        String
+  amount            String       @db.VarChar(50)
+  description       String
+  discount          Decimal      @default(0.0) @db.Decimal(5, 2)
+  price             Decimal      @db.Decimal(10, 2)
+  is_new            Boolean      @default(false)
+  free_shipping     Boolean      @default(false)
+  same_day_delivery Boolean      @default(false)
+  color             BigInt
+  stock             Int          @default(0)
+  rating            Decimal      @default(0.0) @db.Decimal(3, 2)
+  cart_item         cart_item[]
+  favorite          favorite[]
+  order_item        order_item[]
+  category          category     @relation(fields: [category_id], references: [id], onUpdate: NoAction)
+  review            review[]
+}

@@ -4,7 +4,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'category_model.g.dart';
 
-@JsonSerializable(converters: [ColorConverter()])
+@JsonSerializable(
+  fieldRename: FieldRename.snake,
+  converters: [ColorConverter()],
+)
 class CategoryModel extends Category {
   CategoryModel({
     required super.name,
@@ -18,14 +21,8 @@ class CategoryModel extends Category {
         color: entity.color,
       );
 
-  factory CategoryModel.fromJson(Map<String, dynamic> json) {
-    // BACKEND INTEGRATION: Support GraphQL field mapping
-    final mapped = Map<String, dynamic>.from(json);
-    if (mapped.containsKey('image_path') && !mapped.containsKey('imagePath')) {
-      mapped['imagePath'] = mapped['image_path'];
-    }
-    return _$CategoryModelFromJson(mapped);
-  }
+  factory CategoryModel.fromJson(Map<String, dynamic> json) =>
+      _$CategoryModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$CategoryModelToJson(this);
 }

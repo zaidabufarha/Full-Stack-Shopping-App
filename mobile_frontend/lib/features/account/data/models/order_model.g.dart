@@ -8,48 +8,42 @@ part of 'order_model.dart';
 
 OrderModel _$OrderModelFromJson(Map<String, dynamic> json) =>
     OrderModel(
-        id: (json['id'] as num?)?.toInt(),
-        productList: (json['productList'] as List<dynamic>)
-            .map(
-              (e) =>
-                  const CartItemConverter().fromJson(e as Map<String, dynamic>),
-            )
-            .toList(),
-        datePlaced: DateTime.parse(json['datePlaced'] as String),
-        shippingAddress: const AddressConverter().fromJson(
-          json['shippingAddress'] as Map<String, dynamic>,
-        ),
-        creditCard: const CreditCardConverter().fromJson(
-          json['creditCard'] as Map<String, dynamic>,
-        ),
-        shippingMethod: json['shippingMethod'] as String,
+        id: json['id'] as String?,
+        orderItem:
+            (json['order_item'] as List<dynamic>?)
+                ?.map(const CartItemConverter().fromJson)
+                .toList() ??
+            const [],
+        createdAt: DateTime.parse(json['created_at'] as String),
+        address: const AddressConverter().fromJson(json['address']),
+        creditCard: const CreditCardConverter().fromJson(json['credit_card']),
+        shippingMethod: json['shipping_method'] as String,
       )
-      ..dateConfirmed = json['dateConfirmed'] == null
+      ..dateConfirmed = json['date_confirmed'] == null
           ? null
-          : DateTime.parse(json['dateConfirmed'] as String)
-      ..dateShipped = json['dateShipped'] == null
+          : DateTime.parse(json['date_confirmed'] as String)
+      ..dateShipped = json['date_shipped'] == null
           ? null
-          : DateTime.parse(json['dateShipped'] as String)
-      ..dateOutForDelivery = json['dateOutForDelivery'] == null
+          : DateTime.parse(json['date_shipped'] as String)
+      ..dateOutForDelivery = json['date_out_for_delivery'] == null
           ? null
-          : DateTime.parse(json['dateOutForDelivery'] as String)
-      ..dateDelivered = json['dateDelivered'] == null
+          : DateTime.parse(json['date_out_for_delivery'] as String)
+      ..dateDelivered = json['date_delivered'] == null
           ? null
-          : DateTime.parse(json['dateDelivered'] as String);
+          : DateTime.parse(json['date_delivered'] as String);
 
-Map<String, dynamic> _$OrderModelToJson(
-  OrderModel instance,
-) => <String, dynamic>{
-  'id': instance.id,
-  'productList': instance.productList
-      .map(const CartItemConverter().toJson)
-      .toList(),
-  'datePlaced': instance.datePlaced.toIso8601String(),
-  'shippingAddress': const AddressConverter().toJson(instance.shippingAddress),
-  'creditCard': const CreditCardConverter().toJson(instance.creditCard),
-  'shippingMethod': instance.shippingMethod,
-  'dateConfirmed': instance.dateConfirmed?.toIso8601String(),
-  'dateShipped': instance.dateShipped?.toIso8601String(),
-  'dateOutForDelivery': instance.dateOutForDelivery?.toIso8601String(),
-  'dateDelivered': instance.dateDelivered?.toIso8601String(),
-};
+Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'order_item': instance.orderItem
+          .map(const CartItemConverter().toJson)
+          .toList(),
+      'address': const AddressConverter().toJson(instance.address),
+      'credit_card': const CreditCardConverter().toJson(instance.creditCard),
+      'shipping_method': instance.shippingMethod,
+      'created_at': instance.createdAt.toIso8601String(),
+      'date_confirmed': instance.dateConfirmed?.toIso8601String(),
+      'date_shipped': instance.dateShipped?.toIso8601String(),
+      'date_out_for_delivery': instance.dateOutForDelivery?.toIso8601String(),
+      'date_delivered': instance.dateDelivered?.toIso8601String(),
+    };

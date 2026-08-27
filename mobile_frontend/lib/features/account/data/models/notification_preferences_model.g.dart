@@ -9,15 +9,15 @@ part of 'notification_preferences_model.dart';
 NotificationPreferencesModel _$NotificationPreferencesModelFromJson(
   Map<String, dynamic> json,
 ) => NotificationPreferencesModel(
-  allowEmail: json['allowEmail'] as bool,
-  allowGeneral: json['allowGeneral'] as bool,
-  allowOrder: json['allowOrder'] as bool,
+  allowEmail: json['allow_email'] as bool,
+  allowGeneral: json['allow_general'] as bool,
+  allowOrder: json['allow_order'] as bool,
 );
 
 Map<String, dynamic> _$NotificationPreferencesModelToJson(
   NotificationPreferencesModel instance,
 ) => <String, dynamic>{
-  'allowGeneral': instance.allowGeneral,
-  'allowOrder': instance.allowOrder,
-  'allowEmail': instance.allowEmail,
+  'allow_general': instance.allowGeneral,
+  'allow_order': instance.allowOrder,
+  'allow_email': instance.allowEmail,
 };

@@ -9,42 +9,29 @@ part of 'user_model.dart';
 UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
   name: json['name'] as String,
   email: json['email'] as String,
-  number: json['number'] as String,
-  password: json['password'] as String,
-  imagePath: json['imagePath'] as String? ?? 'assets/blank_profile_picture.png',
-  defaultAddress: _$JsonConverterFromJson<Map<String, dynamic>, Address>(
-    json['defaultAddress'],
-    const AddressConverter().fromJson,
-  ),
-  creditCardList:
-      (json['creditCardList'] as List<dynamic>?)
-          ?.map(
-            (e) =>
-                const CreditCardConverter().fromJson(e as Map<String, dynamic>),
-          )
+  phone: json['phone'] as String,
+  password: json['password'] as String? ?? '',
+  imagePath:
+      json['image_path'] as String? ?? 'assets/blank_profile_picture.png',
+  defaultAddress: const AddressConverter().fromJson(json['default_address']),
+  creditCard:
+      (json['credit_card'] as List<dynamic>?)
+          ?.map(const CreditCardConverter().fromJson)
           .toList() ??
       const [],
-  addressList:
-      (json['addressList'] as List<dynamic>?)
-          ?.map(
-            (e) => const AddressConverter().fromJson(e as Map<String, dynamic>),
-          )
+  address:
+      (json['address'] as List<dynamic>?)
+          ?.map(const AddressConverter().fromJson)
           .toList() ??
       const [],
-  orderList:
-      (json['orderList'] as List<dynamic>?)
-          ?.map(
-            (e) => const OrderConverter().fromJson(e as Map<String, dynamic>),
-          )
+  order:
+      (json['order'] as List<dynamic>?)
+          ?.map(const OrderConverter().fromJson)
           .toList() ??
       const [],
-  transactionList:
-      (json['transactionList'] as List<dynamic>?)
-          ?.map(
-            (e) => const TransactionConverter().fromJson(
-              e as Map<String, dynamic>,
-            ),
-          )
+  transaction:
+      (json['transaction'] as List<dynamic>?)
+          ?.map(const TransactionConverter().fromJson)
           .toList() ??
       const [],
 );
@@ -52,29 +39,22 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
   'name': instance.name,
   'email': instance.email,
-  'number': instance.number,
+  'phone': instance.phone,
   'password': instance.password,
-  'imagePath': instance.imagePath,
-  'defaultAddress': _$JsonConverterToJson<Map<String, dynamic>, Address>(
+  'image_path': instance.imagePath,
+  'default_address': _$JsonConverterToJson<dynamic, Address>(
     instance.defaultAddress,
     const AddressConverter().toJson,
   ),
-  'creditCardList': instance.creditCardList
+  'credit_card': instance.creditCard
       .map(const CreditCardConverter().toJson)
       .toList(),
-  'addressList': instance.addressList
-      .map(const AddressConverter().toJson)
-      .toList(),
-  'orderList': instance.orderList.map(const OrderConverter().toJson).toList(),
-  'transactionList': instance.transactionList
+  'address': instance.address.map(const AddressConverter().toJson).toList(),
+  'order': instance.order.map(const OrderConverter().toJson).toList(),
+  'transaction': instance.transaction
       .map(const TransactionConverter().toJson)
       .toList(),
 };
-
-Value? _$JsonConverterFromJson<Json, Value>(
-  Object? json,
-  Value? Function(Json json) fromJson,
-) => json == null ? null : fromJson(json as Json);
 
 Json? _$JsonConverterToJson<Json, Value>(
   Value? value,

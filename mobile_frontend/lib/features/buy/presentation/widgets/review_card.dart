@@ -32,7 +32,7 @@ class ReviewCard extends StatelessWidget {
                     style: Fonts.titleBold(),
                   ),
                   Text(
-                    timeago.format(review.timestamp),
+                    timeago.format(review.createdAt),
                     style: Fonts.paragraphMedium(size: 10),
                   ),
                 ],
@@ -61,7 +61,7 @@ class ReviewCard extends StatelessWidget {
             ],
           ),
           Text(
-            review.content,
+            review.comment,
             style: Fonts.paragraphMedium(),
           ),
         ],

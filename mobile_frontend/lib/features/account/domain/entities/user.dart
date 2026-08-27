@@ -6,24 +6,25 @@ import 'package:big_cart/features/account/domain/entities/transaction.dart';
 class User {
   String name;
   String email;
-  String number;
+  String phone;
   String password;
   String imagePath;
   Address? defaultAddress;
-  List<CreditCard> creditCardList;
-  List<Address> addressList;
-  List<Order> orderList;
-  List<Transaction> transactionList;
+  List<CreditCard> creditCard;
+  List<Address> address;
+  List<Order> order;
+  List<Transaction> transaction;
+
   User({
     required this.name,
     required this.email,
-    required this.number,
-    required this.password,
+    required this.phone,
+    this.password = '',
     this.imagePath = 'assets/blank_profile_picture.png',
     this.defaultAddress,
-    this.creditCardList = const [],
-    this.addressList = const [],
-    this.orderList = const [],
-    this.transactionList = const [],
+    this.creditCard = const [],
+    this.address = const [],
+    this.order = const [],
+    this.transaction = const [],
   });
 }

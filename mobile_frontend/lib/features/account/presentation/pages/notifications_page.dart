@@ -1,7 +1,6 @@
 import 'package:big_cart/core/colors.dart';
 import 'package:big_cart/core/fonts.dart';
 import 'package:big_cart/core/widgets/green_gradient_button.dart';
-import 'package:big_cart/features/account/domain/entities/notification_preferences.dart';
 import 'package:big_cart/features/account/presentation/cubit/cubit/user_cubit.dart';
 import 'package:big_cart/features/account/presentation/widgets/green_switch_list_tile.dart';
 import 'package:flutter/material.dart';

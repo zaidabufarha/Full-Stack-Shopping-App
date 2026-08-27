@@ -35,6 +35,6 @@ class EmptyCacheFailure extends Failure {
   EmptyCacheFailure([super.message = 'User session not found']);
 }
 
-// class ServerFailure extends Failure {
-//   ServerFailure([super.message = 'Something went wrong, try again later']);
-// }
+class ServerFailure extends Failure {
+  ServerFailure([super.message = 'Something went wrong, try again later']);
+}

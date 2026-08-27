@@ -16,7 +16,8 @@ class Product {
   bool sameDayDelivery;
   Category category;
   Color color;
-  List<Review> reviewList;
+  List<Review> review;
+
   Product({
     required this.id,
     required this.name,
@@ -26,10 +27,10 @@ class Product {
     required this.discount,
     required this.price,
     required this.isNew,
-    required this.isFavorite,
+    this.isFavorite = false,
     required this.category,
     required this.color,
-    required this.reviewList,
+    this.review = const [],
     this.sameDayDelivery = false,
     this.freeShipping = false,
   });

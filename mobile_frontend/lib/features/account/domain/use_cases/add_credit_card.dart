@@ -15,7 +15,7 @@ class AddCreditCard {
     required String expiration,
     required String cvv,
     required bool saveCard,
-    required paymentProccessor proccessor,
+    required PaymentProcessor processor,
   }) async {
     return await accountRepository.addCreditCard(
       name: name,
@@ -23,7 +23,7 @@ class AddCreditCard {
       expiration: expiration,
       cvv: cvv,
       saveCard: saveCard,
-      proccessor: proccessor,
+      processor: processor,
     );
   }
 }

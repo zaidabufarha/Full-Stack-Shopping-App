@@ -21,19 +21,19 @@ class AddressCard extends StatefulWidget {
 class _AddressCardState extends State<AddressCard> {
   bool isClosed = true;
   late String name;
-  late String address;
+  late String street;
   late String city;
-  late String zip;
+  late String zipCode;
   late String country;
-  late String number;
+  late String phone;
   @override
   void initState() {
     name = widget.address.name;
-    address = widget.address.address;
+    street = widget.address.street;
     city = widget.address.city;
-    zip = widget.address.zip;
+    zipCode = widget.address.zipCode;
     country = widget.address.country;
-    number = widget.address.number;
+    phone = widget.address.phone;
     super.initState();
   }
 
@@ -84,15 +84,15 @@ class _AddressCardState extends State<AddressCard> {
                       style: Fonts.titleBold(),
                     ),
                     Text(
-                      address,
+                      street,
                       style: Fonts.paragraphRegular(size: 12),
                     ),
                     Text(
-                      '$city, $country $zip',
+                      '$city, $country $zipCode',
                       style: Fonts.paragraphRegular(size: 12),
                     ),
                     Text(
-                      number,
+                      phone,
                       style: Fonts.titleBold(size: 12),
                     ),
                   ],
@@ -157,11 +157,11 @@ class _AddressCardState extends State<AddressCard> {
                           widget.onChanged(
                             Address(
                               name: name,
-                              address: address,
+                              street: street,
                               city: city,
                               country: country,
-                              number: number,
-                              zip: zip,
+                              phone: phone,
+                              zipCode: zipCode,
                               id: widget.address.id,
                               isDefault: widget.address.isDefault,
                             ),
@@ -169,7 +169,7 @@ class _AddressCardState extends State<AddressCard> {
                         },
                       ),
                       TextFormField(
-                        initialValue: widget.address.address,
+                        initialValue: widget.address.street,
 
                         decoration: InputDecoration(
                           filled: true,
@@ -194,15 +194,15 @@ class _AddressCardState extends State<AddressCard> {
                           }
                         },
                         onSaved: (newValue) {
-                          address = newValue!;
+                          street = newValue!;
                           widget.onChanged(
                             Address(
                               name: name,
-                              address: address,
+                              street: street,
                               city: city,
                               country: country,
-                              number: number,
-                              zip: zip,
+                              phone: phone,
+                              zipCode: zipCode,
                               id: widget.address.id,
                               isDefault: widget.address.isDefault,
                             ),
@@ -244,11 +244,11 @@ class _AddressCardState extends State<AddressCard> {
                                 widget.onChanged(
                                   Address(
                                     name: name,
-                                    address: address,
+                                    street: street,
                                     city: city,
                                     country: country,
-                                    number: number,
-                                    zip: zip,
+                                    phone: phone,
+                                    zipCode: zipCode,
                                     id: widget.address.id,
                                     isDefault: widget.address.isDefault,
                                   ),
@@ -258,7 +258,7 @@ class _AddressCardState extends State<AddressCard> {
                           ),
                           Expanded(
                             child: TextFormField(
-                              initialValue: widget.address.zip,
+                              initialValue: widget.address.zipCode,
 
                               decoration: InputDecoration(
                                 filled: true,
@@ -283,15 +283,15 @@ class _AddressCardState extends State<AddressCard> {
                                 }
                               },
                               onSaved: (newValue) {
-                                zip = newValue!;
+                                zipCode = newValue!;
                                 widget.onChanged(
                                   Address(
                                     name: name,
-                                    address: address,
+                                    street: street,
                                     city: city,
                                     country: country,
-                                    number: number,
-                                    zip: zip,
+                                    phone: phone,
+                                    zipCode: zipCode,
                                     id: widget.address.id,
                                     isDefault: widget.address.isDefault,
                                   ),
@@ -343,7 +343,7 @@ class _AddressCardState extends State<AddressCard> {
                         ),
                       ),
                       TextFormField(
-                        initialValue: widget.address.number,
+                        initialValue: widget.address.phone,
 
                         decoration: InputDecoration(
                           filled: true,
@@ -368,15 +368,15 @@ class _AddressCardState extends State<AddressCard> {
                           }
                         },
                         onSaved: (newValue) {
-                          number = newValue!;
+                          phone = newValue!;
                           widget.onChanged(
                             Address(
                               name: name,
-                              address: address,
+                              street: street,
                               city: city,
                               country: country,
-                              number: number,
-                              zip: zip,
+                              phone: phone,
+                              zipCode: zipCode,
                               id: widget.address.id,
                               isDefault: widget.address.isDefault,
                             ),
@@ -416,11 +416,11 @@ class _AddressCardState extends State<AddressCard> {
                                   widget.onChanged(
                                     Address(
                                       name: name,
-                                      address: address,
+                                      street: street,
                                       city: city,
                                       country: country,
-                                      number: number,
-                                      zip: zip,
+                                      phone: phone,
+                                      zipCode: zipCode,
                                       id: widget.address.id,
                                       isDefault: val,
                                     ),

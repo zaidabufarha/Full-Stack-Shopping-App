@@ -34,9 +34,9 @@ class _AddCreditCardPageState extends State<AddCreditCardPage> {
           expiration: expiration,
           cvv: cvv,
           saveCard: saveCard,
-          proccessor: (cardNumber.startsWith('4'))
-              ? paymentProccessor.visa
-              : paymentProccessor.mastercard,
+          processor: (cardNumber.startsWith('4'))
+              ? PaymentProcessor.visa
+              : PaymentProcessor.mastercard,
         );
       }
     }

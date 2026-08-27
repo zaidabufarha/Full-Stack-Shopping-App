@@ -27,7 +27,7 @@ abstract class AccountRemoteDataSource {
     required String expiration,
     required String cvv,
     required bool saveCard,
-    required paymentProccessor proccessor,
+    required PaymentProcessor processor,
   });
   Future<void> updateCreditCard(CreditCardModel card);
 
@@ -115,7 +115,7 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
     required String expiration,
     required String cvv,
     required bool saveCard,
-    required paymentProccessor proccessor,
+    required PaymentProcessor processor,
   }) async {
     const mutation = r'''
       mutation AddCard($input: CardInput!) {
@@ -133,7 +133,7 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
             'card_number': cardNumber,
             'expiry_date': expiration,
             'cvv': cvv,
-            'processor': proccessor.name,
+            'processor': processor.name,
             'is_default': saveCard,
           },
         },
@@ -514,12 +514,12 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
             'id': address.id,
             'input': {
               'name': address.name,
-              'street': address.address,
+              'street': address.street,
               'city': address.city,
               'state': address.city,
-              'zip_code': address.zip,
+              'zip_code': address.zipCode,
               'country': address.country,
-              'phone': address.number,
+              'phone': address.phone,
               'is_default': address.isDefault,
             },
           },

@@ -45,7 +45,7 @@ class DioConsumer implements ApiConsumer {
         '/graphql',
         data: {
           'query': query,
-          if (variables != null) 'variables': variables,
+          'variables': ?variables,
         },
       );
       final data = response.data;

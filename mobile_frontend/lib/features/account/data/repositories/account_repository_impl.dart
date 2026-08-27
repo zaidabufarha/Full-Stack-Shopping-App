@@ -58,7 +58,7 @@ class AccountRepositoryImpl implements AccountRepository {
     required String expiration,
     required String cvv,
     required bool saveCard,
-    required paymentProccessor proccessor,
+    required PaymentProcessor processor,
   }) async {
     try {
       await accountRemoteDataSource.addCreditCard(
@@ -67,7 +67,7 @@ class AccountRepositoryImpl implements AccountRepository {
         expiration: expiration,
         cvv: cvv,
         saveCard: saveCard,
-        proccessor: proccessor,
+        processor: processor,
       );
       return Right(unit);
     } on NoInternetException {
@@ -196,11 +196,11 @@ class AccountRepositoryImpl implements AccountRepository {
       final addressModel = AddressModel(
         id: address.id,
         name: address.name,
-        address: address.address,
+        street: address.street,
         city: address.city,
         country: address.country,
-        number: address.number,
-        zip: address.zip,
+        phone: address.phone,
+        zipCode: address.zipCode,
         isDefault: address.isDefault,
       );
       await accountRemoteDataSource.updateAddress(addressModel);
@@ -217,11 +217,11 @@ class AccountRepositoryImpl implements AccountRepository {
     try {
       final cardModel = CreditCardModel(
         id: card.id,
-        name: card.name,
+        cardHolderName: card.cardHolderName,
         cardNumber: card.cardNumber,
         expiryDate: card.expiryDate,
         cvv: card.cvv,
-        proccessor: card.proccessor,
+        processor: card.processor,
         isDefault: card.isDefault,
       );
       await accountRemoteDataSource.updateCreditCard(cardModel);

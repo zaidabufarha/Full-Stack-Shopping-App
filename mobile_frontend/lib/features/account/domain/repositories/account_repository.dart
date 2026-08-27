@@ -23,7 +23,7 @@ abstract class AccountRepository {
     required String expiration,
     required String cvv,
     required bool saveCard,
-    required paymentProccessor proccessor,
+    required PaymentProcessor processor,
   });
   Future<Either<Failure, Unit>> updateCreditCard(CreditCard card);
 

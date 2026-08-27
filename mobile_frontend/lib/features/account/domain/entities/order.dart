@@ -3,12 +3,12 @@ import 'package:big_cart/features/account/domain/entities/credit_card.dart';
 import 'package:big_cart/features/buy/domain/entities/cart_item.dart';
 
 class Order {
-  int? id;
-  List<CartItem> productList;
-  DateTime datePlaced;
-  Address shippingAddress;
+  String? id;
+  List<CartItem> orderItem;
+  Address address;
   CreditCard creditCard;
   String shippingMethod;
+  DateTime createdAt;
   DateTime? dateConfirmed;
   DateTime? dateShipped;
   DateTime? dateOutForDelivery;
@@ -16,11 +16,11 @@ class Order {
 
   Order({
     this.id,
-    required this.productList,
-    required this.datePlaced,
-    required this.shippingAddress,
+    required this.orderItem,
+    required this.address,
     required this.creditCard,
     required this.shippingMethod,
+    required this.createdAt,
     this.dateConfirmed,
     this.dateDelivered,
     this.dateOutForDelivery,

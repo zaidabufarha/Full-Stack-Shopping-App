@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-class ColorConverter implements JsonConverter<Color, int> {
+class ColorConverter implements JsonConverter<Color, dynamic> {
   const ColorConverter();
 
-  //cant directly add json serializable to built in types like color
+  @override
+  Color fromJson(dynamic json) {
+    if (json is int) return Color(json);
+    if (json is num) return Color(json.toInt());
+    if (json is String) {
+      final parsed = int.tryParse(json);
+      if (parsed != null) return Color(parsed);
+    }
+    return const Color(0xFF4CAF50);
+  }
 
   @override
-  Color fromJson(int json) => Color(json);
-
-  @override
-  int toJson(Color object) => object.toARGB32();
+  dynamic toJson(Color object) => object.toARGB32();
 }

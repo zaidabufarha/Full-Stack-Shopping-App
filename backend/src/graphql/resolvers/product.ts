@@ -26,7 +26,7 @@ export default {
         return cat;
     },
 
-    products: async function ({ filter }: { filter?: ProductFilterInput }) {
+    products: async function ({ filter }: { filter?: ProductFilterInput }, req: any) {
         const where: any = {};
         if (filter) {
             if (filter.category_id) where.category_id = +filter.category_id;
@@ -42,17 +42,28 @@ export default {
             if (filter.same_day_delivery_only) where.same_day_delivery = true;
         }
 
-        return await prisma.product.findMany({
+        const list = await prisma.product.findMany({
             where,
             take: filter?.limit,
-            skip: filter?.offset
+            skip: filter?.offset,
+            include: {
+                favorite: req?.isAuth && req?.id ? { where: { user_id: req.id } } : false
+            }
         });
+
+        return list.map((p: any) => ({
+            ...p,
+            is_favorite: Boolean(p.favorite && p.favorite.length > 0)
+        }));
     },
 
-    product: async function ({ id }: { id: string }) {
+    product: async function ({ id }: { id: string }, req: any) {
         const prod = await prisma.product.findUnique({
             where: { id: +id },
-            include: { category: true }
+            include: {
+                category: true,
+                favorite: req?.isAuth && req?.id ? { where: { user_id: req.id } } : false
+            }
         });
         if (!prod) {
             const err: HttpError = new Error('Product not found');
@@ -61,6 +72,7 @@ export default {
         }
         return {
             ...prod,
+            is_favorite: Boolean((prod as any).favorite && (prod as any).favorite.length > 0),
             review: () => prisma.review.findMany({ where: { product_id: +id } })
         };
     },

@@ -54,6 +54,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(WrongPasswordFailure());
     } on NoInternetException {
       return Left(NoInternetFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -66,6 +68,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(InvalidEmailFailure());
     } on NoInternetException {
       return Left(NoInternetFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -88,6 +92,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(InvalidNumberFailure());
     } on NoInternetException {
       return Left(NoInternetFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -103,7 +109,7 @@ class AuthRepositoryImpl implements AuthRepository {
       User newUser = User(
         name: 'User',
         email: email,
-        number: number,
+        phone: number,
         password: password,
       );
       return Right(newUser);
@@ -119,7 +125,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final userModel = UserModel(
       name: user.name,
       email: user.email,
-      number: user.number,
+      phone: user.phone,
       password: user.password,
     );
     await authLocalDataSource.cacheUser(userModel);
@@ -142,17 +148,17 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> saveCredentials(String email, String password) async {
-    await authLocalDataSource.saveCredentials(email, password);
+  Future<void> saveEmail(String email) async {
+    await authLocalDataSource.saveEmail(email);
   }
 
   @override
-  Future<Map<String, String>?> getSavedCredentials() async {
-    return await authLocalDataSource.getSavedCredentials();
+  Future<String?> getSavedEmail() async {
+    return await authLocalDataSource.getSavedEmail();
   }
 
   @override
-  Future<void> clearCredentials() async {
-    await authLocalDataSource.clearCredentials();
+  Future<void> clearSavedEmail() async {
+    await authLocalDataSource.clearSavedEmail();
   }
 }

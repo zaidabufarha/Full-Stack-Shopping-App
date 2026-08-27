@@ -2,7 +2,7 @@
   "prod_1": {
     "id": "prod_1",
     "name": "Fresh Peach",
-    "imagePath": "assets/peach.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/peach.png",
     "amount": "dozen",
     "description": "Sweet and juicy fresh peaches.",
     "discount": 0.0,
@@ -14,7 +14,7 @@
     "color": 4294954689,
     "category": {
       "name": "Vegetables",
-      "imagePath": "assets/vegetable.png",
+      "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/vegetable.png",
       "color": 4284524419
     },
     "reviewList": []
@@ -22,7 +22,7 @@
   "prod_2": {
     "id": "prod_2",
     "name": "Avacodo",
-    "imagePath": "assets/avocado.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/avocado.png",
     "amount": "2.0 lbs",
     "description": "Fresh and creamy organic avocados.",
     "discount": 0.0,
@@ -34,7 +34,7 @@
     "color": 4294770649,
     "category": {
       "name": "Vegetables",
-      "imagePath": "assets/vegetable.png",
+      "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/vegetable.png",
       "color": 4284524419
     },
     "reviewList": []
@@ -42,7 +42,7 @@
   "prod_3": {
     "id": "prod_3",
     "name": "Pineapple",
-    "imagePath": "assets/pineapple.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/pineapple.png",
     "amount": "1.50 lbs",
     "description": "Sweet, tropical gold pineapples.",
     "discount": 0.0,
@@ -54,7 +54,7 @@
     "color": 4294960834,
     "category": {
       "name": "Vegetables",
-      "imagePath": "assets/vegetable.png",
+      "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/vegetable.png",
       "color": 4284524419
     },
     "reviewList": []
@@ -62,7 +62,7 @@
   "prod_4": {
     "id": "prod_4",
     "name": "Black Grapes",
-    "imagePath": "assets/grapes.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/grapes.png",
     "amount": "5.0 lbs",
     "description": "Fresh, sweet seedless black grapes.",
     "discount": 16.0,
@@ -74,7 +74,7 @@
     "color": 4294894061,
     "category": {
       "name": "Vegetables",
-      "imagePath": "assets/vegetable.png",
+      "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/vegetable.png",
       "color": 4284524419
     },
     "reviewList": []
@@ -82,7 +82,7 @@
   "prod_5": {
     "id": "prod_5",
     "name": "Pomegranate",
-    "imagePath": "assets/pomegranate.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/pomegranate.png",
     "amount": "1.50 lbs",
     "description": "Delicious and antioxidant-rich fresh pomegranates.",
     "discount": 0.0,
@@ -94,7 +94,7 @@
     "color": 4294959586,
     "category": {
       "name": "Vegetables",
-      "imagePath": "assets/vegetable.png",
+      "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/vegetable.png",
       "color": 4284524419
     },
     "reviewList": []
@@ -102,7 +102,7 @@
   "prod_6": {
     "id": "prod_6",
     "name": "Fresh Broccoli",
-    "imagePath": "assets/broccoli.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/broccoli.png",
     "amount": "1 kg",
     "description": "Nutritious and fresh organic broccoli heads.",
     "discount": 0.0,
@@ -114,7 +114,7 @@
     "color": 4291952592,
     "category": {
       "name": "Vegetables",
-      "imagePath": "assets/vegetable.png",
+      "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/vegetable.png",
       "color": 4284524419
     },
     "reviewList": []

@@ -64,7 +64,7 @@ class AuthCubit extends Cubit<AuthState> {
       user,
     ) async {
       if (remember) {
-        await saveCredentials.call(email, password);
+        await saveCredentials.call(email);
       } else {
         await clearCredentials.call();
       }
@@ -112,11 +112,25 @@ class AuthCubit extends Cubit<AuthState> {
     );
     result.fold(
       (failure) => emit(AuthState.error(failure.message)),
-      (user) => emit(AuthState.success(user)),
+      (user) async {
+        final loginRes = await logIn.call(
+          email: email,
+          password: password,
+          remember: true,
+        );
+        loginRes.fold(
+          (failure) => emit(AuthState.error(failure.message)),
+          (loggedInUser) async {
+            await cacheUser.call(loggedInUser);
+            emit(AuthState.success(loggedInUser));
+          },
+        );
+      },
     );
   }
 
   void userForgotPassword(String email) async {
+    emit(AuthState.loading());
     final result = await forgotPassword.call(email: email);
     result.fold(
       (failure) => emit(AuthState.error(failure.message)),
@@ -132,13 +146,11 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> attemptGetSavedCredentials() async {
     emit(AuthState.loading());
-    final result = await getSavedCredentials.call();
-    if (result == null) {
+    final email = await getSavedCredentials.call();
+    if (email == null) {
       emit(AuthState.initial());
     } else {
-      emit(
-        AuthState.loadedCredentials(result.values.first, result.values.last),
-      );
+      emit(AuthState.loadedEmail(email));
     }
   }
 }

@@ -27,9 +27,9 @@ class TransactionCard extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
-                    (transaction.proccessor == paymentProccessor.mastercard)
+                    (transaction.paymentMethod == PaymentProcessor.mastercard)
                         ? 'assets/mastercard.png'
-                        : (transaction.proccessor == paymentProccessor.visa)
+                        : (transaction.paymentMethod == PaymentProcessor.visa)
                         ? 'assets/visa.png'
                         : 'assets/paypal.png',
                   ),
@@ -43,9 +43,9 @@ class TransactionCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                (transaction.proccessor == paymentProccessor.mastercard)
+                (transaction.paymentMethod == PaymentProcessor.mastercard)
                     ? 'Master Card'
-                    : (transaction.proccessor == paymentProccessor.visa)
+                    : (transaction.paymentMethod == PaymentProcessor.visa)
                     ? 'Visa'
                     : 'Paypal',
                 style: Fonts.titleBold(),
@@ -60,7 +60,7 @@ class TransactionCard extends StatelessWidget {
             width: 40.w,
           ),
           Text(
-            '\$${transaction.cost}',
+            '\$${transaction.amount}',
             style: Fonts.titleBold().copyWith(
               color: AppColors.primaryDark,
             ),

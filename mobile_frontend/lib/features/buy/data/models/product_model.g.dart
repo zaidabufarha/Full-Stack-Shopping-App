@@ -10,43 +10,38 @@ ProductModel _$ProductModelFromJson(Map<String, dynamic> json) =>
     ProductModel(
         id: json['id'] as String,
         name: json['name'] as String,
-        imagePath: json['imagePath'] as String,
+        imagePath: json['image_path'] as String,
         amount: json['amount'] as String,
         description: json['description'] as String,
         discount: (json['discount'] as num).toDouble(),
         price: (json['price'] as num).toDouble(),
-        isNew: json['isNew'] as bool,
-        isFavorite: json['isFavorite'] as bool,
-        category: const CategoryConverter().fromJson(
-          json['category'] as Map<String, dynamic>,
-        ),
-        color: const ColorConverter().fromJson((json['color'] as num).toInt()),
-        reviewList: (json['reviewList'] as List<dynamic>)
-            .map(
-              (e) =>
-                  const ReviewConverter().fromJson(e as Map<String, dynamic>),
-            )
-            .toList(),
+        isNew: json['is_new'] as bool,
+        isFavorite: json['is_favorite'] as bool? ?? false,
+        category: const CategoryConverter().fromJson(json['category']),
+        color: const ColorConverter().fromJson(json['color']),
+        review:
+            (json['review'] as List<dynamic>?)
+                ?.map(const ReviewConverter().fromJson)
+                .toList() ??
+            const [],
       )
-      ..freeShipping = json['freeShipping'] as bool
-      ..sameDayDelivery = json['sameDayDelivery'] as bool;
+      ..freeShipping = json['free_shipping'] as bool
+      ..sameDayDelivery = json['same_day_delivery'] as bool;
 
 Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'imagePath': instance.imagePath,
+      'image_path': instance.imagePath,
       'amount': instance.amount,
       'description': instance.description,
       'discount': instance.discount,
       'price': instance.price,
-      'isNew': instance.isNew,
-      'isFavorite': instance.isFavorite,
-      'freeShipping': instance.freeShipping,
-      'sameDayDelivery': instance.sameDayDelivery,
+      'is_new': instance.isNew,
+      'is_favorite': instance.isFavorite,
+      'free_shipping': instance.freeShipping,
+      'same_day_delivery': instance.sameDayDelivery,
       'category': const CategoryConverter().toJson(instance.category),
       'color': const ColorConverter().toJson(instance.color),
-      'reviewList': instance.reviewList
-          .map(const ReviewConverter().toJson)
-          .toList(),
+      'review': instance.review.map(const ReviewConverter().toJson).toList(),
     };

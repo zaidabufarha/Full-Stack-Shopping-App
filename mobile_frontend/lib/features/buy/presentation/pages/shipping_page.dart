@@ -17,7 +17,6 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
-import 'package:flutter_svg/svg.dart';
 
 class ShippingPage extends StatefulWidget {
   final List<CartItem> list;
@@ -66,11 +65,11 @@ class _ShippingPageState extends State<ShippingPage> {
             formKey.currentState!.save();
             address = Address(
               name: addressName,
-              address: addressAddress,
+              street: addressAddress,
               city: addressCity,
               country: addressCountry,
-              number: addressNumber,
-              zip: addressZip,
+              phone: addressNumber,
+              zipCode: addressZip,
             );
             step++;
             if (addressSave) {
@@ -91,13 +90,13 @@ class _ShippingPageState extends State<ShippingPage> {
             if (isValid) {
               formKey.currentState!.save();
               creditCard = CreditCard(
-                name: creditCardName,
+                cardHolderName: creditCardName,
                 cardNumber: creditCardNumber,
                 expiryDate: creditCardExpiration,
                 cvv: creditCardCVV,
-                proccessor: (creditCardNumber.startsWith('4')
-                    ? paymentProccessor.mastercard
-                    : paymentProccessor.visa),
+                processor: (creditCardNumber.startsWith('4')
+                    ? PaymentProcessor.mastercard
+                    : PaymentProcessor.visa),
               );
               if (creditCardSave) {
                 context.read<CardsCubit>().attemptAddCreditCard(
@@ -106,15 +105,15 @@ class _ShippingPageState extends State<ShippingPage> {
                   expiration: creditCardExpiration,
                   cvv: creditCardCVV,
                   saveCard: false,
-                  proccessor: (creditCardNumber.startsWith('4')
-                      ? paymentProccessor.visa
-                      : paymentProccessor.mastercard),
+                  processor: (creditCardNumber.startsWith('4')
+                      ? PaymentProcessor.visa
+                      : PaymentProcessor.mastercard),
                 );
               }
               order = Order(
-                productList: widget.list,
-                datePlaced: DateTime.now(),
-                shippingAddress: address,
+                orderItem: widget.list,
+                createdAt: DateTime.now(),
+                address: address,
                 creditCard: creditCard,
                 shippingMethod: selectedShippingMethod,
               );

@@ -1,13 +1,13 @@
-enum paymentProccessor { mastercard, paypal, visa }
+enum PaymentProcessor { mastercard, paypal, visa }
 
 class Transaction {
-  double cost;
-  DateTime timestamp;
-  paymentProccessor proccessor;
+  double amount;
+  DateTime createdAt;
+  PaymentProcessor paymentMethod;
 
   Transaction({
-    required this.cost,
-    required this.timestamp,
-    required this.proccessor,
+    required this.amount,
+    required this.createdAt,
+    required this.paymentMethod,
   });
 }

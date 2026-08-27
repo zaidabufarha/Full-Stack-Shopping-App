@@ -9,27 +9,21 @@ part of 'credit_card_model.dart';
 CreditCardModel _$CreditCardModelFromJson(Map<String, dynamic> json) =>
     CreditCardModel(
       id: json['id'] as String?,
-      name: json['name'] as String,
-      cardNumber: json['cardNumber'] as String,
-      expiryDate: json['expiryDate'] as String,
+      cardHolderName: json['card_holder_name'] as String,
+      cardNumber: json['card_number'] as String,
+      expiryDate: json['expiry_date'] as String,
       cvv: json['cvv'] as String,
-      proccessor: $enumDecode(_$paymentProccessorEnumMap, json['proccessor']),
-      isDefault: json['isDefault'] as bool? ?? false,
+      processor: const PaymentProcessorConverter().fromJson(json['processor']),
+      isDefault: json['is_default'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$CreditCardModelToJson(CreditCardModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'name': instance.name,
-      'cardNumber': instance.cardNumber,
-      'expiryDate': instance.expiryDate,
+      'card_holder_name': instance.cardHolderName,
+      'card_number': instance.cardNumber,
+      'expiry_date': instance.expiryDate,
       'cvv': instance.cvv,
-      'proccessor': _$paymentProccessorEnumMap[instance.proccessor]!,
-      'isDefault': instance.isDefault,
+      'processor': const PaymentProcessorConverter().toJson(instance.processor),
+      'is_default': instance.isDefault,
     };
-
-const _$paymentProccessorEnumMap = {
-  paymentProccessor.mastercard: 'mastercard',
-  paymentProccessor.paypal: 'paypal',
-  paymentProccessor.visa: 'visa',
-};

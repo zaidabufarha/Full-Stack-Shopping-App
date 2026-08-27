@@ -16,92 +16,166 @@ import 'package:big_cart/features/buy/domain/entities/cart_item.dart';
 import 'package:big_cart/features/buy/domain/entities/category.dart';
 import 'package:big_cart/features/buy/domain/entities/product.dart';
 import 'package:big_cart/features/buy/domain/entities/review.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-class CartItemConverter
-    implements JsonConverter<CartItem, Map<String, dynamic>> {
-  const CartItemConverter();
-  @override
-  CartItem fromJson(Map<String, dynamic> json) => CartItemModel.fromJson(json);
-  @override
-  Map<String, dynamic> toJson(CartItem object) =>
-      (object as CartItemModel).toJson();
-}
-
-class AddressConverter
-    implements JsonConverter<Address, Map<String, dynamic>> {
+class AddressConverter implements JsonConverter<Address, dynamic> {
   const AddressConverter();
   @override
-  Address fromJson(Map<String, dynamic> json) => AddressModel.fromJson(json);
+  Address fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) return AddressModel.fromJson(json);
+    if (json is Map) return AddressModel.fromJson(Map<String, dynamic>.from(json));
+    return AddressModel(name: '', street: '', city: '', country: '', phone: '', zipCode: '');
+  }
   @override
-  Map<String, dynamic> toJson(Address object) =>
-      AddressModel.fromEntity(object).toJson();
+  dynamic toJson(Address object) => (object as AddressModel).toJson();
 }
 
-class CreditCardConverter
-    implements JsonConverter<CreditCard, Map<String, dynamic>> {
+class CreditCardConverter implements JsonConverter<CreditCard, dynamic> {
   const CreditCardConverter();
   @override
-  CreditCard fromJson(Map<String, dynamic> json) =>
-      CreditCardModel.fromJson(json);
+  CreditCard fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) return CreditCardModel.fromJson(json);
+    if (json is Map) return CreditCardModel.fromJson(Map<String, dynamic>.from(json));
+    return CreditCardModel(cardHolderName: '', cardNumber: '', expiryDate: '', cvv: '', processor: PaymentProcessor.mastercard);
+  }
   @override
-  Map<String, dynamic> toJson(CreditCard object) =>
-      CreditCardModel.fromEntity(object).toJson();
+  dynamic toJson(CreditCard object) => (object as CreditCardModel).toJson();
 }
 
-class OrderConverter implements JsonConverter<Order, Map<String, dynamic>> {
+class OrderConverter implements JsonConverter<Order, dynamic> {
   const OrderConverter();
   @override
-  Order fromJson(Map<String, dynamic> json) => OrderModel.fromJson(json);
+  Order fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) return OrderModel.fromJson(json);
+    if (json is Map) return OrderModel.fromJson(Map<String, dynamic>.from(json));
+    return OrderModel(
+      orderItem: [],
+      createdAt: DateTime.now(),
+      address: AddressModel(name: '', street: '', city: '', country: '', phone: '', zipCode: ''),
+      creditCard: CreditCardModel(cardHolderName: '', cardNumber: '', expiryDate: '', cvv: '', processor: PaymentProcessor.mastercard),
+      shippingMethod: '',
+    );
+  }
   @override
-  Map<String, dynamic> toJson(Order object) => (object as OrderModel).toJson();
+  dynamic toJson(Order object) => (object as OrderModel).toJson();
 }
 
-class TransactionConverter
-    implements JsonConverter<Transaction, Map<String, dynamic>> {
+class TransactionConverter implements JsonConverter<Transaction, dynamic> {
   const TransactionConverter();
   @override
-  Transaction fromJson(Map<String, dynamic> json) =>
-      TransactionModel.fromJson(json);
+  Transaction fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) return TransactionModel.fromJson(json);
+    if (json is Map) return TransactionModel.fromJson(Map<String, dynamic>.from(json));
+    return TransactionModel(amount: 0.0, createdAt: DateTime.now(), paymentMethod: PaymentProcessor.mastercard);
+  }
   @override
-  Map<String, dynamic> toJson(Transaction object) =>
-      (object as TransactionModel).toJson();
+  dynamic toJson(Transaction object) => (object as TransactionModel).toJson();
 }
 
-class CategoryConverter
-    implements JsonConverter<Category, Map<String, dynamic>> {
+class CategoryConverter implements JsonConverter<Category, dynamic> {
   const CategoryConverter();
   @override
-  Category fromJson(Map<String, dynamic> json) => CategoryModel.fromJson(json);
+  Category fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) return CategoryModel.fromJson(json);
+    if (json is Map) return CategoryModel.fromJson(Map<String, dynamic>.from(json));
+    return CategoryModel(
+      name: 'General',
+      imagePath: 'https://res.cloudinary.com/jz8fffg2/image/upload/vegetable.png',
+      color: const Color(0xFF4CAF50),
+    );
+  }
   @override
-  Map<String, dynamic> toJson(Category object) =>
-      (object as CategoryModel).toJson();
+  dynamic toJson(Category object) => (object as CategoryModel).toJson();
 }
 
-class ProductConverter
-    implements JsonConverter<Product, Map<String, dynamic>> {
+class ProductConverter implements JsonConverter<Product, dynamic> {
   const ProductConverter();
   @override
-  Product fromJson(Map<String, dynamic> json) => ProductModel.fromJson(json);
+  Product fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) return ProductModel.fromJson(json);
+    if (json is Map) return ProductModel.fromJson(Map<String, dynamic>.from(json));
+    return ProductModel(
+      id: '0',
+      name: '',
+      imagePath: '',
+      amount: '',
+      description: '',
+      discount: 0,
+      price: 0,
+      isNew: false,
+      category: CategoryModel(name: '', imagePath: '', color: Colors.green),
+      color: Colors.green,
+    );
+  }
   @override
-  Map<String, dynamic> toJson(Product object) =>
-      (object as ProductModel).toJson();
+  dynamic toJson(Product object) => (object as ProductModel).toJson();
 }
 
-class ReviewConverter implements JsonConverter<Review, Map<String, dynamic>> {
+class ReviewConverter implements JsonConverter<Review, dynamic> {
   const ReviewConverter();
   @override
-  Review fromJson(Map<String, dynamic> json) => ReviewModel.fromJson(json);
+  Review fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) return ReviewModel.fromJson(json);
+    if (json is Map) return ReviewModel.fromJson(Map<String, dynamic>.from(json));
+    return ReviewModel(
+      user: UserModel(name: '', email: '', phone: ''),
+      comment: '',
+      rating: 5.0,
+      createdAt: DateTime.now(),
+    );
+  }
   @override
-  Map<String, dynamic> toJson(Review object) =>
-      (object as ReviewModel).toJson();
+  dynamic toJson(Review object) => (object as ReviewModel).toJson();
 }
 
-class UserConverter implements JsonConverter<User, Map<String, dynamic>> {
+class UserConverter implements JsonConverter<User, dynamic> {
   const UserConverter();
   @override
-  User fromJson(Map<String, dynamic> json) => UserModel.fromJson(json);
+  User fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) return UserModel.fromJson(json);
+    if (json is Map) return UserModel.fromJson(Map<String, dynamic>.from(json));
+    return UserModel(name: '', email: '', phone: '');
+  }
   @override
-  Map<String, dynamic> toJson(User object) =>
-      UserModel.fromEntity(object).toJson();
+  dynamic toJson(User object) => (object as UserModel).toJson();
+}
+
+class CartItemConverter implements JsonConverter<CartItem, dynamic> {
+  const CartItemConverter();
+  @override
+  CartItem fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) return CartItemModel.fromJson(json);
+    if (json is Map) return CartItemModel.fromJson(Map<String, dynamic>.from(json));
+    return CartItemModel(
+      ProductModel(
+        id: '0',
+        name: '',
+        imagePath: '',
+        amount: '',
+        description: '',
+        discount: 0,
+        price: 0,
+        isNew: false,
+        category: CategoryModel(name: '', imagePath: '', color: Colors.green),
+        color: Colors.green,
+      ),
+      1,
+    );
+  }
+  @override
+  dynamic toJson(CartItem object) => (object as CartItemModel).toJson();
+}
+
+class PaymentProcessorConverter implements JsonConverter<PaymentProcessor, dynamic> {
+  const PaymentProcessorConverter();
+  @override
+  PaymentProcessor fromJson(dynamic json) {
+    final lower = json?.toString().toLowerCase() ?? '';
+    if (lower.contains('visa')) return PaymentProcessor.visa;
+    if (lower.contains('paypal')) return PaymentProcessor.paypal;
+    return PaymentProcessor.mastercard;
+  }
+  @override
+  dynamic toJson(PaymentProcessor object) => object.name;
 }

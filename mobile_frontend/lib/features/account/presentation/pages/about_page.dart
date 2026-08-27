@@ -172,7 +172,7 @@ class _AboutPageState extends State<AboutPage> {
                           },
                         ),
                         TextFormField(
-                          initialValue: widget.user.number,
+                          initialValue: widget.user.phone,
 
                           decoration: InputDecoration(
                             filled: true,

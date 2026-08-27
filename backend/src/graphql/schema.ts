@@ -196,6 +196,7 @@ export default buildSchema(`
     type RootMutation {
         signUp(email: String!, number: String!, password: String!): User!
         logIn(email: String!, password: String!): AuthPayload!
+        forgotPassword(email: String!): Boolean!
         updateProfile(input: UpdateProfileInput!): User!
         changePassword(oldPassword: String!, newPassword: String!): Boolean!
         updateNotificationPreference(allow_general: Boolean, allow_order: Boolean, allow_email: Boolean): NotificationPreference!

@@ -37,8 +37,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<Unit> forgotPassword({required String email}) async {
-    // BACKEND INTEGRATION: Stub for password reset
-    return unit;
+    const mutation = r'''
+      mutation ForgotPassword($email: String!) {
+        forgotPassword(email: $email)
+      }
+    ''';
+    try {
+      await apiConsumer.graphql(
+        query: mutation,
+        variables: {'email': email},
+      );
+      return unit;
+    } on DioException {
+      throw NoInternetException();
+    } catch (e) {
+      final msg = e.toString().toLowerCase();
+      if (msg.contains('not found') || msg.contains('not exist') || msg.contains('invalid email')) {
+        throw InvalidEmailException();
+      }
+      rethrow;
+    }
   }
 
   @override
@@ -150,7 +168,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // Save token and credentials
       await userLocalDataSource.saveToken(token);
       if (remember) {
-        await userLocalDataSource.saveCredentials(email, password);
+        await userLocalDataSource.saveEmail(email);
+      } else {
+        await userLocalDataSource.clearSavedEmail();
       }
 
       final user = UserModel.fromJson(userMap);

@@ -4,7 +4,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'cart_item_model.g.dart';
 
-@JsonSerializable(converters: [ProductConverter()])
+@JsonSerializable(
+  fieldRename: FieldRename.snake,
+  converters: [ProductConverter()],
+)
 class CartItemModel extends CartItem {
   CartItemModel(super.product, super.quantity);
 

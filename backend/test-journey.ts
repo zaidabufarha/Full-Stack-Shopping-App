@@ -262,6 +262,15 @@ async function runJourney() {
     `, token);
     console.log(`   ✅ Successfully tested address & card deletion.`);
 
+    // 13. Test Forgot Password
+    console.log('13. Testing forgot password email dispatch via Resend...');
+    await graphql(`
+        mutation {
+            forgotPassword(email: "${uniqueEmail}")
+        }
+    `);
+    console.log(`   ✅ Forgot password triggered and temporary password email dispatched!`);
+
     console.log('\n🎉 ALL QUERIES AND MUTATIONS TESTED AND PASSED SUCCESSFULLY!');
 }
 

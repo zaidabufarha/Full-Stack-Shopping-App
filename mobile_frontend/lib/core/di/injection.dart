@@ -22,7 +22,7 @@ abstract class RegisterModule {
   Dio dio(SharedPreferences prefs) {
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'http://localhost:4321', // change to render
+        baseUrl: 'https://backend-test-graphql.onrender.com',
         headers: {'Content-Type': 'application/json'},
       ),
     );

@@ -6,7 +6,7 @@ class SaveCredentials {
   final AuthRepository authRepository;
   SaveCredentials(this.authRepository);
 
-  Future<void> call(String email, String password) async {
-    await authRepository.saveCredentials(email, password);
+  Future<void> call(String email) async {
+    await authRepository.saveEmail(email);
   }
 }

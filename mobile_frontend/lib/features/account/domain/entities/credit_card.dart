@@ -2,20 +2,20 @@ import 'package:big_cart/features/account/domain/entities/transaction.dart';
 
 class CreditCard {
   String? id;
-  String name;
+  String cardHolderName;
   String cardNumber;
   String expiryDate;
   String cvv;
-  paymentProccessor proccessor;
+  PaymentProcessor processor;
   bool isDefault;
 
   CreditCard({
     this.id,
-    required this.name,
+    required this.cardHolderName,
     required this.cardNumber,
     required this.expiryDate,
     required this.cvv,
-    required this.proccessor,
+    required this.processor,
     this.isDefault = false,
   });
 }

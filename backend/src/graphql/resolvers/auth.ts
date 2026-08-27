@@ -1,10 +1,14 @@
 import prisma from '../../prisma';
 import { AuthRequest } from '../../types/auth-request';
+import { Resend } from 'resend';
+import crypto from 'crypto';
 const bcrypt = require('bcryptjs')
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const validator = require('validator')
 import { HttpError } from '../../types/error';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 
 function checkAuth(req: any) { //cleanest code of all time ever
@@ -78,6 +82,44 @@ export default {
             }
             throw err
         }
+    },
+    forgotPassword: async function ({ email }: { email: string }, req: any) {
+        if (!validator.isEmail(email)) {
+            const err: HttpError = new Error('Invalid email address');
+            err.statusCode = 422;
+            throw err;
+        }
+        const user = await prisma.user.findUnique({
+            where: { email: email }
+        });
+        if (!user) {
+            const err: HttpError = new Error('No account found with this email');
+            err.statusCode = 404;
+            throw err;
+        }
+
+        const tempPassword = 'Temp_' + crypto.randomBytes(3).toString('hex') + '9!';
+        const hashedPassword = await bcrypt.hash(tempPassword, 10);
+
+        await prisma.user.update({
+            where: { email: email },
+            data: { password: hashedPassword }
+        });
+
+        await resend.emails.send({
+            from: 'BigCart <onboarding@resend.dev>',
+            to: email,
+            subject: 'Your Temporary BigCart Password',
+            html: `
+                <h2>BigCart Password Reset</h2>
+                <p>Hello <strong>${user.name}</strong>,</p>
+                <p>Your temporary password is:</p>
+                <h3 style="background:#f4f4f4;padding:10px 15px;display:inline-block;border-radius:6px;font-family:monospace;letter-spacing:1px;">${tempPassword}</h3>
+                <p>You can use this password to log in immediately. You can update it anytime in your Profile under <em>About me</em>.</p>
+            `
+        });
+
+        return true;
     },
     changePassword: async function ({ oldPassword, newPassword }: { oldPassword: string, newPassword: string }, req: AuthRequest) {
         checkAuth(req);

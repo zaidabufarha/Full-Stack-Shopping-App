@@ -8,7 +8,6 @@ import 'package:big_cart/features/buy/presentation/pages/filter_page.dart';
 import 'package:big_cart/features/buy/presentation/widgets/product_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 
 class CategoryPage extends StatefulWidget {
   Category? category;
@@ -117,12 +116,12 @@ class _CategoryPageState extends State<CategoryPage> {
                     }
                     if (filterData!.minRating > 0) {
                       double sumOfRatings = 0;
-                      for (int i = 0; i < product.reviewList.length; i++) {
-                        sumOfRatings += product.reviewList[i].rating;
+                      for (int i = 0; i < product.review.length; i++) {
+                        sumOfRatings += product.review[i].rating;
                       }
                       double avgRating = 0;
-                      if (product.reviewList.isNotEmpty) {
-                        avgRating = sumOfRatings / product.reviewList.length;
+                      if (product.review.isNotEmpty) {
+                        avgRating = sumOfRatings / product.review.length;
                       }
                       if (avgRating < filterData!.minRating) {
                         return false;

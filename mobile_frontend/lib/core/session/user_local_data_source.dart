@@ -10,12 +10,12 @@ abstract class UserLocalDataSource {
   Future<Unit> cacheUser(UserModel user);
   Future<UserModel?> getCachedUser();
   Future<Unit> clearCache();
-  Future<void> saveCredentials(String email, String password);
-  Future<Map<String, String>?> getSavedCredentials();
-  Future<void> clearCredentials();
   Future<void> saveToken(String token);
   Future<String?> getToken();
   Future<void> clearToken();
+  Future<void> saveEmail(String email);
+  Future<String?> getSavedEmail();
+  Future<void> clearSavedEmail();
 }
 
 @LazySingleton(as: UserLocalDataSource)
@@ -24,81 +24,64 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
 
   UserLocalDataSourceImpl({required this.sharedPreferences});
 
+  static const _cachedUserKey = 'CACHED_USER';
+  static const _authTokenKey = 'AUTH_TOKEN';
+  static const _firstTimeKey = 'FIRST_TIME';
+  static const _savedEmailKey = 'SAVED_EMAIL';
+
   @override
   Future<Unit> cacheUser(UserModel user) async {
-    final json = user.toJson();
-    await sharedPreferences.setString('CACHED_USER', jsonEncode(json));
-    await sharedPreferences.setBool('FIRST_TIME', false);
+    await sharedPreferences.setString(_cachedUserKey, jsonEncode(user.toJson()));
+    await sharedPreferences.setBool(_firstTimeKey, false);
     return unit;
   }
 
   @override
   Future<Unit> clearCache() async {
-    await sharedPreferences.remove('CACHED_USER');
+    await sharedPreferences.remove(_cachedUserKey);
     await clearToken();
     return unit;
   }
 
   @override
   Future<UserModel?> getCachedUser() async {
-    final userJson = sharedPreferences.getString('CACHED_USER');
-    if (userJson == null) {
-      return null;
-    } else {
-      final map = jsonDecode(userJson);
-      return UserModel.fromJson(map);
-    }
+    final userJson = sharedPreferences.getString(_cachedUserKey);
+    if (userJson == null) return null;
+    return UserModel.fromJson(jsonDecode(userJson));
   }
 
   @override
   Future<bool> isFirstTime() async {
-    final response = sharedPreferences.getBool('FIRST_TIME');
-    if (response == null) {
-      return true;
-    } else {
-      return response;
-    }
-  }
-
-  Future<void> saveSavedCredentials(String email, String password) async {
-    await sharedPreferences.setString('SAVED_EMAIL', email);
-    await sharedPreferences.setString('SAVED_PASSWORD', password);
-  }
-
-  @override
-  Future<void> clearCredentials() async {
-    await sharedPreferences.remove('SAVED_EMAIL');
-    await sharedPreferences.remove('SAVED_PASSWORD');
-  }
-
-  @override
-  Future<Map<String, String>?> getSavedCredentials() async {
-    final email = sharedPreferences.getString('SAVED_EMAIL');
-    final password = sharedPreferences.getString('SAVED_PASSWORD');
-    if (email != null && password != null) {
-      return {'email': email, 'password': password};
-    }
-    return null;
-  }
-
-  @override
-  Future<void> saveCredentials(String email, String password) async {
-    await sharedPreferences.setString('SAVED_EMAIL', email);
-    await sharedPreferences.setString('SAVED_PASSWORD', password);
+    return sharedPreferences.getBool(_firstTimeKey) ?? true;
   }
 
   @override
   Future<void> saveToken(String token) async {
-    await sharedPreferences.setString('AUTH_TOKEN', token);
+    await sharedPreferences.setString(_authTokenKey, token);
   }
 
   @override
   Future<String?> getToken() async {
-    return sharedPreferences.getString('AUTH_TOKEN');
+    return sharedPreferences.getString(_authTokenKey);
   }
 
   @override
   Future<void> clearToken() async {
-    await sharedPreferences.remove('AUTH_TOKEN');
+    await sharedPreferences.remove(_authTokenKey);
+  }
+
+  @override
+  Future<void> saveEmail(String email) async {
+    await sharedPreferences.setString(_savedEmailKey, email);
+  }
+
+  @override
+  Future<String?> getSavedEmail() async {
+    return sharedPreferences.getString(_savedEmailKey);
+  }
+
+  @override
+  Future<void> clearSavedEmail() async {
+    await sharedPreferences.remove(_savedEmailKey);
   }
 }

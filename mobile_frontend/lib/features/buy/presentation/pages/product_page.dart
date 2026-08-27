@@ -37,12 +37,12 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     double sumOfRatings = 0;
-    for (int i = 0; i < product.reviewList.length; i++) {
-      sumOfRatings += product.reviewList[i].rating;
+    for (int i = 0; i < product.review.length; i++) {
+      sumOfRatings += product.review[i].rating;
     }
     double averageRating = -1;
-    if (product.reviewList.isNotEmpty) {
-      averageRating = sumOfRatings / product.reviewList.length;
+    if (product.review.isNotEmpty) {
+      averageRating = sumOfRatings / product.review.length;
     }
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -247,7 +247,7 @@ class _ProductPageState extends State<ProductPage> {
                                         )),
                                       ),
                                       Text(
-                                        '(${product.reviewList.length.toString()} review${(product.reviewList.length > 1) ? 's)' : ')'}',
+                                        '(${product.review.length.toString()} review${(product.review.length > 1) ? 's)' : ')'}',
                                         style: Fonts.paragraphRegular(),
                                       ),
                                     ],

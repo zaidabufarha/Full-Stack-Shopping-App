@@ -52,7 +52,7 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
         variables: {
           'productId': id,
           'rating': review.rating,
-          'comment': review.content,
+          'comment': review.comment,
         },
       );
       return unit;
@@ -96,7 +96,7 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
       }
     ''';
     try {
-      final addressId = order.shippingAddress.id ?? '1';
+      final addressId = order.address.id ?? '1';
       final cardId = order.creditCard.id ?? '1';
       await apiConsumer.graphql(
         query: mutation,
@@ -132,6 +132,12 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
                 is_favorite
                 color
                 rating
+                category {
+                  id
+                  name
+                  image_path
+                  color
+                }
               }
             }
           }
@@ -161,6 +167,12 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
                 is_favorite
                 color
                 rating
+                category {
+                  id
+                  name
+                  image_path
+                  color
+                }
               }
             }
           }
@@ -223,6 +235,12 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
           is_favorite
           color
           rating
+          category {
+            id
+            name
+            image_path
+            color
+          }
         }
       }
     ''';

@@ -24,7 +24,7 @@ class _CreditCardCardState extends State<CreditCardCard> {
 
   @override
   void initState() {
-    name = widget.card.name;
+    name = widget.card.cardHolderName;
     cardNumber = widget.card.cardNumber;
     expiration = widget.card.expiryDate;
     cvv = widget.card.cvv;
@@ -68,9 +68,9 @@ class _CreditCardCardState extends State<CreditCardCard> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
-                        (widget.card.proccessor == paymentProccessor.mastercard)
+                        (widget.card.processor == PaymentProcessor.mastercard)
                             ? 'assets/mastercard.png'
-                            : (widget.card.proccessor == paymentProccessor.visa)
+                            : (widget.card.processor == PaymentProcessor.visa)
                             ? 'assets/visa.png'
                             : 'assets/paypal.png',
                       ),
@@ -85,7 +85,7 @@ class _CreditCardCardState extends State<CreditCardCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      (widget.card.proccessor == paymentProccessor.mastercard)
+                      (widget.card.processor == PaymentProcessor.mastercard)
                           ? 'Master Card'
                           : 'Visa', //no paypal card because it's external
                       style: Fonts.titleBold(),
@@ -194,13 +194,13 @@ class _CreditCardCardState extends State<CreditCardCard> {
                           name = newValue!;
                           widget.onChanged(
                             CreditCard(
-                              name: name,
+                              cardHolderName: name,
                               cardNumber: cardNumber,
                               expiryDate: expiration,
                               cvv: cvv,
-                              proccessor: (cardNumber.startsWith('4'))
-                                  ? paymentProccessor.visa
-                                  : paymentProccessor.mastercard,
+                              processor: (cardNumber.startsWith('4'))
+                                  ? PaymentProcessor.visa
+                                  : PaymentProcessor.mastercard,
                               id: widget.card.id,
                               isDefault: widget.card.isDefault,
                             ),
@@ -235,13 +235,13 @@ class _CreditCardCardState extends State<CreditCardCard> {
                           cardNumber = newValue!;
                           widget.onChanged(
                             CreditCard(
-                              name: name,
+                              cardHolderName: name,
                               cardNumber: cardNumber,
                               expiryDate: expiration,
                               cvv: cvv,
-                              proccessor: (cardNumber.startsWith('4'))
-                                  ? paymentProccessor.visa
-                                  : paymentProccessor.mastercard,
+                              processor: (cardNumber.startsWith('4'))
+                                  ? PaymentProcessor.visa
+                                  : PaymentProcessor.mastercard,
                               id: widget.card.id,
                               isDefault: widget.card.isDefault,
                             ),
@@ -281,13 +281,13 @@ class _CreditCardCardState extends State<CreditCardCard> {
                                 expiration = newValue!;
                                 widget.onChanged(
                                   CreditCard(
-                                    name: name,
+                                    cardHolderName: name,
                                     cardNumber: cardNumber,
                                     expiryDate: expiration,
                                     cvv: cvv,
-                                    proccessor: (cardNumber.startsWith('4'))
-                                        ? paymentProccessor.visa
-                                        : paymentProccessor.mastercard,
+                                    processor: (cardNumber.startsWith('4'))
+                                        ? PaymentProcessor.visa
+                                        : PaymentProcessor.mastercard,
                                     id: widget.card.id,
                                     isDefault: widget.card.isDefault,
                                   ),
@@ -324,13 +324,13 @@ class _CreditCardCardState extends State<CreditCardCard> {
                                 cvv = newValue!;
                                 widget.onChanged(
                                   CreditCard(
-                                    name: name,
+                                    cardHolderName: name,
                                     cardNumber: cardNumber,
                                     expiryDate: expiration,
                                     cvv: cvv,
-                                    proccessor: (cardNumber.startsWith('4'))
-                                        ? paymentProccessor.visa
-                                        : paymentProccessor.mastercard,
+                                    processor: (cardNumber.startsWith('4'))
+                                        ? PaymentProcessor.visa
+                                        : PaymentProcessor.mastercard,
                                     id: widget.card.id,
                                     isDefault: widget.card.isDefault,
                                   ),
@@ -370,13 +370,13 @@ class _CreditCardCardState extends State<CreditCardCard> {
                                 onChanged: (val) {
                                   widget.onChanged(
                                     CreditCard(
-                                      name: name,
+                                      cardHolderName: name,
                                       cardNumber: cardNumber,
                                       expiryDate: expiration,
                                       cvv: cvv,
-                                      proccessor: (cardNumber.startsWith('4'))
-                                          ? paymentProccessor.visa
-                                          : paymentProccessor.mastercard,
+                                      processor: (cardNumber.startsWith('4'))
+                                          ? PaymentProcessor.visa
+                                          : PaymentProcessor.mastercard,
                                       id: widget.card.id,
                                       isDefault: val,
                                     ),

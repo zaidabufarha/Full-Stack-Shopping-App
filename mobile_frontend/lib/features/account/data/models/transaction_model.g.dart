@@ -8,20 +8,18 @@ part of 'transaction_model.dart';
 
 TransactionModel _$TransactionModelFromJson(Map<String, dynamic> json) =>
     TransactionModel(
-      cost: (json['cost'] as num).toDouble(),
-      timestamp: DateTime.parse(json['timestamp'] as String),
-      proccessor: $enumDecode(_$paymentProccessorEnumMap, json['proccessor']),
+      amount: (json['amount'] as num).toDouble(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      paymentMethod: const PaymentProcessorConverter().fromJson(
+        json['payment_method'],
+      ),
     );
 
 Map<String, dynamic> _$TransactionModelToJson(TransactionModel instance) =>
     <String, dynamic>{
-      'cost': instance.cost,
-      'timestamp': instance.timestamp.toIso8601String(),
-      'proccessor': _$paymentProccessorEnumMap[instance.proccessor]!,
+      'amount': instance.amount,
+      'created_at': instance.createdAt.toIso8601String(),
+      'payment_method': const PaymentProcessorConverter().toJson(
+        instance.paymentMethod,
+      ),
     };
-
-const _$paymentProccessorEnumMap = {
-  paymentProccessor.mastercard: 'mastercard',
-  paymentProccessor.paypal: 'paypal',
-  paymentProccessor.visa: 'visa',
-};

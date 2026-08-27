@@ -8,9 +8,7 @@ part of 'cart_item_model.dart';
 
 CartItemModel _$CartItemModelFromJson(Map<String, dynamic> json) =>
     CartItemModel(
-      const ProductConverter().fromJson(
-        json['product'] as Map<String, dynamic>,
-      ),
+      const ProductConverter().fromJson(json['product']),
       (json['quantity'] as num).toInt(),
     );
 

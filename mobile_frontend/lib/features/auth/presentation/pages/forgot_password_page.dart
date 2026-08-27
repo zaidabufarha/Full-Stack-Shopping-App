@@ -27,6 +27,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       if (isValid) {
         formKey.currentState!.save();
         context.read<AuthCubit>().userForgotPassword(email!);
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Temporary password sent! Check your inbox.'),
+            backgroundColor: AppColors.primary,
+          ),
+        );
         Navigator.of(context).pop();
       }
     }

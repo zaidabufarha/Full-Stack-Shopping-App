@@ -4,41 +4,27 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'review_model.g.dart';
 
-@JsonSerializable(converters: [UserConverter()])
+@JsonSerializable(
+  fieldRename: FieldRename.snake,
+  converters: [UserConverter()],
+)
 class ReviewModel extends Review {
   ReviewModel({
     required super.user,
-    required super.content,
+    required super.comment,
     required super.rating,
-    required super.timestamp,
+    required super.createdAt,
   });
 
   factory ReviewModel.fromEntity(Review entity) => ReviewModel(
         user: entity.user,
-        content: entity.content,
+        comment: entity.comment,
         rating: entity.rating,
-        timestamp: entity.timestamp,
+        createdAt: entity.createdAt,
       );
 
-  factory ReviewModel.fromJson(Map<String, dynamic> json) {
-    // BACKEND INTEGRATION: Support GraphQL field mapping
-    final mapped = Map<String, dynamic>.from(json);
-    if (mapped.containsKey('comment') && !mapped.containsKey('content')) {
-      mapped['content'] = mapped['comment'];
-    }
-    if (mapped.containsKey('created_at') && !mapped.containsKey('timestamp')) {
-      mapped['timestamp'] = mapped['created_at'];
-    }
-    if (mapped['user'] == null) {
-      mapped['user'] = {
-        'name': 'User',
-        'email': '',
-        'number': '',
-        'password': '',
-      };
-    }
-    return _$ReviewModelFromJson(mapped);
-  }
+  factory ReviewModel.fromJson(Map<String, dynamic> json) =>
+      _$ReviewModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReviewModelToJson(this);
 }

@@ -7,6 +7,6 @@ class ClearCredentials {
   ClearCredentials(this.authRepository);
 
   Future<void> call() async {
-    await authRepository.clearCredentials();
+    await authRepository.clearSavedEmail();
   }
 }

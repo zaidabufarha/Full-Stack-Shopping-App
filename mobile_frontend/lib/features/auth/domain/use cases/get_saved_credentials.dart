@@ -6,7 +6,7 @@ class GetSavedCredentials {
   final AuthRepository authRepository;
   GetSavedCredentials(this.authRepository);
 
-  Future<Map<String, String>?> call() async {
-    return await authRepository.getSavedCredentials();
+  Future<String?> call() async {
+    return await authRepository.getSavedEmail();
   }
 }

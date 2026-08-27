@@ -24,7 +24,7 @@ class CardsCubit extends Cubit<CardsState> {
     required String expiration,
     required String cvv,
     required bool saveCard,
-    required paymentProccessor proccessor,
+    required PaymentProcessor processor,
   }) async {
     final result = await addCreditCard.call(
       name: name,
@@ -32,7 +32,7 @@ class CardsCubit extends Cubit<CardsState> {
       expiration: expiration,
       cvv: cvv,
       saveCard: saveCard,
-      proccessor: proccessor,
+      processor: processor,
     );
 
     result.fold(

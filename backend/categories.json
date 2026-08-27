@@ -1,42 +1,42 @@
 {
   "cat_1": {
     "name": "Vegetables",
-    "imagePath": "assets/lettuce.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/lettuce.png",
     "color": 4293325546
   },
   "cat_2": {
     "name": "Fruits",
-    "imagePath": "assets/apple.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/apple.png",
     "color": 4294961637
   },
   "cat_3": {
     "name": "Beverages",
-    "imagePath": "assets/apple-cider.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/apple-cider.png",
     "color": 4294964963
   },
   "cat_4": {
     "name": "Grocery",
-    "imagePath": "assets/vegetable.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/vegetable.png",
     "color": 4294964963
   },
   "cat_5": {
     "name": "Beverages",
-    "imagePath": "assets/apple-cider.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/apple-cider.png",
     "color": 4294176762
   },
   "cat_6": {
     "name": "Edible oil",
-    "imagePath": "assets/olive-oil.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/olive-oil.png",
     "color": 4292670709
   },
   "cat_7": {
     "name": "Household",
-    "imagePath": "assets/vacuum-cleaner.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/vacuum-cleaner.png",
     "color": 4294961394
   },
   "cat_8": {
     "name": "Babycare",
-    "imagePath": "assets/baby-bottle.png",
+    "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/baby-bottle.png",
     "color": 4292022271
   }
 }

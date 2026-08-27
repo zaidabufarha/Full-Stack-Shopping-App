@@ -1,20 +1,21 @@
 class Address {
   String? id;
   String name;
-  String address;
+  String street;
   String city;
   String country;
-  String number;
-  String zip;
+  String phone;
+  String zipCode;
   bool isDefault;
+
   Address({
     this.id,
     required this.name,
-    required this.address,
+    required this.street,
     required this.city,
     required this.country,
-    required this.number,
-    required this.zip,
+    required this.phone,
+    required this.zipCode,
     this.isDefault = false,
   });
 }

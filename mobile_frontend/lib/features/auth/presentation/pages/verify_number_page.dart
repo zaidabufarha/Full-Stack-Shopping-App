@@ -60,6 +60,12 @@ class _VerifyNumberPageState extends State<VerifyNumberPage> {
               (route) => false,
             );
           },
+          error: (errorMessage) {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(errorMessage)));
+          },
           orElse: () {},
         );
       },

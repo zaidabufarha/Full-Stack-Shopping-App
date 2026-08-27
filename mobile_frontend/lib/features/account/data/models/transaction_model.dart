@@ -1,41 +1,28 @@
+import 'package:big_cart/core/converter/entity_converters.dart';
 import 'package:big_cart/features/account/domain/entities/transaction.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'transaction_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(
+  fieldRename: FieldRename.snake,
+  converters: [PaymentProcessorConverter()],
+)
 class TransactionModel extends Transaction {
   TransactionModel({
-    required super.cost,
-    required super.timestamp,
-    required super.proccessor,
+    required super.amount,
+    required super.createdAt,
+    required super.paymentMethod,
   });
 
   factory TransactionModel.fromEntity(Transaction entity) => TransactionModel(
-        cost: entity.cost,
-        timestamp: entity.timestamp,
-        proccessor: entity.proccessor,
-      );
+    amount: entity.amount,
+    createdAt: entity.createdAt,
+    paymentMethod: entity.paymentMethod,
+  );
 
-  factory TransactionModel.fromJson(Map<String, dynamic> json) {
-    // BACKEND INTEGRATION: Support GraphQL field mapping
-    final mapped = Map<String, dynamic>.from(json);
-    if (mapped.containsKey('amount') && !mapped.containsKey('cost')) {
-      mapped['cost'] = (mapped['amount'] is num)
-          ? (mapped['amount'] as num).toDouble()
-          : double.tryParse(mapped['amount'].toString()) ?? 0.0;
-    }
-    if (mapped.containsKey('created_at') && !mapped.containsKey('timestamp')) {
-      mapped['timestamp'] = mapped['created_at'];
-    }
-    if (mapped.containsKey('payment_method') &&
-        !mapped.containsKey('proccessor')) {
-      final method = mapped['payment_method'].toString().toLowerCase();
-      mapped['proccessor'] = method.contains('visa')
-          ? 'visa'
-          : (method.contains('master') ? 'mastercard' : 'paypal');
-    }
-    return _$TransactionModelFromJson(mapped);
-  }
+  factory TransactionModel.fromJson(Map<String, dynamic> json) =>
+      _$TransactionModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$TransactionModelToJson(this);
 }

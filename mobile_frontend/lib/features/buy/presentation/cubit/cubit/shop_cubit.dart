@@ -37,9 +37,9 @@ class ShopCubit extends Cubit<ShopState> {
     try {
       final review = Review(
         user: (await getCachedUser.call())!,
-        content: content,
+        comment: content,
         rating: rating,
-        timestamp: DateTime.now(),
+        createdAt: DateTime.now(),
       );
       final result = await addReview.call(id, review);
       result.fold(

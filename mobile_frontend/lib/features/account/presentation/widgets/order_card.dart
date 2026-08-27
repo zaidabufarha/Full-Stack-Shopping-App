@@ -26,7 +26,7 @@ class _OrderCardState extends State<OrderCard> {
   int numberOfItems = 0;
   @override
   void initState() {
-    for (CartItem item in widget.order.productList) {
+    for (CartItem item in widget.order.orderItem) {
       numberOfItems += item.quantity;
       //print('${item.product.name} has ${item.quantity}');
     }
@@ -84,7 +84,7 @@ class _OrderCardState extends State<OrderCard> {
                         style: Fonts.titleBold(),
                       ),
                       Text(
-                        'Placed on ${DateFormat('MMM d, y').format(widget.order.datePlaced)}',
+                        'Placed on ${DateFormat('MMM d, y').format(widget.order.createdAt)}',
                         style: Fonts.paragraphRegular(size: 12),
                       ),
                       Row(
@@ -183,7 +183,7 @@ class _OrderCardState extends State<OrderCard> {
                             Text(
                               DateFormat(
                                 'MMM d, y',
-                              ).format(widget.order.datePlaced),
+                              ).format(widget.order.createdAt),
                               style: Fonts.paragraphRegular(),
                             ),
                           ],

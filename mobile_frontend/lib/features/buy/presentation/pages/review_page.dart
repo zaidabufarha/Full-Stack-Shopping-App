@@ -1,6 +1,5 @@
 import 'package:big_cart/core/colors.dart';
 import 'package:big_cart/core/fonts.dart';
-import 'package:big_cart/features/account/domain/entities/user.dart';
 import 'package:big_cart/features/buy/domain/entities/product.dart';
 import 'package:big_cart/features/buy/domain/entities/review.dart';
 import 'package:big_cart/features/buy/presentation/cubit/cubit/shop_cubit.dart';

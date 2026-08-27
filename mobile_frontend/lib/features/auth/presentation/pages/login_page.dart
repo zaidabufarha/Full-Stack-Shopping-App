@@ -72,9 +72,8 @@ class _LoginPageState extends State<LoginPage> {
               context,
             ).showSnackBar(SnackBar(content: Text(errorMessage)));
           },
-          loadedCredentials: (email, password) {
+          loadedEmail: (email) {
             emailController.text = email;
-            passwordController.text = password;
           },
           orElse: () {},
         );

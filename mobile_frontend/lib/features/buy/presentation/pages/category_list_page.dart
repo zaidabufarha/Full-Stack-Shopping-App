@@ -3,7 +3,6 @@ import 'package:big_cart/core/fonts.dart';
 import 'package:big_cart/features/buy/domain/entities/category.dart';
 import 'package:big_cart/features/buy/presentation/cubit/cubit/shop_cubit.dart';
 import 'package:big_cart/features/buy/presentation/pages/category_page.dart';
-import 'package:big_cart/features/buy/presentation/pages/filter_page.dart';
 import 'package:big_cart/features/buy/presentation/widgets/category_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -212,6 +212,9 @@ class _SignUpPage extends State<SignUpPage> {
                                 if (value == null || value.isEmpty) {
                                   return 'Cannot be empty';
                                 }
+                                if (value.length < 8) {
+                                  return 'Must be at least 8 characters';
+                                }
                                 return null;
                               },
                               onSaved: (newValue) {

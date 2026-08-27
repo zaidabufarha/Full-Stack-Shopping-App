@@ -57,12 +57,20 @@ export default {
     logIn: async function ({ email, password }: { email: string, password: string }, req: any) {
         try {
             const user = await prisma.user.findUnique({
-                where: { email: email }
-            })
+                where: { email: email },
+                include: {
+                    notification_preference: true,
+                    address: true,
+                    credit_card: true,
+                    order: true,
+                    transaction: true,
+                    favorite: true
+                }
+            });
             if (user) {
                 if (await bcrypt.compare(password, user.password)) {
-                    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' })
-                    return { token: token, user: user }
+                    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+                    return { token: token, user: user };
                 }
                 else {
                     const err: HttpError = new Error('Incorrect password')

@@ -21,6 +21,8 @@ function checkAuth(req: any) { //cleanest code of all time ever
 
 export default {
     signUp: async function ({ email, number, password }: { email: string, number: string, password: string }, req: any) {
+        email = email.trim().toLowerCase();
+        number = number.trim();
         if (await prisma.user.findUnique({
             where: { email: email }
         })) {
@@ -63,6 +65,7 @@ export default {
     },
 
     logIn: async function ({ email, password }: { email: string, password: string }, req: any) {
+        email = email.trim().toLowerCase();
         try {
             const user = await prisma.user.findUnique({
                 where: { email: email },
@@ -100,6 +103,7 @@ export default {
         }
     },
     forgotPassword: async function ({ email }: { email: string }, req: any) {
+        email = email.trim().toLowerCase();
         if (!validator.isEmail(email)) {
             const err: HttpError = new Error('Invalid email address');
             err.statusCode = 422;

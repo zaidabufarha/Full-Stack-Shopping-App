@@ -41,12 +41,19 @@ export default {
 
     updateProfile: async function ({ input }: { input: UpdateProfileInput }, req: AuthRequest) {
         checkAuth(req);
-        if (input.name !== undefined && validator.isEmpty(input.name.trim())) {
-            const err: HttpError = new Error('Name cannot be empty');
-            err.statusCode = 422;
-            throw err;
+        if (input.name !== undefined) {
+            input.name = input.name.trim();
+            if (validator.isEmpty(input.name)) {
+                const err: HttpError = new Error('Name cannot be empty');
+                err.statusCode = 422;
+                throw err;
+            }
+        }
+        if (input.phone !== undefined) {
+            input.phone = input.phone.trim();
         }
         if (input.email !== undefined) {
+            input.email = input.email.trim().toLowerCase();
             if (!validator.isEmail(input.email)) {
                 const err: HttpError = new Error('Invalid email');
                 err.statusCode = 422;

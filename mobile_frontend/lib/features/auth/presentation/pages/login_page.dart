@@ -159,13 +159,13 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               validator: (value) {
-                                if (value == null || value.isEmpty) {
+                                if (value == null || value.trim().isEmpty) {
                                   return 'Cannot be empty';
                                 }
                                 return null;
                               },
                               onSaved: (newValue) {
-                                inputEmail = newValue!;
+                                inputEmail = newValue!.trim();
                               },
                             ),
                             TextFormField(

@@ -124,7 +124,7 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
       }
     ''';
     try {
-      final cleanNumber = cardNumber.replaceAll(RegExp(r'\s+'), '');
+      final cleanNumber = cardNumber.replaceAll(' ', '');
       final last4 = cleanNumber.length >= 4
           ? cleanNumber.substring(cleanNumber.length - 4)
           : cleanNumber;

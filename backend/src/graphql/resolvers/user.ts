@@ -145,7 +145,7 @@ export default {
     addCard: async function ({ input }: { input: CardInput }, req: AuthRequest) {
         checkAuth(req);
         const { is_default, card_number, last4, stripe_payment_id, ...cardData } = input as any;
-        const finalLast4 = last4 || (card_number ? card_number.replace(/\s+/g, '').slice(-4) : '1234');
+        const finalLast4 = last4 || (card_number ? card_number.replaceAll(' ', '').slice(-4) : '1234');
         const newCard = await prisma.credit_card.create({
             data: {
                 user_id: req.id!,

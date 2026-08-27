@@ -89,7 +89,7 @@ class _ShippingPageState extends State<ShippingPage> {
             bool isValid = formKey.currentState!.validate();
             if (isValid) {
               formKey.currentState!.save();
-              final cleanNum = creditCardNumber.replaceAll(RegExp(r'\s+'), '');
+              final cleanNum = creditCardNumber.replaceAll(' ', '');
               final last4 = cleanNum.length >= 4
                   ? cleanNum.substring(cleanNum.length - 4)
                   : cleanNum;

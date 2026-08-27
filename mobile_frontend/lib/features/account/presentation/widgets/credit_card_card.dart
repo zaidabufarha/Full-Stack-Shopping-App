@@ -18,22 +18,33 @@ class _CreditCardCardState extends State<CreditCardCard> {
   bool isClosed = true;
 
   late String name;
-  late String cardNumber;
   late String expiration;
-  late String cvv;
 
   @override
   void initState() {
     name = widget.card.cardHolderName;
-    cardNumber = widget.card.cardNumber;
     expiration = widget.card.expiryDate;
-    cvv = widget.card.cvv;
-
     super.initState();
+  }
+
+  void _notifyChange({bool? isDefault}) {
+    widget.onChanged(
+      CreditCard(
+        id: widget.card.id,
+        cardHolderName: name,
+        last4: widget.card.last4,
+        expiryDate: expiration,
+        stripePaymentId: widget.card.stripePaymentId,
+        processor: widget.card.processor,
+        isDefault: isDefault ?? widget.card.isDefault,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final formattedNumber = 'XXXX XXXX XXXX ${widget.card.last4}';
+
     return Container(
       width: double.infinity,
       color: AppColors.backgroundPrimary,
@@ -44,6 +55,7 @@ class _CreditCardCardState extends State<CreditCardCard> {
           (widget.card.isDefault)
               ? Container(
                   color: AppColors.primaryLight,
+                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
                   child: Text(
                     'DEFAULT',
                     style: Fonts.label().copyWith(
@@ -51,7 +63,7 @@ class _CreditCardCardState extends State<CreditCardCard> {
                     ),
                   ),
                 )
-              : SizedBox(),
+              : const SizedBox(),
           Row(
             spacing: 10.w,
             mainAxisSize: MainAxisSize.max,
@@ -59,7 +71,7 @@ class _CreditCardCardState extends State<CreditCardCard> {
               Container(
                 width: 80.w,
                 height: 80.h,
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: AppColors.backgroundTertiary,
                   shape: BoxShape.circle,
@@ -87,51 +99,29 @@ class _CreditCardCardState extends State<CreditCardCard> {
                     Text(
                       (widget.card.processor == PaymentProcessor.mastercard)
                           ? 'Master Card'
-                          : 'Visa', //no paypal card because it's external
+                          : 'Visa',
                       style: Fonts.titleBold(),
                     ),
                     Text(
-                      widget.card.cardNumber,
+                      formattedNumber,
                       style: Fonts.paragraphRegular(size: 12),
                     ),
-                    Row(
-                      spacing: 10.w,
-                      children: [
-                        Text.rich(
+                    Text.rich(
+                      TextSpan(
+                        text: 'Expiry: ',
+                        style: Fonts.label().copyWith(
+                          color: AppColors.textPrimary,
+                        ),
+                        children: [
                           TextSpan(
-                            text: 'Expiry: ',
+                            text: widget.card.expiryDate,
                             style: Fonts.label().copyWith(
+                              fontWeight: FontWeight.bold,
                               color: AppColors.textPrimary,
                             ),
-                            children: [
-                              TextSpan(
-                                text: widget.card.expiryDate,
-                                style: Fonts.label().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.textPrimary,
-                                ),
-                              ),
-                            ],
                           ),
-                        ),
-                        Text.rich(
-                          TextSpan(
-                            text: 'CVV: ',
-                            style: Fonts.label().copyWith(
-                              color: AppColors.textPrimary,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: widget.card.cvv,
-                                style: Fonts.label().copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.textPrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -158,13 +148,13 @@ class _CreditCardCardState extends State<CreditCardCard> {
               ? Divider(
                   thickness: 1.h,
                 )
-              : SizedBox(),
+              : const SizedBox(),
 
           (!isClosed)
               ? Padding(
                   padding: const EdgeInsets.all(10),
                   child: Column(
-                    spacing: 5.h,
+                    spacing: 10.h,
                     children: [
                       TextFormField(
                         initialValue: name,
@@ -178,40 +168,27 @@ class _CreditCardCardState extends State<CreditCardCard> {
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
-                          hint: Text(
-                            'Russel Austin',
-                            style: Fonts.paragraphRegular(),
-                          ),
+                          hintText: 'Cardholder Name',
                         ),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null || value.trim().isEmpty) {
                             return 'Cannot be empty';
-                          } else {
-                            return null;
                           }
+                          return null;
                         },
                         onSaved: (newValue) {
-                          name = newValue!;
-                          widget.onChanged(
-                            CreditCard(
-                              cardHolderName: name,
-                              cardNumber: cardNumber,
-                              expiryDate: expiration,
-                              cvv: cvv,
-                              processor: (cardNumber.startsWith('4'))
-                                  ? PaymentProcessor.visa
-                                  : PaymentProcessor.mastercard,
-                              id: widget.card.id,
-                              isDefault: widget.card.isDefault,
-                            ),
-                          );
+                          name = newValue!.trim();
+                          _notifyChange();
                         },
                       ),
                       TextFormField(
-                        initialValue: cardNumber,
+                        initialValue: formattedNumber,
+                        readOnly: true,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: AppColors.backgroundSecondary,
+                          fillColor: AppColors.backgroundSecondary.withValues(
+                            alpha: 0.5,
+                          ),
                           prefixIcon: Icon(
                             Icons.credit_card_outlined,
                             color: AppColors.textSecondary,
@@ -219,128 +196,33 @@ class _CreditCardCardState extends State<CreditCardCard> {
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
-                          hint: Text(
-                            'XXXX XXXX XXXX 5678',
-                            style: Fonts.paragraphRegular(),
+                        ),
+                      ),
+                      TextFormField(
+                        initialValue: expiration,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: AppColors.backgroundSecondary,
+                          prefixIcon: Icon(
+                            Icons.calendar_today_outlined,
+                            color: AppColors.textSecondary,
                           ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          ),
+                          hintText: 'MM/YY',
                         ),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null || value.trim().isEmpty) {
                             return 'Cannot be empty';
-                          } else {
-                            return null;
                           }
+                          return null;
                         },
                         onSaved: (newValue) {
-                          cardNumber = newValue!;
-                          widget.onChanged(
-                            CreditCard(
-                              cardHolderName: name,
-                              cardNumber: cardNumber,
-                              expiryDate: expiration,
-                              cvv: cvv,
-                              processor: (cardNumber.startsWith('4'))
-                                  ? PaymentProcessor.visa
-                                  : PaymentProcessor.mastercard,
-                              id: widget.card.id,
-                              isDefault: widget.card.isDefault,
-                            ),
-                          );
+                          expiration = newValue!.trim();
+                          _notifyChange();
                         },
                       ),
-                      Row(
-                        spacing: 10.w,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              initialValue: expiration,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: AppColors.backgroundSecondary,
-                                prefixIcon: Icon(
-                                  Icons.calendar_today_outlined,
-                                  color: AppColors.textSecondary,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                                hint: Text(
-                                  '01/22',
-                                  style: Fonts.paragraphRegular(),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Cannot be empty';
-                                } else {
-                                  return null;
-                                }
-                              },
-                              onSaved: (newValue) {
-                                expiration = newValue!;
-                                widget.onChanged(
-                                  CreditCard(
-                                    cardHolderName: name,
-                                    cardNumber: cardNumber,
-                                    expiryDate: expiration,
-                                    cvv: cvv,
-                                    processor: (cardNumber.startsWith('4'))
-                                        ? PaymentProcessor.visa
-                                        : PaymentProcessor.mastercard,
-                                    id: widget.card.id,
-                                    isDefault: widget.card.isDefault,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              initialValue: cvv,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: AppColors.backgroundSecondary,
-                                prefixIcon: Icon(
-                                  Icons.lock_outline,
-                                  color: AppColors.textSecondary,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                ),
-                                hint: Text(
-                                  '908',
-                                  style: Fonts.paragraphRegular(),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Cannot be empty';
-                                } else {
-                                  return null;
-                                }
-                              },
-                              onSaved: (newValue) {
-                                cvv = newValue!;
-                                widget.onChanged(
-                                  CreditCard(
-                                    cardHolderName: name,
-                                    cardNumber: cardNumber,
-                                    expiryDate: expiration,
-                                    cvv: cvv,
-                                    processor: (cardNumber.startsWith('4'))
-                                        ? PaymentProcessor.visa
-                                        : PaymentProcessor.mastercard,
-                                    id: widget.card.id,
-                                    isDefault: widget.card.isDefault,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-
                       Row(
                         children: [
                           Expanded(
@@ -353,7 +235,7 @@ class _CreditCardCardState extends State<CreditCardCard> {
                                   'Make default',
                                   style: Fonts.titleBold(),
                                 ),
-                                contentPadding: EdgeInsets.all(0),
+                                contentPadding: EdgeInsets.zero,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
                                 thumbColor: WidgetStateProperty.all(
@@ -368,19 +250,7 @@ class _CreditCardCardState extends State<CreditCardCard> {
                                 visualDensity: VisualDensity.compact,
                                 trackOutlineColor: WidgetStateColor.transparent,
                                 onChanged: (val) {
-                                  widget.onChanged(
-                                    CreditCard(
-                                      cardHolderName: name,
-                                      cardNumber: cardNumber,
-                                      expiryDate: expiration,
-                                      cvv: cvv,
-                                      processor: (cardNumber.startsWith('4'))
-                                          ? PaymentProcessor.visa
-                                          : PaymentProcessor.mastercard,
-                                      id: widget.card.id,
-                                      isDefault: val,
-                                    ),
-                                  );
+                                  _notifyChange(isDefault: val);
                                 },
                               ),
                             ),
@@ -390,7 +260,7 @@ class _CreditCardCardState extends State<CreditCardCard> {
                     ],
                   ),
                 )
-              : SizedBox(),
+              : const SizedBox(),
         ],
       ),
     );

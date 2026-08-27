@@ -10,24 +10,21 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+    const existingProducts = await prisma.product.count();
+    if (existingProducts > 0) {
+        console.log(`Database has existing products. Clearing before seeding fresh data...`);
+        await prisma.product.deleteMany();
+        await prisma.category.deleteMany();
+    }
+
     const categoryEntries = Object.values(categories);
     for (const cat of categoryEntries) {
-        await prisma.category.upsert({
-            where: { id: 0 },
-            update: {},
-            create: {
+        await prisma.category.create({
+            data: {
                 name: cat.name,
                 image_path: cat.imagePath,
                 color: BigInt(cat.color),
             },
-        }).catch(async () => {
-            await prisma.category.create({
-                data: {
-                    name: cat.name,
-                    image_path: cat.imagePath,
-                    color: BigInt(cat.color),
-                },
-            });
         });
     }
 
@@ -56,7 +53,7 @@ async function main() {
         });
     }
 
-    console.log('Database seeded successfully!');
+    console.log('Database seeded successfully with clean data!');
 }
 
 main()

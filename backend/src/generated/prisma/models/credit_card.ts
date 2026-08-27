@@ -40,9 +40,9 @@ export type Credit_cardMinAggregateOutputType = {
   id: number | null
   user_id: number | null
   card_holder_name: string | null
-  card_number: string | null
+  last4: string | null
   expiry_date: string | null
-  cvv: string | null
+  stripe_payment_id: string | null
   processor: string | null
 }
 
@@ -50,9 +50,9 @@ export type Credit_cardMaxAggregateOutputType = {
   id: number | null
   user_id: number | null
   card_holder_name: string | null
-  card_number: string | null
+  last4: string | null
   expiry_date: string | null
-  cvv: string | null
+  stripe_payment_id: string | null
   processor: string | null
 }
 
@@ -60,9 +60,9 @@ export type Credit_cardCountAggregateOutputType = {
   id: number
   user_id: number
   card_holder_name: number
-  card_number: number
+  last4: number
   expiry_date: number
-  cvv: number
+  stripe_payment_id: number
   processor: number
   _all: number
 }
@@ -82,9 +82,9 @@ export type Credit_cardMinAggregateInputType = {
   id?: true
   user_id?: true
   card_holder_name?: true
-  card_number?: true
+  last4?: true
   expiry_date?: true
-  cvv?: true
+  stripe_payment_id?: true
   processor?: true
 }
 
@@ -92,9 +92,9 @@ export type Credit_cardMaxAggregateInputType = {
   id?: true
   user_id?: true
   card_holder_name?: true
-  card_number?: true
+  last4?: true
   expiry_date?: true
-  cvv?: true
+  stripe_payment_id?: true
   processor?: true
 }
 
@@ -102,9 +102,9 @@ export type Credit_cardCountAggregateInputType = {
   id?: true
   user_id?: true
   card_holder_name?: true
-  card_number?: true
+  last4?: true
   expiry_date?: true
-  cvv?: true
+  stripe_payment_id?: true
   processor?: true
   _all?: true
 }
@@ -199,9 +199,9 @@ export type Credit_cardGroupByOutputType = {
   id: number
   user_id: number
   card_holder_name: string
-  card_number: string
+  last4: string
   expiry_date: string
-  cvv: string
+  stripe_payment_id: string
   processor: string
   _count: Credit_cardCountAggregateOutputType | null
   _avg: Credit_cardAvgAggregateOutputType | null
@@ -232,9 +232,9 @@ export type credit_cardWhereInput = {
   id?: Prisma.IntFilter<"credit_card"> | number
   user_id?: Prisma.IntFilter<"credit_card"> | number
   card_holder_name?: Prisma.StringFilter<"credit_card"> | string
-  card_number?: Prisma.StringFilter<"credit_card"> | string
+  last4?: Prisma.StringFilter<"credit_card"> | string
   expiry_date?: Prisma.StringFilter<"credit_card"> | string
-  cvv?: Prisma.StringFilter<"credit_card"> | string
+  stripe_payment_id?: Prisma.StringFilter<"credit_card"> | string
   processor?: Prisma.StringFilter<"credit_card"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.userWhereInput>
   order?: Prisma.OrderListRelationFilter
@@ -245,9 +245,9 @@ export type credit_cardOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   card_holder_name?: Prisma.SortOrder
-  card_number?: Prisma.SortOrder
+  last4?: Prisma.SortOrder
   expiry_date?: Prisma.SortOrder
-  cvv?: Prisma.SortOrder
+  stripe_payment_id?: Prisma.SortOrder
   processor?: Prisma.SortOrder
   user?: Prisma.userOrderByWithRelationInput
   order?: Prisma.orderOrderByRelationAggregateInput
@@ -261,9 +261,9 @@ export type credit_cardWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.credit_cardWhereInput | Prisma.credit_cardWhereInput[]
   user_id?: Prisma.IntFilter<"credit_card"> | number
   card_holder_name?: Prisma.StringFilter<"credit_card"> | string
-  card_number?: Prisma.StringFilter<"credit_card"> | string
+  last4?: Prisma.StringFilter<"credit_card"> | string
   expiry_date?: Prisma.StringFilter<"credit_card"> | string
-  cvv?: Prisma.StringFilter<"credit_card"> | string
+  stripe_payment_id?: Prisma.StringFilter<"credit_card"> | string
   processor?: Prisma.StringFilter<"credit_card"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.userWhereInput>
   order?: Prisma.OrderListRelationFilter
@@ -274,9 +274,9 @@ export type credit_cardOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   card_holder_name?: Prisma.SortOrder
-  card_number?: Prisma.SortOrder
+  last4?: Prisma.SortOrder
   expiry_date?: Prisma.SortOrder
-  cvv?: Prisma.SortOrder
+  stripe_payment_id?: Prisma.SortOrder
   processor?: Prisma.SortOrder
   _count?: Prisma.credit_cardCountOrderByAggregateInput
   _avg?: Prisma.credit_cardAvgOrderByAggregateInput
@@ -292,17 +292,17 @@ export type credit_cardScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"credit_card"> | number
   user_id?: Prisma.IntWithAggregatesFilter<"credit_card"> | number
   card_holder_name?: Prisma.StringWithAggregatesFilter<"credit_card"> | string
-  card_number?: Prisma.StringWithAggregatesFilter<"credit_card"> | string
+  last4?: Prisma.StringWithAggregatesFilter<"credit_card"> | string
   expiry_date?: Prisma.StringWithAggregatesFilter<"credit_card"> | string
-  cvv?: Prisma.StringWithAggregatesFilter<"credit_card"> | string
+  stripe_payment_id?: Prisma.StringWithAggregatesFilter<"credit_card"> | string
   processor?: Prisma.StringWithAggregatesFilter<"credit_card"> | string
 }
 
 export type credit_cardCreateInput = {
   card_holder_name: string
-  card_number: string
+  last4: string
   expiry_date: string
-  cvv: string
+  stripe_payment_id?: string
   processor: string
   user: Prisma.userCreateNestedOneWithoutCredit_cardInput
   order?: Prisma.orderCreateNestedManyWithoutCredit_cardInput
@@ -313,9 +313,9 @@ export type credit_cardUncheckedCreateInput = {
   id?: number
   user_id: number
   card_holder_name: string
-  card_number: string
+  last4: string
   expiry_date: string
-  cvv: string
+  stripe_payment_id?: string
   processor: string
   order?: Prisma.orderUncheckedCreateNestedManyWithoutCredit_cardInput
   user_default_credit_card?: Prisma.userUncheckedCreateNestedManyWithoutDefault_credit_cardInput
@@ -323,9 +323,9 @@ export type credit_cardUncheckedCreateInput = {
 
 export type credit_cardUpdateInput = {
   card_holder_name?: Prisma.StringFieldUpdateOperationsInput | string
-  card_number?: Prisma.StringFieldUpdateOperationsInput | string
+  last4?: Prisma.StringFieldUpdateOperationsInput | string
   expiry_date?: Prisma.StringFieldUpdateOperationsInput | string
-  cvv?: Prisma.StringFieldUpdateOperationsInput | string
+  stripe_payment_id?: Prisma.StringFieldUpdateOperationsInput | string
   processor?: Prisma.StringFieldUpdateOperationsInput | string
   user?: Prisma.userUpdateOneRequiredWithoutCredit_cardNestedInput
   order?: Prisma.orderUpdateManyWithoutCredit_cardNestedInput
@@ -336,9 +336,9 @@ export type credit_cardUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   user_id?: Prisma.IntFieldUpdateOperationsInput | number
   card_holder_name?: Prisma.StringFieldUpdateOperationsInput | string
-  card_number?: Prisma.StringFieldUpdateOperationsInput | string
+  last4?: Prisma.StringFieldUpdateOperationsInput | string
   expiry_date?: Prisma.StringFieldUpdateOperationsInput | string
-  cvv?: Prisma.StringFieldUpdateOperationsInput | string
+  stripe_payment_id?: Prisma.StringFieldUpdateOperationsInput | string
   processor?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.orderUncheckedUpdateManyWithoutCredit_cardNestedInput
   user_default_credit_card?: Prisma.userUncheckedUpdateManyWithoutDefault_credit_cardNestedInput
@@ -348,17 +348,17 @@ export type credit_cardCreateManyInput = {
   id?: number
   user_id: number
   card_holder_name: string
-  card_number: string
+  last4: string
   expiry_date: string
-  cvv: string
+  stripe_payment_id?: string
   processor: string
 }
 
 export type credit_cardUpdateManyMutationInput = {
   card_holder_name?: Prisma.StringFieldUpdateOperationsInput | string
-  card_number?: Prisma.StringFieldUpdateOperationsInput | string
+  last4?: Prisma.StringFieldUpdateOperationsInput | string
   expiry_date?: Prisma.StringFieldUpdateOperationsInput | string
-  cvv?: Prisma.StringFieldUpdateOperationsInput | string
+  stripe_payment_id?: Prisma.StringFieldUpdateOperationsInput | string
   processor?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -366,9 +366,9 @@ export type credit_cardUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   user_id?: Prisma.IntFieldUpdateOperationsInput | number
   card_holder_name?: Prisma.StringFieldUpdateOperationsInput | string
-  card_number?: Prisma.StringFieldUpdateOperationsInput | string
+  last4?: Prisma.StringFieldUpdateOperationsInput | string
   expiry_date?: Prisma.StringFieldUpdateOperationsInput | string
-  cvv?: Prisma.StringFieldUpdateOperationsInput | string
+  stripe_payment_id?: Prisma.StringFieldUpdateOperationsInput | string
   processor?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -376,9 +376,9 @@ export type credit_cardCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   card_holder_name?: Prisma.SortOrder
-  card_number?: Prisma.SortOrder
+  last4?: Prisma.SortOrder
   expiry_date?: Prisma.SortOrder
-  cvv?: Prisma.SortOrder
+  stripe_payment_id?: Prisma.SortOrder
   processor?: Prisma.SortOrder
 }
 
@@ -391,9 +391,9 @@ export type credit_cardMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   card_holder_name?: Prisma.SortOrder
-  card_number?: Prisma.SortOrder
+  last4?: Prisma.SortOrder
   expiry_date?: Prisma.SortOrder
-  cvv?: Prisma.SortOrder
+  stripe_payment_id?: Prisma.SortOrder
   processor?: Prisma.SortOrder
 }
 
@@ -401,9 +401,9 @@ export type credit_cardMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
   card_holder_name?: Prisma.SortOrder
-  card_number?: Prisma.SortOrder
+  last4?: Prisma.SortOrder
   expiry_date?: Prisma.SortOrder
-  cvv?: Prisma.SortOrder
+  stripe_payment_id?: Prisma.SortOrder
   processor?: Prisma.SortOrder
 }
 
@@ -506,9 +506,9 @@ export type credit_cardUncheckedUpdateManyWithoutUserNestedInput = {
 
 export type credit_cardCreateWithoutOrderInput = {
   card_holder_name: string
-  card_number: string
+  last4: string
   expiry_date: string
-  cvv: string
+  stripe_payment_id?: string
   processor: string
   user: Prisma.userCreateNestedOneWithoutCredit_cardInput
   user_default_credit_card?: Prisma.userCreateNestedManyWithoutDefault_credit_cardInput
@@ -518,9 +518,9 @@ export type credit_cardUncheckedCreateWithoutOrderInput = {
   id?: number
   user_id: number
   card_holder_name: string
-  card_number: string
+  last4: string
   expiry_date: string
-  cvv: string
+  stripe_payment_id?: string
   processor: string
   user_default_credit_card?: Prisma.userUncheckedCreateNestedManyWithoutDefault_credit_cardInput
 }
@@ -543,9 +543,9 @@ export type credit_cardUpdateToOneWithWhereWithoutOrderInput = {
 
 export type credit_cardUpdateWithoutOrderInput = {
   card_holder_name?: Prisma.StringFieldUpdateOperationsInput | string
-  card_number?: Prisma.StringFieldUpdateOperationsInput | string
+  last4?: Prisma.StringFieldUpdateOperationsInput | string
   expiry_date?: Prisma.StringFieldUpdateOperationsInput | string
-  cvv?: Prisma.StringFieldUpdateOperationsInput | string
+  stripe_payment_id?: Prisma.StringFieldUpdateOperationsInput | string
   processor?: Prisma.StringFieldUpdateOperationsInput | string
   user?: Prisma.userUpdateOneRequiredWithoutCredit_cardNestedInput
   user_default_credit_card?: Prisma.userUpdateManyWithoutDefault_credit_cardNestedInput
@@ -555,18 +555,18 @@ export type credit_cardUncheckedUpdateWithoutOrderInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   user_id?: Prisma.IntFieldUpdateOperationsInput | number
   card_holder_name?: Prisma.StringFieldUpdateOperationsInput | string
-  card_number?: Prisma.StringFieldUpdateOperationsInput | string
+  last4?: Prisma.StringFieldUpdateOperationsInput | string
   expiry_date?: Prisma.StringFieldUpdateOperationsInput | string
-  cvv?: Prisma.StringFieldUpdateOperationsInput | string
+  stripe_payment_id?: Prisma.StringFieldUpdateOperationsInput | string
   processor?: Prisma.StringFieldUpdateOperationsInput | string
   user_default_credit_card?: Prisma.userUncheckedUpdateManyWithoutDefault_credit_cardNestedInput
 }
 
 export type credit_cardCreateWithoutUserInput = {
   card_holder_name: string
-  card_number: string
+  last4: string
   expiry_date: string
-  cvv: string
+  stripe_payment_id?: string
   processor: string
   order?: Prisma.orderCreateNestedManyWithoutCredit_cardInput
   user_default_credit_card?: Prisma.userCreateNestedManyWithoutDefault_credit_cardInput
@@ -575,9 +575,9 @@ export type credit_cardCreateWithoutUserInput = {
 export type credit_cardUncheckedCreateWithoutUserInput = {
   id?: number
   card_holder_name: string
-  card_number: string
+  last4: string
   expiry_date: string
-  cvv: string
+  stripe_payment_id?: string
   processor: string
   order?: Prisma.orderUncheckedCreateNestedManyWithoutCredit_cardInput
   user_default_credit_card?: Prisma.userUncheckedCreateNestedManyWithoutDefault_credit_cardInput
@@ -595,9 +595,9 @@ export type credit_cardCreateManyUserInputEnvelope = {
 
 export type credit_cardCreateWithoutUser_default_credit_cardInput = {
   card_holder_name: string
-  card_number: string
+  last4: string
   expiry_date: string
-  cvv: string
+  stripe_payment_id?: string
   processor: string
   user: Prisma.userCreateNestedOneWithoutCredit_cardInput
   order?: Prisma.orderCreateNestedManyWithoutCredit_cardInput
@@ -607,9 +607,9 @@ export type credit_cardUncheckedCreateWithoutUser_default_credit_cardInput = {
   id?: number
   user_id: number
   card_holder_name: string
-  card_number: string
+  last4: string
   expiry_date: string
-  cvv: string
+  stripe_payment_id?: string
   processor: string
   order?: Prisma.orderUncheckedCreateNestedManyWithoutCredit_cardInput
 }
@@ -642,9 +642,9 @@ export type credit_cardScalarWhereInput = {
   id?: Prisma.IntFilter<"credit_card"> | number
   user_id?: Prisma.IntFilter<"credit_card"> | number
   card_holder_name?: Prisma.StringFilter<"credit_card"> | string
-  card_number?: Prisma.StringFilter<"credit_card"> | string
+  last4?: Prisma.StringFilter<"credit_card"> | string
   expiry_date?: Prisma.StringFilter<"credit_card"> | string
-  cvv?: Prisma.StringFilter<"credit_card"> | string
+  stripe_payment_id?: Prisma.StringFilter<"credit_card"> | string
   processor?: Prisma.StringFilter<"credit_card"> | string
 }
 
@@ -661,9 +661,9 @@ export type credit_cardUpdateToOneWithWhereWithoutUser_default_credit_cardInput 
 
 export type credit_cardUpdateWithoutUser_default_credit_cardInput = {
   card_holder_name?: Prisma.StringFieldUpdateOperationsInput | string
-  card_number?: Prisma.StringFieldUpdateOperationsInput | string
+  last4?: Prisma.StringFieldUpdateOperationsInput | string
   expiry_date?: Prisma.StringFieldUpdateOperationsInput | string
-  cvv?: Prisma.StringFieldUpdateOperationsInput | string
+  stripe_payment_id?: Prisma.StringFieldUpdateOperationsInput | string
   processor?: Prisma.StringFieldUpdateOperationsInput | string
   user?: Prisma.userUpdateOneRequiredWithoutCredit_cardNestedInput
   order?: Prisma.orderUpdateManyWithoutCredit_cardNestedInput
@@ -673,9 +673,9 @@ export type credit_cardUncheckedUpdateWithoutUser_default_credit_cardInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   user_id?: Prisma.IntFieldUpdateOperationsInput | number
   card_holder_name?: Prisma.StringFieldUpdateOperationsInput | string
-  card_number?: Prisma.StringFieldUpdateOperationsInput | string
+  last4?: Prisma.StringFieldUpdateOperationsInput | string
   expiry_date?: Prisma.StringFieldUpdateOperationsInput | string
-  cvv?: Prisma.StringFieldUpdateOperationsInput | string
+  stripe_payment_id?: Prisma.StringFieldUpdateOperationsInput | string
   processor?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.orderUncheckedUpdateManyWithoutCredit_cardNestedInput
 }
@@ -683,17 +683,17 @@ export type credit_cardUncheckedUpdateWithoutUser_default_credit_cardInput = {
 export type credit_cardCreateManyUserInput = {
   id?: number
   card_holder_name: string
-  card_number: string
+  last4: string
   expiry_date: string
-  cvv: string
+  stripe_payment_id?: string
   processor: string
 }
 
 export type credit_cardUpdateWithoutUserInput = {
   card_holder_name?: Prisma.StringFieldUpdateOperationsInput | string
-  card_number?: Prisma.StringFieldUpdateOperationsInput | string
+  last4?: Prisma.StringFieldUpdateOperationsInput | string
   expiry_date?: Prisma.StringFieldUpdateOperationsInput | string
-  cvv?: Prisma.StringFieldUpdateOperationsInput | string
+  stripe_payment_id?: Prisma.StringFieldUpdateOperationsInput | string
   processor?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.orderUpdateManyWithoutCredit_cardNestedInput
   user_default_credit_card?: Prisma.userUpdateManyWithoutDefault_credit_cardNestedInput
@@ -702,9 +702,9 @@ export type credit_cardUpdateWithoutUserInput = {
 export type credit_cardUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   card_holder_name?: Prisma.StringFieldUpdateOperationsInput | string
-  card_number?: Prisma.StringFieldUpdateOperationsInput | string
+  last4?: Prisma.StringFieldUpdateOperationsInput | string
   expiry_date?: Prisma.StringFieldUpdateOperationsInput | string
-  cvv?: Prisma.StringFieldUpdateOperationsInput | string
+  stripe_payment_id?: Prisma.StringFieldUpdateOperationsInput | string
   processor?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.orderUncheckedUpdateManyWithoutCredit_cardNestedInput
   user_default_credit_card?: Prisma.userUncheckedUpdateManyWithoutDefault_credit_cardNestedInput
@@ -713,9 +713,9 @@ export type credit_cardUncheckedUpdateWithoutUserInput = {
 export type credit_cardUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   card_holder_name?: Prisma.StringFieldUpdateOperationsInput | string
-  card_number?: Prisma.StringFieldUpdateOperationsInput | string
+  last4?: Prisma.StringFieldUpdateOperationsInput | string
   expiry_date?: Prisma.StringFieldUpdateOperationsInput | string
-  cvv?: Prisma.StringFieldUpdateOperationsInput | string
+  stripe_payment_id?: Prisma.StringFieldUpdateOperationsInput | string
   processor?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -763,9 +763,9 @@ export type credit_cardSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   user_id?: boolean
   card_holder_name?: boolean
-  card_number?: boolean
+  last4?: boolean
   expiry_date?: boolean
-  cvv?: boolean
+  stripe_payment_id?: boolean
   processor?: boolean
   user?: boolean | Prisma.userDefaultArgs<ExtArgs>
   order?: boolean | Prisma.credit_card$orderArgs<ExtArgs>
@@ -777,9 +777,9 @@ export type credit_cardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   user_id?: boolean
   card_holder_name?: boolean
-  card_number?: boolean
+  last4?: boolean
   expiry_date?: boolean
-  cvv?: boolean
+  stripe_payment_id?: boolean
   processor?: boolean
   user?: boolean | Prisma.userDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["credit_card"]>
@@ -788,9 +788,9 @@ export type credit_cardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   user_id?: boolean
   card_holder_name?: boolean
-  card_number?: boolean
+  last4?: boolean
   expiry_date?: boolean
-  cvv?: boolean
+  stripe_payment_id?: boolean
   processor?: boolean
   user?: boolean | Prisma.userDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["credit_card"]>
@@ -799,13 +799,13 @@ export type credit_cardSelectScalar = {
   id?: boolean
   user_id?: boolean
   card_holder_name?: boolean
-  card_number?: boolean
+  last4?: boolean
   expiry_date?: boolean
-  cvv?: boolean
+  stripe_payment_id?: boolean
   processor?: boolean
 }
 
-export type credit_cardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "card_holder_name" | "card_number" | "expiry_date" | "cvv" | "processor", ExtArgs["result"]["credit_card"]>
+export type credit_cardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "card_holder_name" | "last4" | "expiry_date" | "stripe_payment_id" | "processor", ExtArgs["result"]["credit_card"]>
 export type credit_cardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.userDefaultArgs<ExtArgs>
   order?: boolean | Prisma.credit_card$orderArgs<ExtArgs>
@@ -830,9 +830,9 @@ export type $credit_cardPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: number
     user_id: number
     card_holder_name: string
-    card_number: string
+    last4: string
     expiry_date: string
-    cvv: string
+    stripe_payment_id: string
     processor: string
   }, ExtArgs["result"]["credit_card"]>
   composites: {}
@@ -1263,9 +1263,9 @@ export interface credit_cardFieldRefs {
   readonly id: Prisma.FieldRef<"credit_card", 'Int'>
   readonly user_id: Prisma.FieldRef<"credit_card", 'Int'>
   readonly card_holder_name: Prisma.FieldRef<"credit_card", 'String'>
-  readonly card_number: Prisma.FieldRef<"credit_card", 'String'>
+  readonly last4: Prisma.FieldRef<"credit_card", 'String'>
   readonly expiry_date: Prisma.FieldRef<"credit_card", 'String'>
-  readonly cvv: Prisma.FieldRef<"credit_card", 'String'>
+  readonly stripe_payment_id: Prisma.FieldRef<"credit_card", 'String'>
   readonly processor: Prisma.FieldRef<"credit_card", 'String'>
 }
     

@@ -91,9 +91,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             credit_card {
               id
               card_holder_name
-              card_number
+              last4
               expiry_date
-              cvv
+              stripe_payment_id
               processor
             }
             order {
@@ -133,9 +133,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
               credit_card {
                 id
                 card_holder_name
-                card_number
+                last4
                 expiry_date
-                cvv
+                stripe_payment_id
                 processor
               }
             }

@@ -37,6 +37,8 @@ import 'package:big_cart/features/account/domain/use_cases/get_transactions.dart
     as _i526;
 import 'package:big_cart/features/account/domain/use_cases/get_user_data.dart'
     as _i605;
+import 'package:big_cart/features/account/domain/use_cases/set_default_credit_card.dart'
+    as _i604;
 import 'package:big_cart/features/account/domain/use_cases/set_notification_preferences.dart'
     as _i783;
 import 'package:big_cart/features/account/domain/use_cases/update_address.dart'
@@ -224,6 +226,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i605.GetUserData>(
       () => _i605.GetUserData(accountRepository: gh<_i62.AccountRepository>()),
     );
+    gh.lazySingleton<_i604.SetDefaultCreditCard>(
+      () => _i604.SetDefaultCreditCard(
+        accountRepository: gh<_i62.AccountRepository>(),
+      ),
+    );
     gh.lazySingleton<_i783.SetNotificationPreferences>(
       () => _i783.SetNotificationPreferences(
         accountRepository: gh<_i62.AccountRepository>(),
@@ -342,6 +349,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i886.AddCreditCard>(),
         gh<_i600.GetCreditCards>(),
         gh<_i1051.UpdateCreditCard>(),
+        gh<_i604.SetDefaultCreditCard>(),
       ),
     );
     gh.lazySingleton<_i270.LogIn>(

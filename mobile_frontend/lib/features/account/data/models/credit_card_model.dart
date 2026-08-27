@@ -12,9 +12,9 @@ class CreditCardModel extends CreditCard {
   CreditCardModel({
     super.id,
     required super.cardHolderName,
-    required super.cardNumber,
+    required super.last4,
     required super.expiryDate,
-    required super.cvv,
+    super.stripePaymentId = 'pm_mock_12345',
     required super.processor,
     super.isDefault = false,
   });
@@ -22,9 +22,9 @@ class CreditCardModel extends CreditCard {
   factory CreditCardModel.fromEntity(CreditCard entity) => CreditCardModel(
         id: entity.id,
         cardHolderName: entity.cardHolderName,
-        cardNumber: entity.cardNumber,
+        last4: entity.last4,
         expiryDate: entity.expiryDate,
-        cvv: entity.cvv,
+        stripePaymentId: entity.stripePaymentId,
         processor: entity.processor,
         isDefault: entity.isDefault,
       );

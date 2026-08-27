@@ -20,7 +20,7 @@ class _AddCreditCardPageState extends State<AddCreditCardPage> {
   late String name;
   late String cardNumber;
   late String expiration;
-  late String cvv;
+  String cvv = '';
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,6 @@ class _AddCreditCardPageState extends State<AddCreditCardPage> {
           name: name,
           cardNumber: cardNumber,
           expiration: expiration,
-          cvv: cvv,
           saveCard: saveCard,
           processor: (cardNumber.startsWith('4'))
               ? PaymentProcessor.visa

@@ -89,23 +89,25 @@ class _ShippingPageState extends State<ShippingPage> {
             bool isValid = formKey.currentState!.validate();
             if (isValid) {
               formKey.currentState!.save();
+              final cleanNum = creditCardNumber.replaceAll(RegExp(r'\s+'), '');
+              final last4 = cleanNum.length >= 4
+                  ? cleanNum.substring(cleanNum.length - 4)
+                  : cleanNum;
               creditCard = CreditCard(
                 cardHolderName: creditCardName,
-                cardNumber: creditCardNumber,
+                last4: last4,
                 expiryDate: creditCardExpiration,
-                cvv: creditCardCVV,
-                processor: (creditCardNumber.startsWith('4')
-                    ? PaymentProcessor.mastercard
-                    : PaymentProcessor.visa),
+                processor: (cleanNum.startsWith('4')
+                    ? PaymentProcessor.visa
+                    : PaymentProcessor.mastercard),
               );
               if (creditCardSave) {
                 context.read<CardsCubit>().attemptAddCreditCard(
                   name: creditCardName,
-                  cardNumber: creditCardNumber,
+                  cardNumber: cleanNum,
                   expiration: creditCardExpiration,
-                  cvv: creditCardCVV,
                   saveCard: false,
-                  processor: (creditCardNumber.startsWith('4')
+                  processor: (cleanNum.startsWith('4')
                       ? PaymentProcessor.visa
                       : PaymentProcessor.mastercard),
                 );

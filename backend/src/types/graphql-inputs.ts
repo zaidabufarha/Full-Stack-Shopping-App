@@ -24,9 +24,10 @@ export interface AddressInput {
 
 export interface CardInput {
     card_holder_name: string;
-    card_number: string;
+    last4?: string;
+    card_number?: string;
     expiry_date: string;
-    cvv: string;
+    stripe_payment_id?: string;
     processor: string;
     is_default?: boolean;
 }

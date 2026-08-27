@@ -56,7 +56,6 @@ class AccountRepositoryImpl implements AccountRepository {
     required String name,
     required String cardNumber,
     required String expiration,
-    required String cvv,
     required bool saveCard,
     required PaymentProcessor processor,
   }) async {
@@ -65,7 +64,6 @@ class AccountRepositoryImpl implements AccountRepository {
         name: name,
         cardNumber: cardNumber,
         expiration: expiration,
-        cvv: cvv,
         saveCard: saveCard,
         processor: processor,
       );
@@ -218,13 +216,25 @@ class AccountRepositoryImpl implements AccountRepository {
       final cardModel = CreditCardModel(
         id: card.id,
         cardHolderName: card.cardHolderName,
-        cardNumber: card.cardNumber,
+        last4: card.last4,
         expiryDate: card.expiryDate,
-        cvv: card.cvv,
+        stripePaymentId: card.stripePaymentId,
         processor: card.processor,
         isDefault: card.isDefault,
       );
       await accountRemoteDataSource.updateCreditCard(cardModel);
+      return Right(unit);
+    } on NoInternetException {
+      return Left(NoInternetFailure());
+    } on EmptyCacheException {
+      return Left(EmptyCacheFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> setDefaultCreditCard(String cardId) async {
+    try {
+      await accountRemoteDataSource.setDefaultCreditCard(cardId);
       return Right(unit);
     } on NoInternetException {
       return Left(NoInternetFailure());

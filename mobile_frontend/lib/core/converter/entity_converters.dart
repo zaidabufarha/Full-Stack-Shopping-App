@@ -37,7 +37,7 @@ class CreditCardConverter implements JsonConverter<CreditCard, dynamic> {
   CreditCard fromJson(dynamic json) {
     if (json is Map<String, dynamic>) return CreditCardModel.fromJson(json);
     if (json is Map) return CreditCardModel.fromJson(Map<String, dynamic>.from(json));
-    return CreditCardModel(cardHolderName: '', cardNumber: '', expiryDate: '', cvv: '', processor: PaymentProcessor.mastercard);
+    return CreditCardModel(cardHolderName: '', last4: '', expiryDate: '', processor: PaymentProcessor.mastercard);
   }
   @override
   dynamic toJson(CreditCard object) => (object as CreditCardModel).toJson();
@@ -53,7 +53,7 @@ class OrderConverter implements JsonConverter<Order, dynamic> {
       orderItem: [],
       createdAt: DateTime.now(),
       address: AddressModel(name: '', street: '', city: '', country: '', phone: '', zipCode: ''),
-      creditCard: CreditCardModel(cardHolderName: '', cardNumber: '', expiryDate: '', cvv: '', processor: PaymentProcessor.mastercard),
+      creditCard: CreditCardModel(cardHolderName: '', last4: '', expiryDate: '', processor: PaymentProcessor.mastercard),
       shippingMethod: '',
     );
   }

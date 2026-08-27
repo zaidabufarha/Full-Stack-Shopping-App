@@ -110,9 +110,9 @@ export const Credit_cardScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   card_holder_name: 'card_holder_name',
-  card_number: 'card_number',
+  last4: 'last4',
   expiry_date: 'expiry_date',
-  cvv: 'cvv',
+  stripe_payment_id: 'stripe_payment_id',
   processor: 'processor'
 } as const
 

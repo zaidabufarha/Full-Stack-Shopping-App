@@ -3,18 +3,18 @@ import 'package:big_cart/features/account/domain/entities/transaction.dart';
 class CreditCard {
   String? id;
   String cardHolderName;
-  String cardNumber;
+  String last4;
   String expiryDate;
-  String cvv;
+  String? stripePaymentId;
   PaymentProcessor processor;
   bool isDefault;
 
   CreditCard({
     this.id,
     required this.cardHolderName,
-    required this.cardNumber,
+    required this.last4,
     required this.expiryDate,
-    required this.cvv,
+    this.stripePaymentId = 'pm_mock_12345',
     required this.processor,
     this.isDefault = false,
   });

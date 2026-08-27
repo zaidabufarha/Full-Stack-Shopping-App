@@ -13,7 +13,6 @@ class AddCreditCard {
     required String name,
     required String cardNumber,
     required String expiration,
-    required String cvv,
     required bool saveCard,
     required PaymentProcessor processor,
   }) async {
@@ -21,7 +20,6 @@ class AddCreditCard {
       name: name,
       cardNumber: cardNumber,
       expiration: expiration,
-      cvv: cvv,
       saveCard: saveCard,
       processor: processor,
     );

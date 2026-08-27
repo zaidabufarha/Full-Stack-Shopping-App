@@ -144,17 +144,43 @@ export default {
 
     addCard: async function ({ input }: { input: CardInput }, req: AuthRequest) {
         checkAuth(req);
-        const { is_default, ...cardData } = input;
+        const { is_default, card_number, last4, stripe_payment_id, ...cardData } = input as any;
+        const finalLast4 = last4 || (card_number ? card_number.replace(/\s+/g, '').slice(-4) : '1234');
         const newCard = await prisma.credit_card.create({
-            data: { user_id: req.id!, ...cardData }
+            data: {
+                user_id: req.id!,
+                last4: finalLast4,
+                stripe_payment_id: stripe_payment_id || 'pm_mock_12345',
+                ...cardData
+            }
         });
-        if (is_default) { //automatically query. no need for two network requests.
+        if (is_default) {
             await prisma.user.update({
                 where: { id: req.id! },
                 data: { default_credit_card_id: newCard.id }
             });
         }
         return newCard;
+    },
+
+    updateCreditCard: async function ({ id, input }: { id: string; input: CardInput }, req: AuthRequest) {
+        checkAuth(req);
+        const { is_default, card_number, last4, stripe_payment_id, cvv, ...cardData } = input as any;
+        const updateData: any = { ...cardData };
+        if (last4) updateData.last4 = last4;
+        if (stripe_payment_id) updateData.stripe_payment_id = stripe_payment_id;
+
+        const updated = await prisma.credit_card.update({
+            where: { id: +id },
+            data: updateData
+        });
+        if (is_default) {
+            await prisma.user.update({
+                where: { id: req.id! },
+                data: { default_credit_card_id: +id }
+            });
+        }
+        return updated;
     },
 
     deleteCard: async function ({ id }: { id: string }, req: AuthRequest) {
@@ -164,6 +190,21 @@ export default {
     },
 
     setDefaultCard: async function ({ id }: { id: string }, req: AuthRequest) {
+        checkAuth(req);
+        await prisma.user.update({
+            where: { id: req.id! },
+            data: { default_credit_card_id: +id }
+        });
+        const card = await prisma.credit_card.findUnique({ where: { id: +id } });
+        if (!card) {
+            const err: HttpError = new Error('Card not found');
+            err.statusCode = 404;
+            throw err;
+        }
+        return card;
+    },
+
+    setDefaultCreditCard: async function ({ id }: { id: string }, req: AuthRequest) {
         checkAuth(req);
         await prisma.user.update({
             where: { id: req.id! },

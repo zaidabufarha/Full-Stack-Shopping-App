@@ -41,9 +41,9 @@ export default buildSchema(`
         id: ID!
         user_id: ID!
         card_holder_name: String!
-        card_number: String!
+        last4: String!
         expiry_date: String!
-        cvv: String!
+        stripe_payment_id: String!
         processor: String!
     }
 
@@ -161,11 +161,12 @@ export default buildSchema(`
     }
 
     input CardInput {
-        card_holder_name: String!
-        card_number: String!
-        expiry_date: String!
-        cvv: String!
-        processor: String!
+        card_holder_name: String
+        last4: String
+        card_number: String
+        expiry_date: String
+        stripe_payment_id: String
+        processor: String
         is_default: Boolean
     }
 
@@ -207,8 +208,10 @@ export default buildSchema(`
         setDefaultAddress(id: ID!): Address!
 
         addCard(input: CardInput!): CreditCard!
+        updateCreditCard(id: ID!, input: CardInput!): CreditCard!
         deleteCard(id: ID!): Boolean!
         setDefaultCard(id: ID!): CreditCard!
+        setDefaultCreditCard(id: ID!): CreditCard!
 
         addToCart(product_id: ID!, quantity: Int!): CartItem!
         updateCartItem(cart_item_id: ID!, quantity: Int!): CartItem!

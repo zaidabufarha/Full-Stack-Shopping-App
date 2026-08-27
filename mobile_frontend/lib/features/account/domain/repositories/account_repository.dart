@@ -21,11 +21,11 @@ abstract class AccountRepository {
     required String name,
     required String cardNumber,
     required String expiration,
-    required String cvv,
     required bool saveCard,
     required PaymentProcessor processor,
   });
   Future<Either<Failure, Unit>> updateCreditCard(CreditCard card);
+  Future<Either<Failure, Unit>> setDefaultCreditCard(String cardId);
 
   Future<Either<Failure, List<CreditCard>>> getCreditCards();
 

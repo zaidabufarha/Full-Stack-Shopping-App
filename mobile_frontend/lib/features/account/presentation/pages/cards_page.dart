@@ -20,6 +20,7 @@ class CardsPage extends StatefulWidget {
 class _CardsPageState extends State<CardsPage> {
   List<CreditCard> list = [];
   final formKey = GlobalKey<FormState>();
+  int? editedCardIndex;
 
   @override
   void initState() {
@@ -30,23 +31,22 @@ class _CardsPageState extends State<CardsPage> {
   @override
   Widget build(BuildContext context) {
     void onClick(int? index) async {
-      bool isValid = formKey.currentState!.validate();
+      final isValid = formKey.currentState?.validate() ?? false;
       if (isValid) {
         formKey.currentState!.save();
-        CreditCard? defaultCard;
-        for (CreditCard card in list) {
-          if (!card.isDefault) {
-            await context.read<CardsCubit>().attemptUpdateCreditCard(
-              card: card,
-            );
-          } else {
-            defaultCard = card;
+        final cubit = context.read<CardsCubit>();
+        if (editedCardIndex != null && editedCardIndex! < list.length) {
+          final editedCard = list[editedCardIndex!];
+          if (editedCard.isDefault && editedCard.id != null) {
+            await cubit.attemptSetDefaultCreditCard(editedCard.id!);
           }
-        }
-        if (defaultCard != null) {
-          await context.read<CardsCubit>().attemptUpdateCreditCard(
-            card: defaultCard,
-          );
+          await cubit.attemptUpdateCreditCard(card: editedCard);
+        } else {
+          final defaultCard =
+              list.where((c) => c.isDefault && c.id != null).firstOrNull;
+          if (defaultCard != null) {
+            await cubit.attemptSetDefaultCreditCard(defaultCard.id!);
+          }
         }
       }
     }
@@ -58,18 +58,16 @@ class _CardsPageState extends State<CardsPage> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back_outlined),
+          icon: const Icon(Icons.arrow_back_outlined),
         ),
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(
-                context,
-              ).push(
-                MaterialPageRoute(builder: (context) => AddCreditCardPage()),
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const AddCreditCardPage()),
               );
             },
-            icon: Icon(Icons.add_circle_outline),
+            icon: const Icon(Icons.add_circle_outline),
           ),
         ],
         centerTitle: true,
@@ -79,7 +77,7 @@ class _CardsPageState extends State<CardsPage> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsetsGeometry.all(20),
+        padding: const EdgeInsets.all(20),
         child: BlocConsumer<CardsCubit, CardsState>(
           listener: (context, state) {
             state.whenOrNull(
@@ -102,9 +100,7 @@ class _CardsPageState extends State<CardsPage> {
               },
               success: (message) {
                 ScaffoldMessenger.of(context).clearSnackBars();
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
                       message,
@@ -120,7 +116,7 @@ class _CardsPageState extends State<CardsPage> {
           },
           builder: (context, state) {
             return state.maybeWhen(
-              loading: () => Center(
+              loading: () => const Center(
                 child: CircularProgressIndicator(),
               ),
               error: (message) => Column(
@@ -134,7 +130,7 @@ class _CardsPageState extends State<CardsPage> {
                       'Retry',
                       style: Fonts.paragraphMedium(),
                     ),
-                    icon: Icon(Icons.restart_alt),
+                    icon: const Icon(Icons.restart_alt),
                   ),
                 ],
               ),
@@ -151,6 +147,7 @@ class _CardsPageState extends State<CardsPage> {
                             for (int i = 0; i < list.length; i++)
                               CreditCardCard(list[i], (updatedCard) {
                                 setState(() {
+                                  editedCardIndex = i;
                                   list[i] = updatedCard;
                                   if (updatedCard.isDefault) {
                                     for (int j = 0; j < list.length; j++) {

@@ -25,11 +25,11 @@ abstract class AccountRemoteDataSource {
     required String name,
     required String cardNumber,
     required String expiration,
-    required String cvv,
     required bool saveCard,
     required PaymentProcessor processor,
   });
   Future<void> updateCreditCard(CreditCardModel card);
+  Future<void> setDefaultCreditCard(String cardId);
 
   Future<List<CreditCardModel>> getCreditCards();
 
@@ -113,7 +113,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
     required String name,
     required String cardNumber,
     required String expiration,
-    required String cvv,
     required bool saveCard,
     required PaymentProcessor processor,
   }) async {
@@ -125,14 +124,18 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
       }
     ''';
     try {
+      final cleanNumber = cardNumber.replaceAll(RegExp(r'\s+'), '');
+      final last4 = cleanNumber.length >= 4
+          ? cleanNumber.substring(cleanNumber.length - 4)
+          : cleanNumber;
       await apiConsumer.graphql(
         query: mutation,
         variables: {
           'input': {
             'card_holder_name': name,
-            'card_number': cardNumber,
+            'card_number': cleanNumber,
+            'last4': last4,
             'expiry_date': expiration,
-            'cvv': cvv,
             'processor': processor.name,
             'is_default': saveCard,
           },
@@ -232,9 +235,9 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
           credit_card {
             id
             card_holder_name
-            card_number
+            last4
             expiry_date
-            cvv
+            stripe_payment_id
             processor
           }
         }
@@ -325,9 +328,9 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
             credit_card {
               id
               card_holder_name
-              card_number
+              last4
               expiry_date
-              cvv
+              stripe_payment_id
               processor
             }
           }
@@ -401,9 +404,9 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
           credit_card {
             id
             card_holder_name
-            card_number
+            last4
             expiry_date
-            cvv
+            stripe_payment_id
             processor
           }
           order {
@@ -443,9 +446,9 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
             credit_card {
               id
               card_holder_name
-              card_number
+              last4
               expiry_date
-              cvv
+              stripe_payment_id
               processor
             }
           }
@@ -532,20 +535,48 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
 
   @override
   Future<void> updateCreditCard(CreditCardModel card) async {
-    // BACKEND INTEGRATION: Set default credit card if needed
+    const mutation = r'''
+      mutation UpdateCreditCard($id: ID!, $input: CardInput!) {
+        updateCreditCard(id: $id, input: $input) {
+          id
+        }
+      }
+    ''';
     try {
-      if (card.isDefault && card.id != null) {
+      if (card.id != null) {
         await apiConsumer.graphql(
-          query: r'''
-            mutation SetDefaultCard($id: ID!) {
-              setDefaultCard(id: $id) {
-                id
-              }
-            }
-          ''',
-          variables: {'id': card.id},
+          query: mutation,
+          variables: {
+            'id': card.id,
+            'input': {
+              'card_holder_name': card.cardHolderName,
+              'last4': card.last4,
+              'expiry_date': card.expiryDate,
+              'processor': card.processor.name,
+              'is_default': card.isDefault,
+            },
+          },
         );
       }
+    } on DioException {
+      throw NoInternetException();
+    }
+  }
+
+  @override
+  Future<void> setDefaultCreditCard(String cardId) async {
+    const mutation = r'''
+      mutation SetDefaultCreditCard($id: ID!) {
+        setDefaultCreditCard(id: $id) {
+          id
+        }
+      }
+    ''';
+    try {
+      await apiConsumer.graphql(
+        query: mutation,
+        variables: {'id': cardId},
+      );
     } on DioException {
       throw NoInternetException();
     }

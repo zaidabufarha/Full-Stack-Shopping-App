@@ -2,6 +2,7 @@ import 'package:big_cart/features/account/domain/entities/credit_card.dart';
 import 'package:big_cart/features/account/domain/entities/transaction.dart';
 import 'package:big_cart/features/account/domain/use_cases/add_credit_card.dart';
 import 'package:big_cart/features/account/domain/use_cases/get_credit_cards.dart';
+import 'package:big_cart/features/account/domain/use_cases/set_default_credit_card.dart';
 import 'package:big_cart/features/account/domain/use_cases/update_credit_card.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,17 +13,21 @@ part 'cards_cubit.freezed.dart';
 
 @injectable
 class CardsCubit extends Cubit<CardsState> {
-  CardsCubit(this.addCreditCard, this.getCreditCards, this.updateCreditCard)
-    : super(CardsState.initial());
+  CardsCubit(
+    this.addCreditCard,
+    this.getCreditCards,
+    this.updateCreditCard,
+    this.setDefaultCreditCard,
+  ) : super(CardsState.initial());
   AddCreditCard addCreditCard;
   UpdateCreditCard updateCreditCard;
   GetCreditCards getCreditCards;
+  SetDefaultCreditCard setDefaultCreditCard;
 
   void attemptAddCreditCard({
     required String name,
     required String cardNumber,
     required String expiration,
-    required String cvv,
     required bool saveCard,
     required PaymentProcessor processor,
   }) async {
@@ -30,7 +35,6 @@ class CardsCubit extends Cubit<CardsState> {
       name: name,
       cardNumber: cardNumber,
       expiration: expiration,
-      cvv: cvv,
       saveCard: saveCard,
       processor: processor,
     );
@@ -54,6 +58,19 @@ class CardsCubit extends Cubit<CardsState> {
       },
       (unit) {
         emit(CardsState.success('Updated successfully'));
+      },
+    );
+  }
+
+  Future<void> attemptSetDefaultCreditCard(String cardId) async {
+    final result = await setDefaultCreditCard.call(cardId);
+
+    result.fold(
+      (failure) {
+        emit(CardsState.error(failure.message));
+      },
+      (unit) {
+        emit(CardsState.success('Updated default card successfully'));
       },
     );
   }

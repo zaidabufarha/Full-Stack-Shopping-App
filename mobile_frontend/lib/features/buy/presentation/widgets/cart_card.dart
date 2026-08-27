@@ -100,7 +100,7 @@ class _CartCardState extends State<CartCard> {
                     setState(() {
                       context.read<CartCubit>().attemptUpdateQuantity(
                         widget.data,
-                        widget.data.quantity += 1,
+                        widget.data.quantity + 1,
                       );
                     });
                   },

@@ -9,7 +9,7 @@
   "scripts": {
     "start": "tsx watch src/app.ts",
     "dev": "tsx watch src/app.ts",
-    "test": "mocha",
+    "test": "vitest run",
     "test:journey": "tsx test-journey.ts"
   },
   "prisma": {
@@ -41,7 +41,14 @@
     "@types/body-parser": "^1.19.6",
     "@types/express": "^5.0.6",
     "@types/express-graphql": "^0.8.2",
-    "prisma": "^7.9.1"
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/supertest": "^6.0.3",
+    "prisma": "^7.9.1",
+    "supertest": "^6.3.4",
+    "vitest": "^1.6.1"
+  },
+  "overrides": {
+    "graphql": "$graphql"
   },
   "allowScripts": {
     "@prisma/engines@7.9.1": true,

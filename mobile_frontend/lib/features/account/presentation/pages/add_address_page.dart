@@ -18,18 +18,27 @@ class AddAddressPage extends StatefulWidget {
 class _AddAddressPageState extends State<AddAddressPage> {
   bool saveAddress = true;
   late String name;
-  late String email;
   late String phoneNumber;
   late String address;
   late String zip;
   late String city;
   String? country;
+  String? countryError;
 
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     void onClick(int? index) {
       bool isValid = formKey.currentState!.validate();
+      if (country == null) {
+        setState(() {
+          countryError = 'Please select a country';
+        });
+      } else {
+        setState(() {
+          countryError = null;
+        });
+      }
       if (isValid && country != null) {
         formKey.currentState!.save();
         context.read<AddressCubit>().attemptAddAddress(
@@ -123,32 +132,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
                           },
                           onSaved: (newValue) {
                             name = newValue!;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: AppColors.backgroundPrimary,
-                            prefixIcon: Icon(
-                              Icons.mail_outline,
-                              color: AppColors.textSecondary,
-                            ),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                            ),
-                            hint: Text(
-                              'Email address',
-                              style: Fonts.paragraphRegular(),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Cannot be empty';
-                            }
-                            return null;
-                          },
-                          onSaved: (newValue) {
-                            email = newValue!;
                           },
                         ),
                         TextFormField(
@@ -255,46 +238,66 @@ class _AddAddressPageState extends State<AddAddressPage> {
                             city = newValue!;
                           },
                         ),
-                        InkWell(
-                          onTap: () {
-                            showCountryPicker(
-                              context: context,
-                              showPhoneCode: false,
-                              onSelect: (Country selectedCountry) {
-                                setState(() {
-                                  country = selectedCountry.name;
-                                });
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                showCountryPicker(
+                                  context: context,
+                                  showPhoneCode: false,
+                                  onSelect: (Country selectedCountry) {
+                                    setState(() {
+                                      country = selectedCountry.name;
+                                      countryError = null;
+                                    });
+                                  },
+                                );
                               },
-                            );
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            color: AppColors.backgroundPrimary,
-                            padding: EdgeInsets.all(10),
-                            height: 56.h,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  spacing: 12.w,
+                              child: Container(
+                                width: double.infinity,
+                                color: AppColors.backgroundPrimary,
+                                padding: EdgeInsets.all(10),
+                                height: 56.h,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Icon(
-                                      Icons.language,
-                                      color: AppColors.textSecondary,
+                                    Row(
+                                      spacing: 12.w,
+                                      children: [
+                                        Icon(
+                                          Icons.language,
+                                          color: AppColors.textSecondary,
+                                        ),
+                                        Text(
+                                          (country == null)
+                                              ? 'Country'
+                                              : country!,
+                                          style: Fonts.paragraphRegular(),
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      (country == null) ? 'Country' : country!,
-                                      style: Fonts.paragraphRegular(),
+                                    Icon(
+                                      Icons.arrow_drop_down,
+                                      color: AppColors.textSecondary,
                                     ),
                                   ],
                                 ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  color: AppColors.textSecondary,
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
+                            if (countryError != null)
+                              Padding(
+                                padding: EdgeInsets.only(left: 12.w, top: 8.h),
+                                child: Text(
+                                  countryError!,
+                                  style: Fonts.paragraphRegular().copyWith(
+                                    color: Colors.red,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                         Row(
                           children: [

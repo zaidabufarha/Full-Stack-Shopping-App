@@ -85,7 +85,7 @@ class CartCubit extends Cubit<CartState> {
         emit(CartState.error(failure.message));
       },
       (unit) {
-        emit(CartState.success('Checkout successful')); //idk what to write here
+        emit(CartState.success('Checkout successful'));
       },
     );
   }

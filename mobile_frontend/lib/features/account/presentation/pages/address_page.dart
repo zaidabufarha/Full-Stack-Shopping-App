@@ -19,7 +19,8 @@ class AddressPage extends StatefulWidget {
 }
 
 class _AddressPageState extends State<AddressPage> {
-  late List<Address> list;
+  List<Address> list = [];
+  List<Address> originalList = [];
   final formKey = GlobalKey<FormState>();
   bool hasBeenLoaded = false;
   @override
@@ -35,15 +36,26 @@ class _AddressPageState extends State<AddressPage> {
       if (isValid) {
         formKey.currentState!.save();
         Address? defaultAddress;
-        Address? lastAddress;
-        for (Address address in list) {
-          if (!address.isDefault) {
-            lastAddress = address;
-            await context.read<AddressCubit>().attemptUpdateAddress(
-              address: address,
-            );
-          } else {
-            defaultAddress = address;
+        for (int i = 0; i < list.length; i++) {
+          final address = list[i];
+          final original = i < originalList.length ? originalList[i] : null;
+          final changed = original == null ||
+              address.name != original.name ||
+              address.street != original.street ||
+              address.city != original.city ||
+              address.country != original.country ||
+              address.phone != original.phone ||
+              address.zipCode != original.zipCode ||
+              address.isDefault != original.isDefault;
+
+          if (changed) {
+            if (!address.isDefault) {
+              await context.read<AddressCubit>().attemptUpdateAddress(
+                address: address,
+              );
+            } else {
+              defaultAddress = address;
+            }
           }
         }
         if (defaultAddress != null) {
@@ -87,7 +99,36 @@ class _AddressPageState extends State<AddressPage> {
           listener: (context, state) {
             state.whenOrNull(
               loaded: (addresses) {
-                if (!hasBeenLoaded) list = List.from(addresses);
+                if (!hasBeenLoaded) {
+                  list = addresses
+                      .map(
+                        (a) => Address(
+                          id: a.id,
+                          name: a.name,
+                          street: a.street,
+                          city: a.city,
+                          country: a.country,
+                          phone: a.phone,
+                          zipCode: a.zipCode,
+                          isDefault: a.isDefault,
+                        ),
+                      )
+                      .toList();
+                  originalList = addresses
+                      .map(
+                        (a) => Address(
+                          id: a.id,
+                          name: a.name,
+                          street: a.street,
+                          city: a.city,
+                          country: a.country,
+                          phone: a.phone,
+                          zipCode: a.zipCode,
+                          isDefault: a.isDefault,
+                        ),
+                      )
+                      .toList();
+                }
                 hasBeenLoaded = true;
               },
 
@@ -145,6 +186,14 @@ class _AddressPageState extends State<AddressPage> {
                 ],
               ),
               orElse: () {
+                if (list.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No addresses found',
+                      style: Fonts.titleBold(),
+                    ),
+                  );
+                }
                 return Form(
                   key: formKey,
                   child: Column(

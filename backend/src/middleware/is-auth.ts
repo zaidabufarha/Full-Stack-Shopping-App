@@ -1,26 +1,33 @@
-const jwt = require('jsonwebtoken')
+import jwt from 'jsonwebtoken';
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../types/auth-request'
+import { AuthRequest } from '../types/auth-request';
 
 //instead of throwing I'll use flags. this way I can ignore it for signup and login
 
-module.exports = (req: AuthRequest, res: Response, next: NextFunction) => {
+const isAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const token = req.get('Authorization')!.split(' ')[1] //after 'Bearer '
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+        const authHeader = req.get('Authorization');
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            req.isAuth = false;
+            return next();
+        }
+        const token = authHeader.split(' ')[1]; //after 'Bearer '
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET!) as any;
         if (decodedToken) {
-            req.id = decodedToken.userId
-            req.isAuth = true
-            return next()
+            req.id = decodedToken.userId;
+            req.isAuth = true;
+            return next();
         }
         else {
-            req.isAuth = false
-            return next()
+            req.isAuth = false;
+            return next();
         }
 
     }
     catch (err) {
-        req.isAuth = false
-        return next()
+        req.isAuth = false;
+        return next();
     }
-}
+};
+
+export default isAuth;

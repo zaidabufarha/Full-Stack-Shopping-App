@@ -31,6 +31,7 @@ class ProfilePageOption extends StatelessWidget {
             MaterialPageRoute(builder: (context) => SplashScreen(0)),
             (route) => false,
           );
+          return;
         }
         Navigator.of(
           context,

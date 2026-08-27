@@ -1,9 +1,17 @@
+import 'dotenv/config'
 import express from 'express'
 import { graphqlHTTP } from 'express-graphql'
 import bodyParser from 'body-parser'
 import graphqlSchema from './graphql/schema'
 import graphqlResolver from './graphql/resolvers'
-const isAuth = require('./middleware/is-auth')
+import isAuth from './middleware/is-auth'
+
+const requiredEnvVars = ['JWT_SECRET', 'DATABASE_URL', 'RESEND_API_KEY'];
+for (const envVar of requiredEnvVars) {
+    if (!process.env[envVar]) {
+        throw new Error(`Missing required environment variable: ${envVar}`);
+    }
+}
 
 const app = express()
 
@@ -27,4 +35,8 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true
 
 }))
-app.listen(process.env.PORT || 4321)
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(process.env.PORT || 4321)
+}
+
+export default app;

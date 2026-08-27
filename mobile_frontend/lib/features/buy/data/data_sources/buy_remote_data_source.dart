@@ -38,7 +38,6 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
 
   @override
   Future<Unit> addReview(String id, ReviewModel review) async {
-    // BACKEND INTEGRATION: GraphQL addReview mutation
     const mutation = r'''
       mutation AddReview($productId: ID!, $rating: Float!, $comment: String!) {
         addReview(product_id: $productId, rating: $rating, comment: $comment) {
@@ -63,7 +62,6 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
 
   @override
   Future<Unit> addToCart(CartItemModel item) async {
-    // BACKEND INTEGRATION: GraphQL addToCart mutation
     const mutation = r'''
       mutation AddToCart($productId: ID!, $quantity: Int!) {
         addToCart(product_id: $productId, quantity: $quantity) {
@@ -87,7 +85,6 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
 
   @override
   Future<Unit> checkOut(OrderModel order) async {
-    // BACKEND INTEGRATION: GraphQL createOrder mutation
     const mutation = r'''
       mutation CreateOrder($addressId: ID!, $cardId: ID!, $shippingMethod: String) {
         createOrder(address_id: $addressId, card_id: $cardId, shipping_method: $shippingMethod) {
@@ -114,7 +111,6 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
 
   @override
   Future<List<CartItemModel>> getCartItems({bool isFavorites = false}) async {
-    // BACKEND INTEGRATION: GraphQL cart or favorites query
     try {
       if (isFavorites) {
         const favQuery = r'''
@@ -197,7 +193,6 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
 
   @override
   Future<List<CategoryModel>> getCategoryList() async {
-    // BACKEND INTEGRATION: GraphQL categories query
     const query = r'''
       query GetCategories {
         categories {
@@ -224,7 +219,6 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
 
   @override
   Future<List<ProductModel>> getProductList() async {
-    // BACKEND INTEGRATION: GraphQL products query
     const query = r'''
       query GetProducts {
         products {
@@ -266,7 +260,6 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
 
   @override
   Future<List<ReviewModel>> getProductReviews(String id) async {
-    // BACKEND INTEGRATION: GraphQL productReviews query
     const query = r'''
       query GetProductReviews($productId: ID!) {
         productReviews(product_id: $productId) {
@@ -297,9 +290,9 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
 
   @override
   Future<Unit> removeFromCart(CartItemModel item) async {
-    // BACKEND INTEGRATION: GraphQL removeFromCart mutation
     try {
-      final cartData = await apiConsumer.graphql(query: r'''
+      final cartData = await apiConsumer.graphql(
+        query: r'''
         query GetCartIds {
           cart {
             id
@@ -308,7 +301,8 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
             }
           }
         }
-      ''');
+      ''',
+      );
       final items = cartData['cart'] as List? ?? [];
       final match = items.firstWhere(
         (e) => e['product']['id'].toString() == item.product.id.toString(),
@@ -332,7 +326,6 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
 
   @override
   Future<Unit> toggleFavorite(String id, bool isFavorite) async {
-    // BACKEND INTEGRATION: GraphQL toggleFavorite mutation
     const mutation = r'''
       mutation ToggleFavorite($productId: ID!) {
         toggleFavorite(product_id: $productId)
@@ -351,9 +344,9 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
 
   @override
   Future<Unit> updateQuantity(CartItemModel item, int newQuantity) async {
-    // BACKEND INTEGRATION: GraphQL updateCartItem mutation
     try {
-      final cartData = await apiConsumer.graphql(query: r'''
+      final cartData = await apiConsumer.graphql(
+        query: r'''
         query GetCartIds {
           cart {
             id
@@ -362,7 +355,8 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
             }
           }
         }
-      ''');
+      ''',
+      );
       final items = cartData['cart'] as List? ?? [];
       final match = items.firstWhere(
         (e) => e['product']['id'].toString() == item.product.id.toString(),

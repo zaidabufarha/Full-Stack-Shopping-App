@@ -52,7 +52,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw NoInternetException();
     } catch (e) {
       final msg = e.toString().toLowerCase();
-      if (msg.contains('not found') || msg.contains('not exist') || msg.contains('invalid email')) {
+      if (msg.contains('not found') ||
+          msg.contains('not exist') ||
+          msg.contains('invalid email')) {
         throw InvalidEmailException();
       }
       rethrow;
@@ -65,7 +67,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
     required bool remember,
   }) async {
-    // BACKEND INTEGRATION: GraphQL logIn mutation with token & session caching
     const mutation = r'''
       mutation LogIn($email: String!, $password: String!) {
         logIn(email: $email, password: $password) {
@@ -180,7 +181,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw NoInternetException();
     } catch (e) {
       final msg = e.toString().toLowerCase();
-      if (msg.contains('incorrect password') || msg.contains('wrong password')) {
+      if (msg.contains('incorrect password') ||
+          msg.contains('wrong password')) {
         throw WrongPasswordException();
       } else if (msg.contains('not found') || msg.contains('invalid email')) {
         throw InvalidEmailException();
@@ -200,7 +202,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
     required String number,
   }) async {
-    // BACKEND INTEGRATION: GraphQL signUp mutation
     const mutation = r'''
       mutation SignUp($email: String!, $number: String!, $password: String!) {
         signUp(email: $email, number: $number, password: $password) {

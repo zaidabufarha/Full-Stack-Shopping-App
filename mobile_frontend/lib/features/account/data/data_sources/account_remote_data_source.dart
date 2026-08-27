@@ -190,7 +190,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
 
   @override
   Future<List<AddressModel>> getAddresses() async {
-    // BACKEND INTEGRATION: GraphQL me.address query
     const query = r'''
       query GetAddresses {
         me {
@@ -227,7 +226,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
 
   @override
   Future<List<CreditCardModel>> getCreditCards() async {
-    // BACKEND INTEGRATION: GraphQL me.credit_card query
     const query = r'''
       query GetCreditCards {
         me {
@@ -262,7 +260,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
 
   @override
   Future<NotificationPreferencesModel> getNotificationPreferences() async {
-    // BACKEND INTEGRATION: GraphQL me.notification_preference query
     const query = r'''
       query GetNotificationPreferences {
         me {

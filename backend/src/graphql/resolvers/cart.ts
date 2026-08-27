@@ -15,7 +15,7 @@ export default {
         checkAuth(req);
         return await prisma.cart_item.findMany({
             where: { user_id: req.id! },
-            include: { product: true }
+            include: { product: { include: { category: true } } }
         });
     },
 
@@ -36,7 +36,7 @@ export default {
                 product_id: +product_id,
                 quantity
             },
-            include: { product: true }
+            include: { product: { include: { category: true } } }
         });
     },
 
@@ -56,7 +56,7 @@ export default {
         return await prisma.cart_item.update({
             where: { id: +cart_item_id },
             data: { quantity },
-            include: { product: true }
+            include: { product: { include: { category: true } } }
         });
     },
 

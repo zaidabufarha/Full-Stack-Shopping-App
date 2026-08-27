@@ -51,7 +51,7 @@ export default {
                         }
                     },
                     include: {
-                        order_item: { include: { product: true } },
+                        order_item: { include: { product: { include: { category: true } } } },
                         address: true,
                         credit_card: true
                     }
@@ -71,7 +71,7 @@ export default {
         checkAuth(req)
         const order = await prisma.order.findUnique({
             where: { id: +id },
-            include: { order_item: { include: { product: true } }, address: true }
+            include: { order_item: { include: { product: { include: { category: true } } } }, address: true, credit_card: true }
         });
         if (!order) {
             const err: HttpError = new Error('Order not found')

@@ -1,5 +1,9 @@
+import 'package:big_cart/core/di/injection.dart';
+import 'package:big_cart/features/auth/presentation/pages/welcome_page.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ApiConsumer {
   Future<dynamic> graphql({
@@ -54,6 +58,18 @@ class DioConsumer implements ApiConsumer {
           (data['errors'] as List).isNotEmpty) {
         final message =
             data['errors'][0]['message']?.toString() ?? 'GraphQL error';
+        final lower = message.toLowerCase();
+        if (lower.contains('not authorized') ||
+            lower.contains('jwt') ||
+            lower.contains('expired')) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.remove('AUTH_TOKEN');
+          await prefs.remove('CACHED_USER');
+          navigatorKey.currentState?.pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const WelcomePage()),
+            (route) => false,
+          );
+        }
         throw Exception(message);
       }
       return data is Map && data.containsKey('data') ? data['data'] : data;

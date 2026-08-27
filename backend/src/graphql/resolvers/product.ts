@@ -47,6 +47,7 @@ export default {
             take: filter?.limit,
             skip: filter?.offset,
             include: {
+                category: true,
                 favorite: req?.isAuth && req?.id ? { where: { user_id: req.id } } : false
             }
         });

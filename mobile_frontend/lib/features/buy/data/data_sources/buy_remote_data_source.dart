@@ -132,6 +132,8 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
                 is_favorite
                 color
                 rating
+                free_shipping
+                same_day_delivery
                 category {
                   id
                   name
@@ -167,6 +169,8 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
                 is_favorite
                 color
                 rating
+                free_shipping
+                same_day_delivery
                 category {
                   id
                   name
@@ -235,6 +239,8 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
           is_favorite
           color
           rating
+          free_shipping
+          same_day_delivery
           category {
             id
             name

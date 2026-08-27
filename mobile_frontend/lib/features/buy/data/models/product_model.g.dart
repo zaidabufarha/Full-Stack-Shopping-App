@@ -6,27 +6,26 @@ part of 'product_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ProductModel _$ProductModelFromJson(Map<String, dynamic> json) =>
-    ProductModel(
-        id: json['id'] as String,
-        name: json['name'] as String,
-        imagePath: json['image_path'] as String,
-        amount: json['amount'] as String,
-        description: json['description'] as String,
-        discount: (json['discount'] as num).toDouble(),
-        price: (json['price'] as num).toDouble(),
-        isNew: json['is_new'] as bool,
-        isFavorite: json['is_favorite'] as bool? ?? false,
-        category: const CategoryConverter().fromJson(json['category']),
-        color: const ColorConverter().fromJson(json['color']),
-        review:
-            (json['review'] as List<dynamic>?)
-                ?.map(const ReviewConverter().fromJson)
-                .toList() ??
-            const [],
-      )
-      ..freeShipping = json['free_shipping'] as bool
-      ..sameDayDelivery = json['same_day_delivery'] as bool;
+ProductModel _$ProductModelFromJson(Map<String, dynamic> json) => ProductModel(
+  id: json['id'] as String,
+  name: json['name'] as String,
+  imagePath: json['image_path'] as String,
+  amount: json['amount'] as String,
+  description: json['description'] as String,
+  discount: (json['discount'] as num).toDouble(),
+  price: (json['price'] as num).toDouble(),
+  isNew: json['is_new'] as bool,
+  isFavorite: json['is_favorite'] as bool? ?? false,
+  freeShipping: json['free_shipping'] as bool? ?? false,
+  sameDayDelivery: json['same_day_delivery'] as bool? ?? false,
+  category: const CategoryConverter().fromJson(json['category']),
+  color: const ColorConverter().fromJson(json['color']),
+  review:
+      (json['review'] as List<dynamic>?)
+          ?.map(const ReviewConverter().fromJson)
+          .toList() ??
+      const [],
+);
 
 Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
     <String, dynamic>{

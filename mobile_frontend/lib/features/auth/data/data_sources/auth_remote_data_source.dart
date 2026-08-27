@@ -84,7 +84,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
               name
               street
               city
-              state
               zip_code
               country
               phone
@@ -126,7 +125,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
                 name
                 street
                 city
-                state
                 zip_code
                 country
                 phone

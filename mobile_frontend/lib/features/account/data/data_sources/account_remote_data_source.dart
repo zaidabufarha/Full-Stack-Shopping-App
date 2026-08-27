@@ -95,7 +95,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
             'name': name,
             'street': address,
             'city': city,
-            'state': city,
             'zip_code': zip,
             'country': country,
             'phone': phoneNumber,
@@ -199,7 +198,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
             name
             street
             city
-            state
             zip_code
             country
             phone
@@ -317,7 +315,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
               name
               street
               city
-              state
               zip_code
               country
               phone
@@ -393,7 +390,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
             name
             street
             city
-            state
             zip_code
             country
             phone
@@ -435,7 +431,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
               name
               street
               city
-              state
               zip_code
               country
               phone
@@ -516,7 +511,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
               'name': address.name,
               'street': address.street,
               'city': address.city,
-              'state': address.city,
               'zip_code': address.zipCode,
               'country': address.country,
               'phone': address.phone,

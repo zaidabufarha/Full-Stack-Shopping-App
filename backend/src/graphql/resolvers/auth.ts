@@ -50,6 +50,14 @@ export default {
                 notification_preference: {
                     create: {}
                 }
+            },
+            include: {
+                notification_preference: true,
+                address: true,
+                credit_card: true,
+                order: true,
+                transaction: true,
+                favorite: true
             }
         });
     },

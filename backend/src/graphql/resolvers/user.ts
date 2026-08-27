@@ -63,7 +63,15 @@ export default {
         }
         return await prisma.user.update({
             where: { id: req.id! },
-            data: input
+            data: input,
+            include: {
+                notification_preference: true,
+                address: true,
+                credit_card: true,
+                order: true,
+                transaction: true,
+                favorite: true
+            }
         });
     },
 

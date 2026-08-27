@@ -13,7 +13,8 @@ function checkAuth(req: any) {
 
 export default {
     categories: async function () {
-        return await prisma.category.findMany();
+        const list = await prisma.category.findMany();
+        return list.map(c => ({ ...c, color: c.color.toString() }));
     },
 
     category: async function ({ id }: { id: string }) {
@@ -23,7 +24,7 @@ export default {
             err.statusCode = 404;
             throw err;
         }
-        return cat;
+        return { ...cat, color: cat.color.toString() };
     },
 
     products: async function ({ filter }: { filter?: ProductFilterInput }, req: any) {
@@ -54,6 +55,8 @@ export default {
 
         return list.map((p: any) => ({
             ...p,
+            color: p.color.toString(),
+            category: p.category ? { ...p.category, color: p.category.color.toString() } : undefined,
             is_favorite: Boolean(p.favorite && p.favorite.length > 0)
         }));
     },
@@ -73,6 +76,8 @@ export default {
         }
         return {
             ...prod,
+            color: prod.color.toString(),
+            category: prod.category ? { ...prod.category, color: prod.category.color.toString() } : undefined,
             is_favorite: Boolean((prod as any).favorite && (prod as any).favorite.length > 0),
             review: () => prisma.review.findMany({ where: { product_id: +id } })
         };

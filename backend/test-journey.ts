@@ -81,7 +81,6 @@ async function runJourney() {
                 name: "Home",
                 street: "123 Main St",
                 city: "Amman",
-                state: "Amman",
                 zip_code: "11181",
                 country: "Jordan",
                 phone: "0790000000"
@@ -247,7 +246,7 @@ async function runJourney() {
     const temp = await graphql(`
         mutation {
             addAddress(input: {
-                name: "Temp", street: "1 Temp St", city: "Amman", state: "Amman", zip_code: "111", country: "Jordan", phone: "0790"
+                name: "Temp", street: "1 Temp St", city: "Amman", zip_code: "111", country: "Jordan", phone: "0790"
             }) { id }
             addCard(input: {
                 card_holder_name: "Temp", card_number: "4000000000000000", expiry_date: "01/30", cvv: "000", processor: "Visa"

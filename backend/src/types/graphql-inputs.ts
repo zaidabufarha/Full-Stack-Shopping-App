@@ -15,7 +15,6 @@ export interface AddressInput {
     name: string;
     street: string;
     city: string;
-    state: string;
     zip_code: string;
     country: string;
     phone: string;

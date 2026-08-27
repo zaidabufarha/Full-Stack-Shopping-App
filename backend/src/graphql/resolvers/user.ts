@@ -94,7 +94,10 @@ export default {
         checkAuth(req);
         const { is_default, ...addressData } = input;
         const newAddress = await prisma.address.create({
-            data: { user_id: req.id!, ...addressData }
+            data: {
+                user_id: req.id!,
+                ...addressData
+            }
         });
         if (is_default) {
             await prisma.user.update({

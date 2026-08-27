@@ -74,6 +74,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                   backgroundColor: AppColors.primaryDark,
                 ),
               );
+              context.read<ShopCubit>().attemptGetProductReviews(widget.id);
               context.read<ShopCubit>().attemptGetProductList();
               Navigator.of(context).pop();
             },

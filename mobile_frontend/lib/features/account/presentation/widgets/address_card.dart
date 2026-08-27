@@ -38,6 +38,34 @@ class _AddressCardState extends State<AddressCard> {
   }
 
   @override
+  void didUpdateWidget(covariant AddressCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.address != oldWidget.address) {
+      name = widget.address.name;
+      street = widget.address.street;
+      city = widget.address.city;
+      zipCode = widget.address.zipCode;
+      country = widget.address.country;
+      phone = widget.address.phone;
+    }
+  }
+
+  void _notifyChanged() {
+    widget.onChanged(
+      Address(
+        name: name,
+        street: street,
+        city: city,
+        country: country,
+        phone: phone,
+        zipCode: zipCode,
+        id: widget.address.id,
+        isDefault: widget.address.isDefault,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -152,20 +180,15 @@ class _AddressCardState extends State<AddressCard> {
                             return null;
                           }
                         },
+                        onChanged: (newValue) {
+                          setState(() {
+                            name = newValue;
+                          });
+                          _notifyChanged();
+                        },
                         onSaved: (newValue) {
-                          name = newValue!;
-                          widget.onChanged(
-                            Address(
-                              name: name,
-                              street: street,
-                              city: city,
-                              country: country,
-                              phone: phone,
-                              zipCode: zipCode,
-                              id: widget.address.id,
-                              isDefault: widget.address.isDefault,
-                            ),
-                          );
+                          name = newValue ?? name;
+                          _notifyChanged();
                         },
                       ),
                       TextFormField(
@@ -193,20 +216,15 @@ class _AddressCardState extends State<AddressCard> {
                             return null;
                           }
                         },
+                        onChanged: (newValue) {
+                          setState(() {
+                            street = newValue;
+                          });
+                          _notifyChanged();
+                        },
                         onSaved: (newValue) {
-                          street = newValue!;
-                          widget.onChanged(
-                            Address(
-                              name: name,
-                              street: street,
-                              city: city,
-                              country: country,
-                              phone: phone,
-                              zipCode: zipCode,
-                              id: widget.address.id,
-                              isDefault: widget.address.isDefault,
-                            ),
-                          );
+                          street = newValue ?? street;
+                          _notifyChanged();
                         },
                       ),
                       Row(
@@ -239,20 +257,15 @@ class _AddressCardState extends State<AddressCard> {
                                   return null;
                                 }
                               },
+                              onChanged: (newValue) {
+                                setState(() {
+                                  city = newValue;
+                                });
+                                _notifyChanged();
+                              },
                               onSaved: (newValue) {
-                                city = newValue!;
-                                widget.onChanged(
-                                  Address(
-                                    name: name,
-                                    street: street,
-                                    city: city,
-                                    country: country,
-                                    phone: phone,
-                                    zipCode: zipCode,
-                                    id: widget.address.id,
-                                    isDefault: widget.address.isDefault,
-                                  ),
-                                );
+                                city = newValue ?? city;
+                                _notifyChanged();
                               },
                             ),
                           ),
@@ -282,20 +295,15 @@ class _AddressCardState extends State<AddressCard> {
                                   return null;
                                 }
                               },
+                              onChanged: (newValue) {
+                                setState(() {
+                                  zipCode = newValue;
+                                });
+                                _notifyChanged();
+                              },
                               onSaved: (newValue) {
-                                zipCode = newValue!;
-                                widget.onChanged(
-                                  Address(
-                                    name: name,
-                                    street: street,
-                                    city: city,
-                                    country: country,
-                                    phone: phone,
-                                    zipCode: zipCode,
-                                    id: widget.address.id,
-                                    isDefault: widget.address.isDefault,
-                                  ),
-                                );
+                                zipCode = newValue ?? zipCode;
+                                _notifyChanged();
                               },
                             ),
                           ),
@@ -310,6 +318,7 @@ class _AddressCardState extends State<AddressCard> {
                               setState(() {
                                 country = selectedCountry.name;
                               });
+                              _notifyChanged();
                             },
                           );
                         },
@@ -367,20 +376,15 @@ class _AddressCardState extends State<AddressCard> {
                             return null;
                           }
                         },
+                        onChanged: (newValue) {
+                          setState(() {
+                            phone = newValue;
+                          });
+                          _notifyChanged();
+                        },
                         onSaved: (newValue) {
-                          phone = newValue!;
-                          widget.onChanged(
-                            Address(
-                              name: name,
-                              street: street,
-                              city: city,
-                              country: country,
-                              phone: phone,
-                              zipCode: zipCode,
-                              id: widget.address.id,
-                              isDefault: widget.address.isDefault,
-                            ),
-                          );
+                          phone = newValue ?? phone;
+                          _notifyChanged();
                         },
                       ),
                       Row(

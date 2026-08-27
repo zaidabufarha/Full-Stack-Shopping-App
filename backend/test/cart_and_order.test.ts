@@ -210,7 +210,6 @@ describe('Cart & Order GraphQL API (Protected Operations)', () => {
           name: 'Home',
           street: '123 Main St',
           city: 'Amman',
-          state: 'Amman',
           zip_code: '11181',
           country: 'Jordan',
           phone: '0790000000',

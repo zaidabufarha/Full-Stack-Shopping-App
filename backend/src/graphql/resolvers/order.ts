@@ -36,7 +36,9 @@ export default {
             //not empty cart
             let sum = 0
             cartItems.forEach(item => { //decimal needs to be converted to number
-                sum += item.product.price.toNumber() * (1 - item.product.discount.toNumber()) * (item.quantity)
+                const discountFactor = 1 - (item.product.discount.toNumber() / 100);
+                const itemPrice = item.product.price.toNumber() * discountFactor;
+                sum += itemPrice * item.quantity;
             })
             return await prisma.$transaction(async (tx) => { //transaction means that it all has to work to be done or it all rolls back. no cleared carts without orders or vice versa
                 const newOrder = await tx.order.create({
@@ -47,7 +49,15 @@ export default {
                         total_amount: sum,
                         //we also need to add order items using the id of this order. we have a relationship that simplifies this
                         order_item: {
-                            create: cartItems.map(item => ({ product_id: item.product_id, quantity: item.quantity, price_at_purchase: item.product.price.toNumber() * (1 - item.product.discount.toNumber()) }))
+                            create: cartItems.map(item => {
+                                const discountFactor = 1 - (item.product.discount.toNumber() / 100);
+                                const priceAtPurchase = item.product.price.toNumber() * discountFactor;
+                                return {
+                                    product_id: item.product_id,
+                                    quantity: item.quantity,
+                                    price_at_purchase: priceAtPurchase
+                                };
+                            })
                         }
                     },
                     include: {

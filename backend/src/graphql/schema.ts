@@ -31,7 +31,6 @@ export default buildSchema(`
         name: String!
         street: String!
         city: String!
-        state: String!
         zip_code: String!
         country: String!
         phone: String!
@@ -153,7 +152,6 @@ export default buildSchema(`
         name: String!
         street: String!
         city: String!
-        state: String!
         zip_code: String!
         country: String!
         phone: String!

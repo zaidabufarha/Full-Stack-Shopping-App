@@ -18,13 +18,21 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPageState extends State<AboutPage> {
   final formKey = GlobalKey<FormState>();
+  final currentPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   bool hidePassword = true;
   late String name;
   late String email;
   late String phoneNumber;
-  late String currentPassword;
-  late String newPassword1;
-  late String newPassword2;
+
+  @override
+  void dispose() {
+    currentPasswordController.dispose();
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +44,9 @@ class _AboutPageState extends State<AboutPage> {
           name: name,
           email: email,
           phoneNumber: phoneNumber,
-          currentPassword: currentPassword,
-          newPassword1: newPassword1,
-          newPassword2: newPassword2,
+          currentPassword: currentPasswordController.text,
+          newPassword1: newPasswordController.text,
+          newPassword2: confirmPasswordController.text,
         );
       }
     }
@@ -207,6 +215,7 @@ class _AboutPageState extends State<AboutPage> {
                           style: Fonts.titleBold(size: 20),
                         ),
                         TextFormField(
+                          controller: currentPasswordController,
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: AppColors.backgroundPrimary,
@@ -222,11 +231,19 @@ class _AboutPageState extends State<AboutPage> {
                               style: Fonts.paragraphRegular(),
                             ),
                           ),
-                          onSaved: (current) {
-                            currentPassword = current!;
+                          validator: (val) {
+                            final isChanging =
+                                currentPasswordController.text.isNotEmpty ||
+                                newPasswordController.text.isNotEmpty ||
+                                confirmPasswordController.text.isNotEmpty;
+                            if (isChanging && (val == null || val.isEmpty)) {
+                              return 'Current password required';
+                            }
+                            return null;
                           },
                         ),
                         TextFormField(
+                          controller: newPasswordController,
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: AppColors.backgroundPrimary,
@@ -253,12 +270,24 @@ class _AboutPageState extends State<AboutPage> {
                             ),
                           ),
                           obscureText: hidePassword,
-
-                          onSaved: (newPassword) {
-                            newPassword1 = newPassword!;
+                          validator: (val) {
+                            final isChanging =
+                                currentPasswordController.text.isNotEmpty ||
+                                newPasswordController.text.isNotEmpty ||
+                                confirmPasswordController.text.isNotEmpty;
+                            if (isChanging) {
+                              if (val == null || val.isEmpty) {
+                                return 'New password required';
+                              }
+                              if (val.length < 8) {
+                                return 'Password must be at least 8 characters';
+                              }
+                            }
+                            return null;
                           },
                         ),
                         TextFormField(
+                          controller: confirmPasswordController,
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: AppColors.backgroundPrimary,
@@ -274,10 +303,22 @@ class _AboutPageState extends State<AboutPage> {
                               style: Fonts.paragraphRegular(),
                             ),
                           ),
-                          onSaved: (newPassword) {
-                            newPassword2 = newPassword!;
-                          },
                           obscureText: hidePassword,
+                          validator: (val) {
+                            final isChanging =
+                                currentPasswordController.text.isNotEmpty ||
+                                newPasswordController.text.isNotEmpty ||
+                                confirmPasswordController.text.isNotEmpty;
+                            if (isChanging) {
+                              if (val == null || val.isEmpty) {
+                                return 'Confirm password required';
+                              }
+                              if (val != newPasswordController.text) {
+                                return 'Passwords do not match';
+                              }
+                            }
+                            return null;
+                          },
                         ),
                       ],
                     ),

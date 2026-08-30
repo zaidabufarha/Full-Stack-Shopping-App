@@ -59,6 +59,23 @@ class AddressCubit extends Cubit<AddressState> {
     );
   }
 
+  Future<void> attemptUpdateAddresses(List<Address> addresses) async {
+    if (addresses.isEmpty) return;
+    emit(AddressState.loading());
+    final results = await Future.wait(
+      addresses.map((address) => updateAddress.call(address)),
+    );
+    final failure = results.where((r) => r.isLeft()).firstOrNull;
+    if (failure != null) {
+      failure.fold(
+        (f) => emit(AddressState.error(f.message)),
+        (_) {},
+      );
+    } else {
+      emit(AddressState.success('Updated successfully'));
+    }
+  }
+
   void attemptGetAddressesCubit() async {
     emit(AddressState.loading());
     final result = await getAddresses.call();

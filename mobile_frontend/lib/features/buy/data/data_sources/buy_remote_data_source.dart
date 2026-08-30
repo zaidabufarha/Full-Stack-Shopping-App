@@ -93,8 +93,55 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
       }
     ''';
     try {
-      final addressId = order.address.id ?? '1';
-      final cardId = order.creditCard.id ?? '1';
+      String? addressId = order.address.id;
+      if (addressId == null || addressId.isEmpty) {
+        final addressRes = await apiConsumer.graphql(
+          query: r'''
+            mutation AddAddress($input: AddressInput!) {
+              addAddress(input: $input) {
+                id
+              }
+            }
+          ''',
+          variables: {
+            'input': {
+              'name': order.address.name,
+              'street': order.address.street,
+              'city': order.address.city,
+              'zip_code': order.address.zipCode,
+              'country': order.address.country,
+              'phone': order.address.phone,
+              'is_default': order.address.isDefault,
+            },
+          },
+        );
+        addressId = addressRes['addAddress']['id'].toString();
+      }
+
+      String? cardId = order.creditCard.id;
+      if (cardId == null || cardId.isEmpty) {
+        final cleanNum = order.creditCard.last4;
+        final cardRes = await apiConsumer.graphql(
+          query: r'''
+            mutation AddCard($input: CardInput!) {
+              addCard(input: $input) {
+                id
+              }
+            }
+          ''',
+          variables: {
+            'input': {
+              'card_holder_name': order.creditCard.cardHolderName,
+              'last4': cleanNum,
+              'expiry_date': order.creditCard.expiryDate,
+              'processor': order.creditCard.processor.name,
+              'is_default': order.creditCard.isDefault,
+            },
+          },
+        );
+        cardId = cardRes['addCard']['id'].toString();
+      }
+
       await apiConsumer.graphql(
         query: mutation,
         variables: {

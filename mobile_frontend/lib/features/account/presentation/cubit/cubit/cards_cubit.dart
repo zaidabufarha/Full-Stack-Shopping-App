@@ -62,6 +62,24 @@ class CardsCubit extends Cubit<CardsState> {
     );
   }
 
+  Future<void> attemptUpdateCreditCards(List<CreditCard> cards) async {
+    if (cards.isEmpty) return;
+    emit(CardsState.loading());
+    final results = await Future.wait(
+      cards.map((card) => updateCreditCard.call(card)),
+    );
+
+    final failure = results.where((r) => r.isLeft()).firstOrNull;
+    if (failure != null) {
+      failure.fold(
+        (f) => emit(CardsState.error(f.message)),
+        (_) {},
+      );
+    } else {
+      emit(CardsState.success('Updated successfully'));
+    }
+  }
+
   Future<void> attemptSetDefaultCreditCard(String cardId) async {
     final result = await setDefaultCreditCard.call(cardId);
 

@@ -48,6 +48,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -72,6 +74,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -86,6 +90,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -98,6 +104,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -110,6 +118,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -124,6 +134,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -138,6 +150,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -152,6 +166,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -164,6 +180,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -185,6 +203,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -207,6 +227,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -228,6 +250,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -240,6 +264,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -268,6 +294,8 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 }

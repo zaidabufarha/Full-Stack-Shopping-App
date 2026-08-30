@@ -22,7 +22,7 @@ class _AddressPageState extends State<AddressPage> {
   List<Address> list = [];
   List<Address> originalList = [];
   final formKey = GlobalKey<FormState>();
-  bool hasBeenLoaded = false;
+
   @override
   void initState() {
     context.read<AddressCubit>().attemptGetAddressesCubit();
@@ -31,40 +31,20 @@ class _AddressPageState extends State<AddressPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onClick() async {
-      bool isValid = formKey.currentState!.validate();
-      if (isValid) {
-        formKey.currentState!.save();
-        Address? defaultAddress;
+    void onClick() {
+      if (formKey.currentState?.validate() ?? true) {
+        final modifiedAddresses = <Address>[];
         for (int i = 0; i < list.length; i++) {
-          final address = list[i];
+          final current = list[i];
           final original = i < originalList.length ? originalList[i] : null;
-          final changed = original == null ||
-              address.name != original.name ||
-              address.street != original.street ||
-              address.city != original.city ||
-              address.country != original.country ||
-              address.phone != original.phone ||
-              address.zipCode != original.zipCode ||
-              address.isDefault != original.isDefault;
-
-          if (changed) {
-            if (!address.isDefault) {
-              await context.read<AddressCubit>().attemptUpdateAddress(
-                address: address,
-              );
-            } else {
-              defaultAddress = address;
-            }
+          if (original == null || current != original) {
+            modifiedAddresses.add(current);
           }
         }
-        if (defaultAddress != null) {
-          await context.read<AddressCubit>().attemptUpdateAddress(
-            address: defaultAddress,
-          );
-        }
 
-        hasBeenLoaded = false;
+        if (modifiedAddresses.isNotEmpty) {
+          context.read<AddressCubit>().attemptUpdateAddresses(modifiedAddresses);
+        }
       }
     }
 
@@ -75,16 +55,16 @@ class _AddressPageState extends State<AddressPage> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back_outlined),
+          icon: const Icon(Icons.arrow_back_outlined),
         ),
         actions: [
           IconButton(
             onPressed: () {
               Navigator.of(
                 context,
-              ).push(MaterialPageRoute(builder: (context) => AddAddressPage()));
+              ).push(MaterialPageRoute(builder: (context) => const AddAddressPage()));
             },
-            icon: Icon(Icons.add_circle_outline),
+            icon: const Icon(Icons.add_circle_outline),
           ),
         ],
         centerTitle: true,
@@ -94,44 +74,14 @@ class _AddressPageState extends State<AddressPage> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsetsGeometry.all(20),
+        padding: const EdgeInsets.all(20),
         child: BlocConsumer<AddressCubit, AddressState>(
           listener: (context, state) {
             state.whenOrNull(
               loaded: (addresses) {
-                if (!hasBeenLoaded) {
-                  list = addresses
-                      .map(
-                        (a) => Address(
-                          id: a.id,
-                          name: a.name,
-                          street: a.street,
-                          city: a.city,
-                          country: a.country,
-                          phone: a.phone,
-                          zipCode: a.zipCode,
-                          isDefault: a.isDefault,
-                        ),
-                      )
-                      .toList();
-                  originalList = addresses
-                      .map(
-                        (a) => Address(
-                          id: a.id,
-                          name: a.name,
-                          street: a.street,
-                          city: a.city,
-                          country: a.country,
-                          phone: a.phone,
-                          zipCode: a.zipCode,
-                          isDefault: a.isDefault,
-                        ),
-                      )
-                      .toList();
-                }
-                hasBeenLoaded = true;
+                list = addresses.map((a) => a.copyWith()).toList();
+                originalList = addresses.map((a) => a.copyWith()).toList();
               },
-
               error: (message) {
                 ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -146,7 +96,6 @@ class _AddressPageState extends State<AddressPage> {
                   ),
                 );
               },
-
               success: (message) {
                 ScaffoldMessenger.of(context).clearSnackBars();
                 ScaffoldMessenger.of(
@@ -162,12 +111,13 @@ class _AddressPageState extends State<AddressPage> {
                     backgroundColor: AppColors.primaryDark,
                   ),
                 );
+                context.read<AddressCubit>().attemptGetAddressesCubit();
               },
             );
           },
           builder: (context, state) {
             return state.maybeWhen(
-              loading: () => Center(
+              loading: () => const Center(
                 child: CircularProgressIndicator(),
               ),
               error: (message) => Column(
@@ -181,7 +131,7 @@ class _AddressPageState extends State<AddressPage> {
                       'Retry',
                       style: Fonts.paragraphMedium(),
                     ),
-                    icon: Icon(Icons.restart_alt),
+                    icon: const Icon(Icons.restart_alt),
                   ),
                 ],
               ),
@@ -204,16 +154,31 @@ class _AddressPageState extends State<AddressPage> {
                             spacing: 10.h,
                             children: [
                               for (int i = 0; i < list.length; i++)
-                                AddressCard(list[i], (updatedAddress) {
-                                  setState(() {
-                                    list[i] = updatedAddress;
-                                    if (updatedAddress.isDefault) {
-                                      for (int j = 0; j < list.length; j++) {
-                                        if (j != i) list[j].isDefault = false;
+                                AddressCard(
+                                  key: ValueKey(list[i].id ?? '$i'),
+                                  list[i],
+                                  (updatedAddress) {
+                                    setState(() {
+                                      if (updatedAddress.isDefault) {
+                                        list = [
+                                          for (int j = 0; j < list.length; j++)
+                                            if (j == i)
+                                              updatedAddress
+                                            else
+                                              list[j].copyWith(isDefault: false),
+                                        ];
+                                      } else {
+                                        list = [
+                                          for (int j = 0; j < list.length; j++)
+                                            if (j == i)
+                                              updatedAddress
+                                            else
+                                              list[j],
+                                        ];
                                       }
-                                    }
-                                  });
-                                }),
+                                    });
+                                  },
+                                ),
                             ],
                           ),
                         ),

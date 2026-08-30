@@ -142,6 +142,51 @@ void main() {
     );
   });
 
+  group('attemptUpdateCreditCards', () {
+    blocTest<CardsCubit, CardsState>(
+      'emits [loading, success] when all cards updated successfully',
+      build: () {
+        when(
+          () => mockUpdateCreditCard.call(any()),
+        ).thenAnswer((_) async => const Right(unit));
+        return cardsCubit;
+      },
+      act: (cubit) => cubit.attemptUpdateCreditCards([testCreditCard]),
+      expect: () => [
+        const CardsState.loading(),
+        const CardsState.success('Updated successfully'),
+      ],
+      verify: (_) {
+        verify(() => mockUpdateCreditCard.call(testCreditCard)).called(1);
+      },
+    );
+
+    blocTest<CardsCubit, CardsState>(
+      'emits [loading, error] when updating cards fails',
+      build: () {
+        when(
+          () => mockUpdateCreditCard.call(any()),
+        ).thenAnswer((_) async => Left(DummyFailure('Batch update failed')));
+        return cardsCubit;
+      },
+      act: (cubit) => cubit.attemptUpdateCreditCards([testCreditCard]),
+      expect: () => [
+        const CardsState.loading(),
+        const CardsState.error('Batch update failed'),
+      ],
+    );
+
+    blocTest<CardsCubit, CardsState>(
+      'emits nothing when cards list is empty',
+      build: () => cardsCubit,
+      act: (cubit) => cubit.attemptUpdateCreditCards([]),
+      expect: () => [],
+      verify: (_) {
+        verifyNever(() => mockUpdateCreditCard.call(any()));
+      },
+    );
+  });
+
   group('attemptSetDefaultCreditCard', () {
     blocTest<CardsCubit, CardsState>(
       'emits [CardsState.success("Updated default card successfully")] on success without loading',

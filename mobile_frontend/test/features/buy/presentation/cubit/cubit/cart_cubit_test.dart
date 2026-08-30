@@ -59,7 +59,7 @@ void main() {
 
   group('attemptGetCartItems', () {
     blocTest<CartCubit, CartState>(
-      'emits [CartState.loaded(list)] on success without emitting loading',
+      'emits [CartState.loading(), CartState.loaded(list)] on success',
       build: () {
         when(
           () => mockGetCartItems.call(isFavorites: any(named: 'isFavorites')),
@@ -68,6 +68,7 @@ void main() {
       },
       act: (cubit) => cubit.attemptGetCartItems(isFavorites: false),
       expect: () => [
+        const CartState.loading(),
         CartState.loaded([testCartItem]),
       ],
       verify: (_) {
@@ -76,7 +77,7 @@ void main() {
     );
 
     blocTest<CartCubit, CartState>(
-      'emits [CartState.error(message)] on failure without emitting loading',
+      'emits [CartState.loading(), CartState.error(message)] on failure',
       build: () {
         when(
           () => mockGetCartItems.call(isFavorites: any(named: 'isFavorites')),
@@ -86,7 +87,10 @@ void main() {
         return cartCubit;
       },
       act: (cubit) => cubit.attemptGetCartItems(isFavorites: true),
-      expect: () => [const CartState.error('Failed to load cart items')],
+      expect: () => [
+        const CartState.loading(),
+        const CartState.error('Failed to load cart items'),
+      ],
     );
   });
 

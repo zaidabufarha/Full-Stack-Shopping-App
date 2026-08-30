@@ -17,30 +17,6 @@ class CreditCardCard extends StatefulWidget {
 class _CreditCardCardState extends State<CreditCardCard> {
   bool isClosed = true;
 
-  late String name;
-  late String expiration;
-
-  @override
-  void initState() {
-    name = widget.card.cardHolderName;
-    expiration = widget.card.expiryDate;
-    super.initState();
-  }
-
-  void _notifyChange({bool? isDefault}) {
-    widget.onChanged(
-      CreditCard(
-        id: widget.card.id,
-        cardHolderName: name,
-        last4: widget.card.last4,
-        expiryDate: expiration,
-        stripePaymentId: widget.card.stripePaymentId,
-        processor: widget.card.processor,
-        isDefault: isDefault ?? widget.card.isDefault,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final formattedNumber = 'XXXX XXXX XXXX ${widget.card.last4}';
@@ -157,8 +133,8 @@ class _CreditCardCardState extends State<CreditCardCard> {
                     spacing: 10.h,
                     children: [
                       TextFormField(
-                        initialValue: name,
-                        decoration: InputDecoration(
+                        initialValue: widget.card.cardHolderName,
+                        decoration: const InputDecoration(
                           filled: true,
                           fillColor: AppColors.backgroundSecondary,
                           prefixIcon: Icon(
@@ -176,9 +152,10 @@ class _CreditCardCardState extends State<CreditCardCard> {
                           }
                           return null;
                         },
-                        onSaved: (newValue) {
-                          name = newValue!.trim();
-                          _notifyChange();
+                        onChanged: (newValue) {
+                          widget.onChanged(
+                            widget.card.copyWith(cardHolderName: newValue),
+                          );
                         },
                       ),
                       TextFormField(
@@ -189,18 +166,18 @@ class _CreditCardCardState extends State<CreditCardCard> {
                           fillColor: AppColors.backgroundSecondary.withValues(
                             alpha: 0.5,
                           ),
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.credit_card_outlined,
                             color: AppColors.textSecondary,
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
                         ),
                       ),
                       TextFormField(
-                        initialValue: expiration,
-                        decoration: InputDecoration(
+                        initialValue: widget.card.expiryDate,
+                        decoration: const InputDecoration(
                           filled: true,
                           fillColor: AppColors.backgroundSecondary,
                           prefixIcon: Icon(
@@ -218,9 +195,10 @@ class _CreditCardCardState extends State<CreditCardCard> {
                           }
                           return null;
                         },
-                        onSaved: (newValue) {
-                          expiration = newValue!.trim();
-                          _notifyChange();
+                        onChanged: (newValue) {
+                          widget.onChanged(
+                            widget.card.copyWith(expiryDate: newValue),
+                          );
                         },
                       ),
                       Row(
@@ -250,7 +228,9 @@ class _CreditCardCardState extends State<CreditCardCard> {
                                 visualDensity: VisualDensity.compact,
                                 trackOutlineColor: WidgetStateColor.transparent,
                                 onChanged: (val) {
-                                  _notifyChange(isDefault: val);
+                                  widget.onChanged(
+                                    widget.card.copyWith(isDefault: val),
+                                  );
                                 },
                               ),
                             ),

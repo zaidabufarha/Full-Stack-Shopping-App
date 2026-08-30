@@ -19,8 +19,8 @@ class CardsPage extends StatefulWidget {
 
 class _CardsPageState extends State<CardsPage> {
   List<CreditCard> list = [];
+  List<CreditCard> originalList = [];
   final formKey = GlobalKey<FormState>();
-  int? editedCardIndex;
 
   @override
   void initState() {
@@ -30,23 +30,20 @@ class _CardsPageState extends State<CardsPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onClick() async {
-      final isValid = formKey.currentState?.validate() ?? false;
+    void onClick() {
+      final isValid = formKey.currentState?.validate() ?? true;
       if (isValid) {
-        formKey.currentState!.save();
-        final cubit = context.read<CardsCubit>();
-        if (editedCardIndex != null && editedCardIndex! < list.length) {
-          final editedCard = list[editedCardIndex!];
-          if (editedCard.isDefault && editedCard.id != null) {
-            await cubit.attemptSetDefaultCreditCard(editedCard.id!);
+        final modifiedCards = <CreditCard>[];
+        for (int i = 0; i < list.length; i++) {
+          final current = list[i];
+          final original = i < originalList.length ? originalList[i] : null;
+          if (original == null || current != original) {
+            modifiedCards.add(current);
           }
-          await cubit.attemptUpdateCreditCard(card: editedCard);
-        } else {
-          final defaultCard =
-              list.where((c) => c.isDefault && c.id != null).firstOrNull;
-          if (defaultCard != null) {
-            await cubit.attemptSetDefaultCreditCard(defaultCard.id!);
-          }
+        }
+
+        if (modifiedCards.isNotEmpty) {
+          context.read<CardsCubit>().attemptUpdateCreditCards(modifiedCards);
         }
       }
     }
@@ -82,7 +79,8 @@ class _CardsPageState extends State<CardsPage> {
           listener: (context, state) {
             state.whenOrNull(
               loaded: (cards) {
-                list = List.from(cards);
+                list = cards.map((c) => c.copyWith()).toList();
+                originalList = cards.map((c) => c.copyWith()).toList();
               },
               error: (message) {
                 ScaffoldMessenger.of(context).clearSnackBars();
@@ -111,6 +109,7 @@ class _CardsPageState extends State<CardsPage> {
                     backgroundColor: AppColors.primaryDark,
                   ),
                 );
+                context.read<CardsCubit>().attemptGetCreditCards();
               },
             );
           },
@@ -134,36 +133,60 @@ class _CardsPageState extends State<CardsPage> {
                   ),
                 ],
               ),
-              orElse: () => Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          spacing: 10.h,
-                          children: [
-                            for (int i = 0; i < list.length; i++)
-                              CreditCardCard(list[i], (updatedCard) {
-                                setState(() {
-                                  editedCardIndex = i;
-                                  list[i] = updatedCard;
-                                  if (updatedCard.isDefault) {
-                                    for (int j = 0; j < list.length; j++) {
-                                      if (j != i) list[j].isDefault = false;
-                                    }
-                                  }
-                                });
-                              }),
-                          ],
+              orElse: () {
+                if (list.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No cards found',
+                      style: Fonts.titleBold(),
+                    ),
+                  );
+                }
+                return Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            spacing: 10.h,
+                            children: [
+                              for (int i = 0; i < list.length; i++)
+                                CreditCardCard(
+                                  key: ValueKey(list[i].id ?? '$i'),
+                                  list[i],
+                                  (updatedCard) {
+                                    setState(() {
+                                      if (updatedCard.isDefault) {
+                                        list = [
+                                          for (int j = 0; j < list.length; j++)
+                                            if (j == i)
+                                              updatedCard
+                                            else
+                                              list[j].copyWith(isDefault: false),
+                                        ];
+                                      } else {
+                                        list = [
+                                          for (int j = 0; j < list.length; j++)
+                                            if (j == i)
+                                              updatedCard
+                                            else
+                                              list[j],
+                                        ];
+                                      }
+                                    });
+                                  },
+                                ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    GreenGradientButton(onClick, 'Save settings'),
-                  ],
-                ),
-              ),
+                      GreenGradientButton(onClick, 'Save settings'),
+                    ],
+                  ),
+                );
+              },
             );
           },
         ),

@@ -20,6 +20,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
+  bool obscure = true;
   String inputEmail = '';
   String inputPassword = '';
   bool inputRemember = true;
@@ -54,8 +55,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    bool rememberplaceholder = false;
-
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         state.maybeWhen(
@@ -169,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             TextFormField(
                               controller: passwordController,
-                              obscureText: true,
+                              obscureText: obscure,
                               decoration: InputDecoration(
                                 fillColor: Colors.white,
                                 filled: true,
@@ -177,7 +176,19 @@ class _LoginPageState extends State<LoginPage> {
                                   borderSide: BorderSide.none,
                                 ),
                                 prefixIcon: Icon(Icons.lock_outline),
-                                suffixIcon: Icon(Icons.remove_red_eye_outlined),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      obscure = !obscure;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    (obscure)
+                                        ? Icons.visibility_outlined
+                                        : Icons.visibility_off_outlined,
+                                    color: AppColors.textSecondary,
+                                  ),
+                                ),
                                 hint: Text(
                                   'Password',
                                   style: Fonts.paragraphRegular().copyWith(

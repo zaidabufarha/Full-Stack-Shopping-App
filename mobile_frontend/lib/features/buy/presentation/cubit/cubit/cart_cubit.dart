@@ -28,6 +28,7 @@ class CartCubit extends Cubit<CartState> {
   CheckOut checkOut;
 
   void attemptGetCartItems({bool isFavorites = false}) async {
+    emit(CartState.loading());
     final result = await getCartItems.call(isFavorites: isFavorites);
     result.fold(
       (failure) {

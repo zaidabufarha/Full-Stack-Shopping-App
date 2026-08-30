@@ -20,50 +20,6 @@ class AddressCard extends StatefulWidget {
 
 class _AddressCardState extends State<AddressCard> {
   bool isClosed = true;
-  late String name;
-  late String street;
-  late String city;
-  late String zipCode;
-  late String country;
-  late String phone;
-  @override
-  void initState() {
-    name = widget.address.name;
-    street = widget.address.street;
-    city = widget.address.city;
-    zipCode = widget.address.zipCode;
-    country = widget.address.country;
-    phone = widget.address.phone;
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant AddressCard oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.address != oldWidget.address) {
-      name = widget.address.name;
-      street = widget.address.street;
-      city = widget.address.city;
-      zipCode = widget.address.zipCode;
-      country = widget.address.country;
-      phone = widget.address.phone;
-    }
-  }
-
-  void _notifyChanged() {
-    widget.onChanged(
-      Address(
-        name: name,
-        street: street,
-        city: city,
-        country: country,
-        phone: phone,
-        zipCode: zipCode,
-        id: widget.address.id,
-        isDefault: widget.address.isDefault,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +40,7 @@ class _AddressCardState extends State<AddressCard> {
                     ),
                   ),
                 )
-              : SizedBox(),
+              : const SizedBox(),
           Row(
             spacing: 10.w,
             mainAxisSize: MainAxisSize.max,
@@ -108,19 +64,19 @@ class _AddressCardState extends State<AddressCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      widget.address.name,
                       style: Fonts.titleBold(),
                     ),
                     Text(
-                      street,
+                      widget.address.street,
                       style: Fonts.paragraphRegular(size: 12),
                     ),
                     Text(
-                      '$city, $country $zipCode',
+                      '${widget.address.city}, ${widget.address.country} ${widget.address.zipCode}',
                       style: Fonts.paragraphRegular(size: 12),
                     ),
                     Text(
-                      phone,
+                      widget.address.phone,
                       style: Fonts.titleBold(size: 12),
                     ),
                   ],
@@ -148,8 +104,7 @@ class _AddressCardState extends State<AddressCard> {
               ? Divider(
                   thickness: 1.h,
                 )
-              : SizedBox(),
-
+              : const SizedBox(),
           (!isClosed)
               ? Padding(
                   padding: const EdgeInsets.all(10),
@@ -165,7 +120,7 @@ class _AddressCardState extends State<AddressCard> {
                             Icons.person_outline,
                             color: AppColors.textSecondary,
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
                           hint: Text(
@@ -181,19 +136,13 @@ class _AddressCardState extends State<AddressCard> {
                           }
                         },
                         onChanged: (newValue) {
-                          setState(() {
-                            name = newValue;
-                          });
-                          _notifyChanged();
-                        },
-                        onSaved: (newValue) {
-                          name = newValue ?? name;
-                          _notifyChanged();
+                          widget.onChanged(
+                            widget.address.copyWith(name: newValue),
+                          );
                         },
                       ),
                       TextFormField(
                         initialValue: widget.address.street,
-
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: AppColors.backgroundSecondary,
@@ -201,7 +150,7 @@ class _AddressCardState extends State<AddressCard> {
                             Icons.location_on_outlined,
                             color: AppColors.textSecondary,
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
                           hint: Text(
@@ -217,14 +166,9 @@ class _AddressCardState extends State<AddressCard> {
                           }
                         },
                         onChanged: (newValue) {
-                          setState(() {
-                            street = newValue;
-                          });
-                          _notifyChanged();
-                        },
-                        onSaved: (newValue) {
-                          street = newValue ?? street;
-                          _notifyChanged();
+                          widget.onChanged(
+                            widget.address.copyWith(street: newValue),
+                          );
                         },
                       ),
                       Row(
@@ -234,7 +178,6 @@ class _AddressCardState extends State<AddressCard> {
                           Expanded(
                             child: TextFormField(
                               initialValue: widget.address.city,
-
                               decoration: InputDecoration(
                                 filled: true,
                                 fillColor: AppColors.backgroundSecondary,
@@ -242,7 +185,7 @@ class _AddressCardState extends State<AddressCard> {
                                   Icons.map_outlined,
                                   color: AppColors.textSecondary,
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                 ),
                                 hint: Text(
@@ -258,21 +201,15 @@ class _AddressCardState extends State<AddressCard> {
                                 }
                               },
                               onChanged: (newValue) {
-                                setState(() {
-                                  city = newValue;
-                                });
-                                _notifyChanged();
-                              },
-                              onSaved: (newValue) {
-                                city = newValue ?? city;
-                                _notifyChanged();
+                                widget.onChanged(
+                                  widget.address.copyWith(city: newValue),
+                                );
                               },
                             ),
                           ),
                           Expanded(
                             child: TextFormField(
                               initialValue: widget.address.zipCode,
-
                               decoration: InputDecoration(
                                 filled: true,
                                 fillColor: AppColors.backgroundSecondary,
@@ -280,7 +217,7 @@ class _AddressCardState extends State<AddressCard> {
                                   Icons.pin_outlined,
                                   color: AppColors.textSecondary,
                                 ),
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                 ),
                                 hint: Text(
@@ -296,14 +233,9 @@ class _AddressCardState extends State<AddressCard> {
                                 }
                               },
                               onChanged: (newValue) {
-                                setState(() {
-                                  zipCode = newValue;
-                                });
-                                _notifyChanged();
-                              },
-                              onSaved: (newValue) {
-                                zipCode = newValue ?? zipCode;
-                                _notifyChanged();
+                                widget.onChanged(
+                                  widget.address.copyWith(zipCode: newValue),
+                                );
                               },
                             ),
                           ),
@@ -315,17 +247,18 @@ class _AddressCardState extends State<AddressCard> {
                             context: context,
                             showPhoneCode: false,
                             onSelect: (Country selectedCountry) {
-                              setState(() {
-                                country = selectedCountry.name;
-                              });
-                              _notifyChanged();
+                              widget.onChanged(
+                                widget.address.copyWith(
+                                  country: selectedCountry.name,
+                                ),
+                              );
                             },
                           );
                         },
                         child: Container(
                           width: double.infinity,
                           color: AppColors.backgroundSecondary,
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           height: 56.h,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -338,7 +271,7 @@ class _AddressCardState extends State<AddressCard> {
                                     color: AppColors.textSecondary,
                                   ),
                                   Text(
-                                    country,
+                                    widget.address.country,
                                     style: Fonts.paragraphRegular(),
                                   ),
                                 ],
@@ -353,7 +286,6 @@ class _AddressCardState extends State<AddressCard> {
                       ),
                       TextFormField(
                         initialValue: widget.address.phone,
-
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: AppColors.backgroundSecondary,
@@ -361,7 +293,7 @@ class _AddressCardState extends State<AddressCard> {
                             Icons.phone_outlined,
                             color: AppColors.textSecondary,
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
                           hint: Text(
@@ -377,14 +309,9 @@ class _AddressCardState extends State<AddressCard> {
                           }
                         },
                         onChanged: (newValue) {
-                          setState(() {
-                            phone = newValue;
-                          });
-                          _notifyChanged();
-                        },
-                        onSaved: (newValue) {
-                          phone = newValue ?? phone;
-                          _notifyChanged();
+                          widget.onChanged(
+                            widget.address.copyWith(phone: newValue),
+                          );
                         },
                       ),
                       Row(
@@ -399,7 +326,7 @@ class _AddressCardState extends State<AddressCard> {
                                   'Make default',
                                   style: Fonts.titleBold(),
                                 ),
-                                contentPadding: EdgeInsets.all(0),
+                                contentPadding: EdgeInsets.zero,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
                                 thumbColor: WidgetStateProperty.all(
@@ -412,22 +339,11 @@ class _AddressCardState extends State<AddressCard> {
                                 ),
                                 dense: true,
                                 visualDensity: VisualDensity.compact,
-                                trackOutlineColor: WidgetStateColor.transparent,
+                                trackOutlineColor:
+                                    WidgetStateColor.transparent,
                                 onChanged: (val) {
-                                  setState(() {
-                                    widget.address.isDefault = val;
-                                  });
                                   widget.onChanged(
-                                    Address(
-                                      name: name,
-                                      street: street,
-                                      city: city,
-                                      country: country,
-                                      phone: phone,
-                                      zipCode: zipCode,
-                                      id: widget.address.id,
-                                      isDefault: val,
-                                    ),
+                                    widget.address.copyWith(isDefault: val),
                                   );
                                 },
                               ),
@@ -438,7 +354,7 @@ class _AddressCardState extends State<AddressCard> {
                     ],
                   ),
                 )
-              : SizedBox(),
+              : const SizedBox(),
         ],
       ),
     );

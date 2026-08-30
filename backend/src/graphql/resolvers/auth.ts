@@ -29,15 +29,24 @@ function formatUser(user: any) {
                 ...oi,
                 product: oi.product ? {
                     ...oi.product,
-                    color: oi.product.color ? oi.product.color.toString() : '0',
+                    color: oi.product.color.toString(),
                     category: oi.product.category ? {
                         ...oi.product.category,
-                        color: oi.product.category.color ? oi.product.category.color.toString() : '0'
+                        color: oi.product.category.color.toString()
                     } : undefined,
                     is_favorite: false
                 } : oi.product
             })),
             transaction: o.transaction || []
+        })),
+        favorite: (user.favorite || []).map((f: any) => ({
+            ...f.product,
+            color: f.product.color.toString(),
+            category: f.product.category ? {
+                ...f.product.category,
+                color: f.product.category.color.toString()
+            } : undefined,
+            is_favorite: true
         }))
     };
 }
@@ -65,7 +74,7 @@ export default {
         }
         //now we know we have valid input and a unique email
         const hashedPassword = await bcrypt.hash(password, 10);
-        return await prisma.user.create({
+        const newUser = await prisma.user.create({
             data: {
                 email: email,
                 phone: number,
@@ -82,9 +91,18 @@ export default {
                 credit_card: true,
                 order: true,
                 transaction: true,
-                favorite: true
+                favorite: {
+                    include: {
+                        product: {
+                            include: {
+                                category: true
+                            }
+                        }
+                    }
+                }
             }
         });
+        return formatUser(newUser);
     },
 
     logIn: async function ({ email, password }: { email: string, password: string }, req: any) {
@@ -113,7 +131,15 @@ export default {
                         }
                     },
                     transaction: true,
-                    favorite: true
+                    favorite: {
+                        include: {
+                            product: {
+                                include: {
+                                    category: true
+                                }
+                            }
+                        }
+                    }
                 }
             });
             if (user) {

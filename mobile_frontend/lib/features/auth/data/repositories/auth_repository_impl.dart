@@ -1,7 +1,6 @@
 import 'package:big_cart/core/error/exception.dart';
 import 'package:big_cart/core/error/failure.dart';
 import 'package:big_cart/core/network/network_info.dart';
-import 'package:big_cart/features/account/data/models/user_model.dart';
 import 'package:big_cart/features/auth/data/data_sources/auth_local_data_source.dart';
 import 'package:big_cart/features/auth/data/data_sources/auth_remote_data_source.dart';
 import 'package:big_cart/features/account/domain/entities/user.dart';
@@ -28,10 +27,10 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await authRemoteDataSource.forgotPassword(email: email);
       return Right(unit);
-    } on InvalidEmailException {
-      return Left(InvalidEmailFailure());
     } on NoInternetException {
       return Left(NoInternetFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -48,10 +47,6 @@ class AuthRepositoryImpl implements AuthRepository {
         remember: remember,
       );
       return Right(user);
-    } on InvalidEmailException {
-      return Left(InvalidEmailFailure());
-    } on WrongPasswordException {
-      return Left(WrongPasswordFailure());
     } on NoInternetException {
       return Left(NoInternetFailure());
     } catch (e) {
@@ -64,8 +59,6 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await authRemoteDataSource.sendOtp(number);
       return Right(unit);
-    } on InvalidEmailException {
-      return Left(InvalidEmailFailure());
     } on NoInternetException {
       return Left(NoInternetFailure());
     } catch (e) {
@@ -86,10 +79,6 @@ class AuthRepositoryImpl implements AuthRepository {
         number: number,
       );
       return Right(user);
-    } on InvalidEmailException {
-      return Left(InvalidEmailFailure());
-    } on InvalidNumberException {
-      return Left(InvalidNumberFailure());
     } on NoInternetException {
       return Left(NoInternetFailure());
     } catch (e) {
@@ -114,10 +103,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(user);
     } on WrongOTPException {
       return Left(WrongOTPFailure());
-    } on InvalidEmailException {
-      return Left(InvalidEmailFailure());
-    } on InvalidNumberException {
-      return Left(InvalidNumberFailure());
     } on NoInternetException {
       return Left(NoInternetFailure());
     } catch (e) {

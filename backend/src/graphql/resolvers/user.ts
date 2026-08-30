@@ -81,10 +81,10 @@ export default {
                         ...oi,
                         product: oi.product ? {
                             ...oi.product,
-                            color: oi.product.color ? oi.product.color.toString() : '0',
+                            color: oi.product.color.toString(),
                             category: oi.product.category ? {
                                 ...oi.product.category,
-                                color: oi.product.category.color ? oi.product.category.color.toString() : '0'
+                                color: oi.product.category.color.toString()
                             } : undefined,
                             is_favorite: Boolean(oi.product.favorite?.length)
                         } : oi.product
@@ -100,10 +100,10 @@ export default {
                 });
                 return favs.map((p: any) => ({
                     ...p,
-                    color: p.color ? p.color.toString() : '0',
+                    color: p.color.toString(),
                     category: p.category ? {
                         ...p.category,
-                        color: p.category.color ? p.category.color.toString() : '0'
+                        color: p.category.color.toString()
                     } : undefined,
                     is_favorite: true
                 }));

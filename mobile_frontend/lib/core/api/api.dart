@@ -44,12 +44,17 @@ class DioConsumer implements ApiConsumer {
     required String query,
     Map<String, dynamic>? variables,
   }) async {
+    //debugprint shows the full message
+    debugPrint('--- [GraphQL Request] ---');
+    debugPrint('Query: $query');
+    if (variables != null) debugPrint('Variables: $variables');
+
     try {
       final response = await dio.post(
         '/graphql',
         data: {
           'query': query,
-          'variables': ?variables,
+          'variables': variables,
         },
       );
       final data = response.data;
@@ -58,6 +63,7 @@ class DioConsumer implements ApiConsumer {
           (data['errors'] as List).isNotEmpty) {
         final message =
             data['errors'][0]['message']?.toString() ?? 'GraphQL error';
+        debugPrint('--- [GraphQL Error] ---: $message');
         final lower = message.toLowerCase();
         if (lower.contains('not authorized') ||
             lower.contains('jwt') ||
@@ -78,10 +84,13 @@ class DioConsumer implements ApiConsumer {
         final errors = e.response!.data['errors'] as List;
         if (errors.isNotEmpty) {
           final message = errors[0]['message']?.toString() ?? 'GraphQL error';
+          debugPrint('--- [GraphQL Error] ---: $message');
           throw Exception(message);
         }
       }
-      rethrow;
+      final message = e.message ?? e.toString();
+      debugPrint('--- [GraphQL Error] ---: $message');
+      throw Exception(message);
     }
   }
 

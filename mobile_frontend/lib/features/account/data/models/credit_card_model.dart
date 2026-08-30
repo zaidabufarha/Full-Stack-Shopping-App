@@ -9,7 +9,7 @@ part 'credit_card_model.g.dart';
   converters: [PaymentProcessorConverter()],
 )
 class CreditCardModel extends CreditCard {
-  CreditCardModel({
+  const CreditCardModel({
     super.id,
     required super.cardHolderName,
     required super.last4,

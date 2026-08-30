@@ -70,19 +70,9 @@ class _ShippingPageState extends State<ShippingPage> {
               country: addressCountry,
               phone: addressNumber,
               zipCode: addressZip,
+              isDefault: addressSave,
             );
             step++;
-            if (addressSave) {
-              context.read<AddressCubit>().attemptAddAddress(
-                name: addressName,
-                address: addressAddress,
-                city: addressCity,
-                country: addressCountry,
-                zip: addressZip,
-                phoneNumber: addressNumber,
-                makeDefault: false,
-              );
-            }
           }
         } else if (step == 3) {
           {
@@ -97,21 +87,11 @@ class _ShippingPageState extends State<ShippingPage> {
                 cardHolderName: creditCardName,
                 last4: last4,
                 expiryDate: creditCardExpiration,
+                isDefault: creditCardSave,
                 processor: (cleanNum.startsWith('4')
                     ? PaymentProcessor.visa
                     : PaymentProcessor.mastercard),
               );
-              if (creditCardSave) {
-                context.read<CardsCubit>().attemptAddCreditCard(
-                  name: creditCardName,
-                  cardNumber: cleanNum,
-                  expiration: creditCardExpiration,
-                  saveCard: false,
-                  processor: (cleanNum.startsWith('4')
-                      ? PaymentProcessor.visa
-                      : PaymentProcessor.mastercard),
-                );
-              }
               order = Order(
                 orderItem: widget.list,
                 createdAt: DateTime.now(),

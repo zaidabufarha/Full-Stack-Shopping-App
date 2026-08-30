@@ -50,14 +50,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return unit;
     } on DioException {
       throw NoInternetException();
-    } catch (e) {
-      final msg = e.toString().toLowerCase();
-      if (msg.contains('not found') ||
-          msg.contains('not exist') ||
-          msg.contains('invalid email')) {
-        throw InvalidEmailException();
-      }
-      rethrow;
     }
   }
 
@@ -176,15 +168,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return user;
     } on DioException {
       throw NoInternetException();
-    } catch (e) {
-      final msg = e.toString().toLowerCase();
-      if (msg.contains('incorrect password') ||
-          msg.contains('wrong password')) {
-        throw WrongPasswordException();
-      } else if (msg.contains('not found') || msg.contains('invalid email')) {
-        throw InvalidEmailException();
-      }
-      rethrow;
     }
   }
 
@@ -225,12 +208,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return UserModel.fromJson(userMap);
     } on DioException {
       throw NoInternetException();
-    } catch (e) {
-      final msg = e.toString().toLowerCase();
-      if (msg.contains('already in use') || msg.contains('invalid email')) {
-        throw InvalidEmailException();
-      }
-      rethrow;
     }
   }
 

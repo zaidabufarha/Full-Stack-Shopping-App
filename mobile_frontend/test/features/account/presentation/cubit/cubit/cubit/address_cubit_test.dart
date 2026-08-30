@@ -157,6 +157,51 @@ void main() {
     );
   });
 
+  group('attemptUpdateAddresses', () {
+    blocTest<AddressCubit, AddressState>(
+      'emits [loading, success] when all addresses updated successfully',
+      build: () {
+        when(
+          () => mockUpdateAddress.call(any()),
+        ).thenAnswer((_) async => const Right(unit));
+        return addressCubit;
+      },
+      act: (cubit) => cubit.attemptUpdateAddresses([testAddress]),
+      expect: () => [
+        const AddressState.loading(),
+        const AddressState.success('Updated successfully'),
+      ],
+      verify: (_) {
+        verify(() => mockUpdateAddress.call(testAddress)).called(1);
+      },
+    );
+
+    blocTest<AddressCubit, AddressState>(
+      'emits [loading, error] when any update address fails',
+      build: () {
+        when(
+          () => mockUpdateAddress.call(any()),
+        ).thenAnswer((_) async => Left(DummyFailure('Batch update failed')));
+        return addressCubit;
+      },
+      act: (cubit) => cubit.attemptUpdateAddresses([testAddress]),
+      expect: () => [
+        const AddressState.loading(),
+        const AddressState.error('Batch update failed'),
+      ],
+    );
+
+    blocTest<AddressCubit, AddressState>(
+      'emits nothing when addresses list is empty',
+      build: () => addressCubit,
+      act: (cubit) => cubit.attemptUpdateAddresses([]),
+      expect: () => [],
+      verify: (_) {
+        verifyNever(() => mockUpdateAddress.call(any()));
+      },
+    );
+  });
+
   group('attemptGetAddressesCubit', () {
     blocTest<AddressCubit, AddressState>(
       'emits [loading, loaded] when fetching addresses succeeds',

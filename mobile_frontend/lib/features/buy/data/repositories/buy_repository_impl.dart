@@ -31,6 +31,8 @@ class BuyRepositoryImpl implements BuyRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -45,6 +47,8 @@ class BuyRepositoryImpl implements BuyRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -59,6 +63,8 @@ class BuyRepositoryImpl implements BuyRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -77,6 +83,8 @@ class BuyRepositoryImpl implements BuyRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -91,6 +99,8 @@ class BuyRepositoryImpl implements BuyRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -105,6 +115,8 @@ class BuyRepositoryImpl implements BuyRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -119,6 +131,8 @@ class BuyRepositoryImpl implements BuyRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -135,6 +149,8 @@ class BuyRepositoryImpl implements BuyRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -152,6 +168,8 @@ class BuyRepositoryImpl implements BuyRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 
@@ -172,6 +190,8 @@ class BuyRepositoryImpl implements BuyRepository {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
       return Left(EmptyCacheFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 }

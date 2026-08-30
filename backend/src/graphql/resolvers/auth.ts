@@ -19,6 +19,29 @@ function checkAuth(req: any) { //cleanest code of all time ever
     }
 }
 
+function formatUser(user: any) {
+    if (!user) return user;
+    return {
+        ...user,
+        order: (user.order || []).map((o: any) => ({
+            ...o,
+            order_item: (o.order_item || []).map((oi: any) => ({
+                ...oi,
+                product: oi.product ? {
+                    ...oi.product,
+                    color: oi.product.color ? oi.product.color.toString() : '0',
+                    category: oi.product.category ? {
+                        ...oi.product.category,
+                        color: oi.product.category.color ? oi.product.category.color.toString() : '0'
+                    } : undefined,
+                    is_favorite: false
+                } : oi.product
+            })),
+            transaction: o.transaction || []
+        }))
+    };
+}
+
 export default {
     signUp: async function ({ email, number, password }: { email: string, number: string, password: string }, req: any) {
         email = email.trim().toLowerCase();
@@ -73,7 +96,22 @@ export default {
                     notification_preference: true,
                     address: true,
                     credit_card: true,
-                    order: true,
+                    order: {
+                        include: {
+                            order_item: {
+                                include: {
+                                    product: {
+                                        include: {
+                                            category: true
+                                        }
+                                    }
+                                }
+                            },
+                            address: true,
+                            credit_card: true,
+                            transaction: true
+                        }
+                    },
                     transaction: true,
                     favorite: true
                 }
@@ -81,7 +119,7 @@ export default {
             if (user) {
                 if (await bcrypt.compare(password, user.password)) {
                     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-                    return { token: token, user: user };
+                    return { token: token, user: formatUser(user) };
                 }
                 else {
                     const err: HttpError = new Error('Incorrect password')

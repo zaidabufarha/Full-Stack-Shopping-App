@@ -84,7 +84,6 @@ class AuthCubit extends Cubit<AuthState> {
     result.fold((failure) => emit(AuthState.error(failure.message)), (
       user,
     ) async {
-      await cacheUser.call(user);
       emit(AuthState.success(user));
     });
   }

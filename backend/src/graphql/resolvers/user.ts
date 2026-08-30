@@ -17,6 +17,29 @@ function checkAuth(req: any) {
     }
 }
 
+function formatUser(user: any) {
+    if (!user) return user;
+    return {
+        ...user,
+        order: (user.order || []).map((o: any) => ({
+            ...o,
+            order_item: (o.order_item || []).map((oi: any) => ({
+                ...oi,
+                product: oi.product ? {
+                    ...oi.product,
+                    color: oi.product.color ? oi.product.color.toString() : '0',
+                    category: oi.product.category ? {
+                        ...oi.product.category,
+                        color: oi.product.category.color ? oi.product.category.color.toString() : '0'
+                    } : undefined,
+                    is_favorite: false
+                } : oi.product
+            })),
+            transaction: o.transaction || []
+        }))
+    };
+}
+
 export default {
     me: async function (args: any, req: AuthRequest) {
         checkAuth(req);
@@ -33,9 +56,58 @@ export default {
             notification_preference: () => prisma.notification_preference.findUnique({ where: { user_id: req.id! } }),
             address: () => prisma.address.findMany({ where: { user_id: req.id! } }),
             credit_card: () => prisma.credit_card.findMany({ where: { user_id: req.id! } }),
-            order: () => prisma.order.findMany({ where: { user_id: req.id! } }),
+            order: async () => {
+                const orders = await prisma.order.findMany({
+                    where: { user_id: req.id! },
+                    include: {
+                        order_item: {
+                            include: {
+                                product: {
+                                    include: {
+                                        category: true,
+                                        favorite: { where: { user_id: req.id! } }
+                                    }
+                                }
+                            }
+                        },
+                        address: true,
+                        credit_card: true,
+                        transaction: true
+                    }
+                });
+                return orders.map((o: any) => ({
+                    ...o,
+                    order_item: (o.order_item || []).map((oi: any) => ({
+                        ...oi,
+                        product: oi.product ? {
+                            ...oi.product,
+                            color: oi.product.color ? oi.product.color.toString() : '0',
+                            category: oi.product.category ? {
+                                ...oi.product.category,
+                                color: oi.product.category.color ? oi.product.category.color.toString() : '0'
+                            } : undefined,
+                            is_favorite: Boolean(oi.product.favorite?.length)
+                        } : oi.product
+                    })),
+                    transaction: o.transaction || []
+                }));
+            },
             transaction: () => prisma.transaction.findMany({ where: { user_id: req.id! } }),
-            favorite: () => prisma.product.findMany({ where: { favorite: { some: { user_id: req.id! } } } })
+            favorite: async () => {
+                const favs = await prisma.product.findMany({
+                    where: { favorite: { some: { user_id: req.id! } } },
+                    include: { category: true }
+                });
+                return favs.map((p: any) => ({
+                    ...p,
+                    color: p.color ? p.color.toString() : '0',
+                    category: p.category ? {
+                        ...p.category,
+                        color: p.category.color ? p.category.color.toString() : '0'
+                    } : undefined,
+                    is_favorite: true
+                }));
+            }
         };
     },
 
@@ -68,18 +140,34 @@ export default {
                 throw err;
             }
         }
-        return await prisma.user.update({
+        const updatedUser = await prisma.user.update({
             where: { id: req.id! },
             data: input,
             include: {
                 notification_preference: true,
                 address: true,
                 credit_card: true,
-                order: true,
+                order: {
+                    include: {
+                        order_item: {
+                            include: {
+                                product: {
+                                    include: {
+                                        category: true
+                                    }
+                                }
+                            }
+                        },
+                        address: true,
+                        credit_card: true,
+                        transaction: true
+                    }
+                },
                 transaction: true,
                 favorite: true
             }
         });
+        return formatUser(updatedUser);
     },
 
     updateNotificationPreference: async function (args: UpdateNotificationPreferenceInput, req: AuthRequest) {

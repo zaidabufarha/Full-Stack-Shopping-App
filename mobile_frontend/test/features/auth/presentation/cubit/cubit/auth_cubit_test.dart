@@ -231,7 +231,7 @@ void main() {
         AuthState.success(testUser),
       ],
       verify: (_) {
-        verify(() => mockCacheUser.call(testUser)).called(1);
+        verifyNever(() => mockCacheUser.call(any()));
       },
     );
 

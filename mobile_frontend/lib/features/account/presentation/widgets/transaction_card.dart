@@ -3,15 +3,24 @@ import 'package:big_cart/core/fonts.dart';
 import 'package:big_cart/features/account/domain/entities/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+import 'package:intl/intl.dart';
 
 class TransactionCard extends StatelessWidget {
-  Transaction transaction;
-  TransactionCard(this.transaction, {super.key});
+  final Transaction transaction;
+  const TransactionCard(this.transaction, {super.key});
+
   @override
   Widget build(BuildContext context) {
+    final amountText = transaction.amount % 1 == 0
+        ? '\$${transaction.amount.toStringAsFixed(0)}'
+        : '\$${transaction.amount.toStringAsFixed(2)}';
+
     return Container(
       padding: EdgeInsets.all(20),
-      color: AppColors.backgroundPrimary,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -51,7 +60,7 @@ class TransactionCard extends StatelessWidget {
                 style: Fonts.titleBold(),
               ),
               Text(
-                'Dec 12 2021 at 10:00pm',
+                DateFormat("MMM d y 'at' h:mm a").format(transaction.createdAt),
                 style: Fonts.label(),
               ),
             ],
@@ -60,7 +69,7 @@ class TransactionCard extends StatelessWidget {
             width: 40.w,
           ),
           Text(
-            '\$${transaction.amount}',
+            amountText,
             style: Fonts.titleBold().copyWith(
               color: AppColors.primaryDark,
             ),

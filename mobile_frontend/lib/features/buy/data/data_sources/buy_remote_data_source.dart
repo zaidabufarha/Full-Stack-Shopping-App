@@ -288,6 +288,16 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
             image_path
             color
           }
+          review {
+            id
+            rating
+            comment
+            created_at
+            user {
+              name
+              image_path
+            }
+          }
         }
       }
     ''';

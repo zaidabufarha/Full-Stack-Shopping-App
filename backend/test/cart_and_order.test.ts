@@ -234,9 +234,14 @@ describe('Cart & Order GraphQL API (Protected Operations)', () => {
         },
       };
 
+      (prisma.credit_card.findUnique as any).mockResolvedValue({
+        id: 1,
+        processor: 'Visa',
+      });
       (prisma.cart_item.findMany as any).mockResolvedValue(mockCartItems);
       (prisma.order.create as any).mockResolvedValue(mockCreatedOrder);
       (prisma.cart_item.deleteMany as any).mockResolvedValue({ count: 1 });
+      (prisma.transaction.create as any).mockResolvedValue({ id: 1 });
 
       const query = `
         mutation {
@@ -279,6 +284,15 @@ describe('Cart & Order GraphQL API (Protected Operations)', () => {
       expect(prisma.cart_item.findMany).toHaveBeenCalledWith({
         where: { user_id: testUserId },
         include: { product: true },
+      });
+      expect(prisma.transaction.create).toHaveBeenCalledWith({
+        data: {
+          user_id: testUserId,
+          order_id: 100,
+          amount: 20.0,
+          status: 'success',
+          payment_method: 'Visa',
+        },
       });
       expect(prisma.$transaction).toHaveBeenCalled();
     });

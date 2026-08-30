@@ -68,6 +68,20 @@ export default {
                     }
 
                 })
+                const card = await tx.credit_card.findUnique({
+                    where: { id: +args.card_id }
+                });
+
+                await tx.transaction.create({
+                    data: {
+                        user_id: req.id!,
+                        order_id: newOrder.id,
+                        amount: sum,
+                        status: 'success',
+                        payment_method: card ? card.processor : 'mastercard'
+                    }
+                });
+
                 //clear cart
                 await tx.cart_item.deleteMany({
                     where: { user_id: req.id! }

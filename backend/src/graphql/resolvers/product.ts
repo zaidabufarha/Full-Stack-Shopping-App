@@ -49,7 +49,12 @@ export default {
             skip: filter?.offset,
             include: {
                 category: true,
-                favorite: req?.isAuth && req?.id ? { where: { user_id: req.id } } : false
+                favorite: req?.isAuth && req?.id ? { where: { user_id: req.id } } : false,
+                review: {
+                    include: {
+                        user: true
+                    }
+                }
             }
         });
 
@@ -57,7 +62,11 @@ export default {
             ...p,
             color: p.color.toString(),
             category: p.category ? { ...p.category, color: p.category.color.toString() } : undefined,
-            is_favorite: Boolean(p.favorite && p.favorite.length > 0)
+            is_favorite: Boolean(p.favorite && p.favorite.length > 0),
+            review: (p.review || []).map((r: any) => ({
+                ...r,
+                created_at: r.created_at ? new Date(r.created_at).toISOString() : r.created_at
+            }))
         }));
     },
 
@@ -66,7 +75,12 @@ export default {
             where: { id: +id },
             include: {
                 category: true,
-                favorite: req?.isAuth && req?.id ? { where: { user_id: req.id } } : false
+                favorite: req?.isAuth && req?.id ? { where: { user_id: req.id } } : false,
+                review: {
+                    include: {
+                        user: true
+                    }
+                }
             }
         });
         if (!prod) {
@@ -79,19 +93,19 @@ export default {
             color: prod.color.toString(),
             category: prod.category ? { ...prod.category, color: prod.category.color.toString() } : undefined,
             is_favorite: Boolean((prod as any).favorite && (prod as any).favorite.length > 0),
-            review: async () => {
-                const list = await prisma.review.findMany({ where: { product_id: +id } });
-                return list.map(r => ({
-                    ...r,
-                    created_at: r.created_at ? new Date(r.created_at).toISOString() : r.created_at
-                }));
-            }
+            review: ((prod as any).review || []).map((r: any) => ({
+                ...r,
+                created_at: r.created_at ? new Date(r.created_at).toISOString() : r.created_at
+            }))
         };
     },
 
     productReviews: async function ({ product_id }: { product_id: string }) {
         const list = await prisma.review.findMany({
-            where: { product_id: +product_id }
+            where: { product_id: +product_id },
+            include: {
+                user: true
+            }
         });
         return list.map(r => ({
             ...r,
@@ -101,14 +115,32 @@ export default {
 
     addReview: async function ({ product_id, rating, comment }: { product_id: string; rating: number; comment: string }, req: AuthRequest) {
         checkAuth(req);
+        const pId = +product_id;
         const review = await prisma.review.create({
             data: {
-                product_id: +product_id,
+                product_id: pId,
                 user_id: req.id!,
                 rating,
                 comment
+            },
+            include: {
+                user: true
             }
         });
+
+        const allReviews = await prisma.review.findMany({
+            where: { product_id: pId }
+        });
+        const totalRating = allReviews.reduce((sum, r) => sum + Number(r.rating), 0);
+        const avgRating = allReviews.length > 0 ? totalRating / allReviews.length : 0;
+
+        await prisma.product.update({
+            where: { id: pId },
+            data: {
+                rating: avgRating
+            }
+        });
+
         return {
             ...review,
             created_at: review.created_at ? new Date(review.created_at).toISOString() : review.created_at

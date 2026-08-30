@@ -42,6 +42,7 @@ const mockPrismaClient: any = {
   product: {
     findUnique: vi.fn(),
     findMany: vi.fn(),
+    update: vi.fn(),
   },
   review: {
     findMany: vi.fn(),

@@ -84,7 +84,7 @@ class _OrderCardState extends State<OrderCard> {
                         style: Fonts.titleBold(),
                       ),
                       Text(
-                        'Placed on ${DateFormat('MMM d, y').format(widget.order.createdAt)}',
+                        'Placed on ${DateFormat('MMM d, y').format(widget.order.datePlaced)}',
                         style: Fonts.paragraphRegular(size: 12),
                       ),
                       Row(
@@ -183,7 +183,7 @@ class _OrderCardState extends State<OrderCard> {
                             Text(
                               DateFormat(
                                 'MMM d, y',
-                              ).format(widget.order.createdAt),
+                              ).format(widget.order.datePlaced),
                               style: Fonts.paragraphRegular(),
                             ),
                           ],

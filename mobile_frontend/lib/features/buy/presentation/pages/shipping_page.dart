@@ -37,23 +37,108 @@ class _ShippingPageState extends State<ShippingPage> {
 
   String selectedShippingMethod = 'Standard Delivery';
 
-  late String addressName;
-  late String addressEmail;
-  late String addressNumber;
-  late String addressAddress; //bad name
-  late String addressZip;
-  late String addressCity;
+  final TextEditingController addressNameController = TextEditingController();
+  final TextEditingController addressEmailController = TextEditingController();
+  final TextEditingController addressPhoneController = TextEditingController();
+  final TextEditingController addressStreetController = TextEditingController(); //bad name
+  final TextEditingController addressZipController = TextEditingController();
+  final TextEditingController addressCityController = TextEditingController();
+
   String addressCountry = 'Country';
   bool addressSave = false;
-  late String creditCardName;
-  late String creditCardNumber;
-  late String creditCardExpiration;
-  late String creditCardCVV;
+
+  final TextEditingController cardNameController = TextEditingController();
+  final TextEditingController cardNumberController = TextEditingController();
+  final TextEditingController cardExpiryController = TextEditingController();
+  final TextEditingController cardCvvController = TextEditingController();
+
   bool creditCardSave = false;
+
+  Address? selectedAddress;
+  bool isNewAddress = false;
+
+  CreditCard? selectedCreditCard;
+  bool isNewCard = false;
 
   late Address address;
   late CreditCard creditCard;
   late Order order;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<AddressCubit>().attemptGetAddressesCubit();
+    context.read<CardsCubit>().attemptGetCreditCards();
+  }
+
+  @override
+  void dispose() {
+    addressNameController.dispose();
+    addressEmailController.dispose();
+    addressPhoneController.dispose();
+    addressStreetController.dispose();
+    addressZipController.dispose();
+    addressCityController.dispose();
+
+    cardNameController.dispose();
+    cardNumberController.dispose();
+    cardExpiryController.dispose();
+    cardCvvController.dispose();
+    super.dispose();
+  }
+
+  void _populateAddress(Address addr) {
+    setState(() {
+      selectedAddress = addr;
+      isNewAddress = false;
+      addressNameController.text = addr.name;
+      addressPhoneController.text = addr.phone;
+      addressStreetController.text = addr.street;
+      addressZipController.text = addr.zipCode;
+      addressCityController.text = addr.city;
+      addressCountry = addr.country.isNotEmpty ? addr.country : 'Country';
+      addressSave = addr.isDefault;
+    });
+  }
+
+  void _clearAddress() {
+    setState(() {
+      selectedAddress = null;
+      isNewAddress = true;
+      addressNameController.clear();
+      addressEmailController.clear();
+      addressPhoneController.clear();
+      addressStreetController.clear();
+      addressZipController.clear();
+      addressCityController.clear();
+      addressCountry = 'Country';
+      addressSave = false;
+    });
+  }
+
+  void _populateCard(CreditCard card) {
+    setState(() {
+      selectedCreditCard = card;
+      isNewCard = false;
+      cardNameController.text = card.cardHolderName;
+      cardNumberController.text = '**** **** **** ${card.last4}';
+      cardExpiryController.text = card.expiryDate;
+      cardCvvController.text = '***';
+      creditCardSave = card.isDefault;
+    });
+  }
+
+  void _clearCard() {
+    setState(() {
+      selectedCreditCard = null;
+      isNewCard = true;
+      cardNameController.clear();
+      cardNumberController.clear();
+      cardExpiryController.clear();
+      cardCvvController.clear();
+      creditCardSave = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,44 +148,50 @@ class _ShippingPageState extends State<ShippingPage> {
           bool isValid = formKey.currentState!.validate();
           if (isValid) {
             formKey.currentState!.save();
-            address = Address(
-              name: addressName,
-              street: addressAddress,
-              city: addressCity,
-              country: addressCountry,
-              phone: addressNumber,
-              zipCode: addressZip,
-              isDefault: addressSave,
-            );
+            if (selectedAddress != null && !isNewAddress) {
+              address = selectedAddress!;
+            } else {
+              address = Address(
+                name: addressNameController.text,
+                street: addressStreetController.text,
+                city: addressCityController.text,
+                country: addressCountry,
+                phone: addressPhoneController.text,
+                zipCode: addressZipController.text,
+                isDefault: addressSave,
+              );
+            }
             step++;
           }
         } else if (step == 3) {
-          {
-            bool isValid = formKey.currentState!.validate();
-            if (isValid) {
-              formKey.currentState!.save();
-              final cleanNum = creditCardNumber.replaceAll(' ', '');
+          bool isValid = formKey.currentState!.validate();
+          if (isValid) {
+            formKey.currentState!.save();
+            if (selectedCreditCard != null && !isNewCard) {
+              creditCard = selectedCreditCard!;
+            } else {
+              final cleanNum = cardNumberController.text.replaceAll(' ', '');
               final last4 = cleanNum.length >= 4
                   ? cleanNum.substring(cleanNum.length - 4)
                   : cleanNum;
               creditCard = CreditCard(
-                cardHolderName: creditCardName,
+                cardHolderName: cardNameController.text,
                 last4: last4,
-                expiryDate: creditCardExpiration,
+                expiryDate: cardExpiryController.text,
                 isDefault: creditCardSave,
                 processor: (cleanNum.startsWith('4')
                     ? PaymentProcessor.visa
                     : PaymentProcessor.mastercard),
               );
-              order = Order(
-                orderItem: widget.list,
-                createdAt: DateTime.now(),
-                address: address,
-                creditCard: creditCard,
-                shippingMethod: selectedShippingMethod,
-              );
-              context.read<CartCubit>().attemptCheckOut(order);
             }
+            order = Order(
+              orderItem: widget.list,
+              datePlaced: DateTime.now(),
+              address: address,
+              creditCard: creditCard,
+              shippingMethod: selectedShippingMethod,
+            );
+            context.read<CartCubit>().attemptCheckOut(order);
           }
         } else {
           step++; //for step 1
@@ -117,7 +208,6 @@ class _ShippingPageState extends State<ShippingPage> {
           },
           icon: Icon(Icons.arrow_back_outlined),
         ),
-
         centerTitle: true,
         title: Text(
           'Add Address',
@@ -261,7 +351,88 @@ class _ShippingPageState extends State<ShippingPage> {
                             ? Column(
                                 spacing: 5.h,
                                 children: [
+                                  BlocConsumer<AddressCubit, AddressState>(
+                                    listener: (context, state) {
+                                      state.whenOrNull(
+                                        loaded: (addresses) {
+                                          if (addresses.isNotEmpty &&
+                                              selectedAddress == null &&
+                                              !isNewAddress) {
+                                            final defaultAddr =
+                                                addresses.firstWhere(
+                                              (a) => a.isDefault,
+                                              orElse: () => addresses.first,
+                                            );
+                                            _populateAddress(defaultAddr);
+                                          }
+                                        },
+                                      );
+                                    },
+                                    builder: (context, state) {
+                                      final addresses = state.maybeWhen(
+                                        loaded: (list) => list,
+                                        orElse: () => <Address>[],
+                                      );
+                                      return DropdownButtonFormField<Address?>(
+                                        key: ValueKey(selectedAddress?.id ??
+                                            (isNewAddress ? 'new' : 'none')),
+                                        initialValue: selectedAddress,
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select Saved Address',
+                                          style: Fonts.paragraphRegular(),
+                                        ),
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor:
+                                              AppColors.backgroundPrimary,
+                                          prefixIcon: Icon(
+                                            Icons.location_on_outlined,
+                                            color: AppColors.textSecondary,
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                        items: [
+                                          ...addresses.map(
+                                            (addr) =>
+                                                DropdownMenuItem<Address?>(
+                                              value: addr,
+                                              child: Text(
+                                                '${addr.name} - ${addr.street}, ${addr.city}',
+                                                style:
+                                                    Fonts.paragraphRegular(),
+                                                overflow:
+                                                    TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ),
+                                          DropdownMenuItem<Address?>(
+                                            value: null,
+                                            child: Text(
+                                              '+ Add New Address',
+                                              style: Fonts.paragraphRegular()
+                                                  .copyWith(
+                                                color: AppColors.primaryDark,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        onChanged: (Address? value) {
+                                          if (value == null) {
+                                            _clearAddress();
+                                          } else {
+                                            _populateAddress(value);
+                                          }
+                                        },
+                                      );
+                                    },
+                                  ),
                                   TextFormField(
+                                    controller: addressNameController,
+                                    readOnly: !isNewAddress,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.backgroundPrimary,
@@ -278,16 +449,16 @@ class _ShippingPageState extends State<ShippingPage> {
                                       ),
                                     ),
                                     validator: (value) {
+                                      if (!isNewAddress) return null;
                                       if (value == null || value.isEmpty) {
                                         return 'Cannot be empty';
                                       }
                                       return null;
                                     },
-                                    onSaved: (newValue) {
-                                      addressName = newValue!;
-                                    },
                                   ),
                                   TextFormField(
+                                    controller: addressEmailController,
+                                    readOnly: !isNewAddress,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.backgroundPrimary,
@@ -304,16 +475,16 @@ class _ShippingPageState extends State<ShippingPage> {
                                       ),
                                     ),
                                     validator: (value) {
+                                      if (!isNewAddress) return null;
                                       if (value == null || value.isEmpty) {
                                         return 'Cannot be empty';
                                       }
                                       return null;
                                     },
-                                    onSaved: (newValue) {
-                                      addressEmail = newValue!;
-                                    },
                                   ),
                                   TextFormField(
+                                    controller: addressPhoneController,
+                                    readOnly: !isNewAddress,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.backgroundPrimary,
@@ -330,16 +501,16 @@ class _ShippingPageState extends State<ShippingPage> {
                                       ),
                                     ),
                                     validator: (value) {
+                                      if (!isNewAddress) return null;
                                       if (value == null || value.isEmpty) {
                                         return 'Cannot be empty';
                                       }
                                       return null;
                                     },
-                                    onSaved: (newValue) {
-                                      addressNumber = newValue!;
-                                    },
                                   ),
                                   TextFormField(
+                                    controller: addressStreetController,
+                                    readOnly: !isNewAddress,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.backgroundPrimary,
@@ -356,16 +527,16 @@ class _ShippingPageState extends State<ShippingPage> {
                                       ),
                                     ),
                                     validator: (value) {
+                                      if (!isNewAddress) return null;
                                       if (value == null || value.isEmpty) {
                                         return 'Cannot be empty';
                                       }
                                       return null;
                                     },
-                                    onSaved: (newValue) {
-                                      addressAddress = newValue!;
-                                    },
                                   ),
                                   TextFormField(
+                                    controller: addressZipController,
+                                    readOnly: !isNewAddress,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.backgroundPrimary,
@@ -382,16 +553,16 @@ class _ShippingPageState extends State<ShippingPage> {
                                       ),
                                     ),
                                     validator: (value) {
+                                      if (!isNewAddress) return null;
                                       if (value == null || value.isEmpty) {
                                         return 'Cannot be empty';
                                       }
                                       return null;
                                     },
-                                    onSaved: (newValue) {
-                                      addressZip = newValue!;
-                                    },
                                   ),
                                   TextFormField(
+                                    controller: addressCityController,
+                                    readOnly: !isNewAddress,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.backgroundPrimary,
@@ -408,6 +579,7 @@ class _ShippingPageState extends State<ShippingPage> {
                                       ),
                                     ),
                                     validator: (value) {
+                                      if (!isNewAddress) return null;
                                       if (value == null ||
                                           value.isEmpty ||
                                           addressCountry == 'Country') {
@@ -415,22 +587,22 @@ class _ShippingPageState extends State<ShippingPage> {
                                       }
                                       return null;
                                     },
-                                    onSaved: (newValue) {
-                                      addressCity = newValue!;
-                                    },
                                   ),
                                   InkWell(
-                                    onTap: () {
-                                      showCountryPicker(
-                                        context: context,
-                                        showPhoneCode: false,
-                                        onSelect: (Country country) {
-                                          setState(() {
-                                            addressCountry = country.name;
-                                          });
-                                        },
-                                      );
-                                    },
+                                    onTap: isNewAddress
+                                        ? () {
+                                            showCountryPicker(
+                                              context: context,
+                                              showPhoneCode: false,
+                                              onSelect: (Country country) {
+                                                setState(() {
+                                                  addressCountry =
+                                                      country.name;
+                                                });
+                                              },
+                                            );
+                                          }
+                                        : null,
                                     child: Container(
                                       width: double.infinity,
                                       color: AppColors.backgroundPrimary,
@@ -504,6 +676,86 @@ class _ShippingPageState extends State<ShippingPage> {
                             : Column(
                                 spacing: 5.h,
                                 children: [
+                                  BlocConsumer<CardsCubit, CardsState>(
+                                    listener: (context, state) {
+                                      state.whenOrNull(
+                                        loaded: (cards) {
+                                          if (cards.isNotEmpty &&
+                                              selectedCreditCard == null &&
+                                              !isNewCard) {
+                                            final defaultCard =
+                                                cards.firstWhere(
+                                              (c) => c.isDefault,
+                                              orElse: () => cards.first,
+                                            );
+                                            _populateCard(defaultCard);
+                                          }
+                                        },
+                                      );
+                                    },
+                                    builder: (context, state) {
+                                      final cards = state.maybeWhen(
+                                        loaded: (list) => list,
+                                        orElse: () => <CreditCard>[],
+                                      );
+                                      return DropdownButtonFormField<
+                                          CreditCard?>(
+                                        key: ValueKey(selectedCreditCard?.id ??
+                                            (isNewCard ? 'new' : 'none')),
+                                        initialValue: selectedCreditCard,
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select Saved Card',
+                                          style: Fonts.paragraphRegular(),
+                                        ),
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor:
+                                              AppColors.backgroundPrimary,
+                                          prefixIcon: Icon(
+                                            Icons.credit_card_outlined,
+                                            color: AppColors.textSecondary,
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                        items: [
+                                          ...cards.map(
+                                            (card) => DropdownMenuItem<
+                                                CreditCard?>(
+                                              value: card,
+                                              child: Text(
+                                                '${card.processor.name.toUpperCase()} (**** ${card.last4}) - ${card.cardHolderName}',
+                                                style:
+                                                    Fonts.paragraphRegular(),
+                                                overflow:
+                                                    TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ),
+                                          DropdownMenuItem<CreditCard?>(
+                                            value: null,
+                                            child: Text(
+                                              '+ Add New Card',
+                                              style: Fonts.paragraphRegular()
+                                                  .copyWith(
+                                                color: AppColors.primaryDark,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        onChanged: (CreditCard? value) {
+                                          if (value == null) {
+                                            _clearCard();
+                                          } else {
+                                            _populateCard(value);
+                                          }
+                                        },
+                                      );
+                                    },
+                                  ),
                                   Row(
                                     children: [
                                       PaymentCard(
@@ -520,11 +772,12 @@ class _ShippingPageState extends State<ShippingPage> {
                                       ),
                                     ],
                                   ),
-
                                   Image.asset(
                                     'assets/card_picture.png',
                                   ),
                                   TextFormField(
+                                    controller: cardNameController,
+                                    readOnly: !isNewCard,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.backgroundPrimary,
@@ -541,16 +794,16 @@ class _ShippingPageState extends State<ShippingPage> {
                                       ),
                                     ),
                                     validator: (value) {
+                                      if (!isNewCard) return null;
                                       if (value == null || value.isEmpty) {
                                         return 'Cannot be empty';
                                       }
                                       return null;
                                     },
-                                    onSaved: (newValue) {
-                                      creditCardName = newValue!;
-                                    },
                                   ),
                                   TextFormField(
+                                    controller: cardNumberController,
+                                    readOnly: !isNewCard,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: AppColors.backgroundPrimary,
@@ -567,13 +820,11 @@ class _ShippingPageState extends State<ShippingPage> {
                                       ),
                                     ),
                                     validator: (value) {
+                                      if (!isNewCard) return null;
                                       if (value == null || value.isEmpty) {
                                         return 'Cannot be empty';
                                       }
                                       return null;
-                                    },
-                                    onSaved: (newValue) {
-                                      creditCardNumber = newValue!;
                                     },
                                   ),
                                   Row(
@@ -582,6 +833,8 @@ class _ShippingPageState extends State<ShippingPage> {
                                     children: [
                                       Expanded(
                                         child: TextFormField(
+                                          controller: cardExpiryController,
+                                          readOnly: !isNewCard,
                                           decoration: InputDecoration(
                                             filled: true,
                                             fillColor:
@@ -599,19 +852,19 @@ class _ShippingPageState extends State<ShippingPage> {
                                             ),
                                           ),
                                           validator: (value) {
+                                            if (!isNewCard) return null;
                                             if (value == null ||
                                                 value.isEmpty) {
                                               return 'Cannot be empty';
                                             }
                                             return null;
                                           },
-                                          onSaved: (newValue) {
-                                            creditCardExpiration = newValue!;
-                                          },
                                         ),
                                       ),
                                       Expanded(
                                         child: TextFormField(
+                                          controller: cardCvvController,
+                                          readOnly: !isNewCard,
                                           keyboardType:
                                               TextInputType.numberWithOptions(),
                                           decoration: InputDecoration(
@@ -631,20 +884,17 @@ class _ShippingPageState extends State<ShippingPage> {
                                             ),
                                           ),
                                           validator: (value) {
+                                            if (!isNewCard) return null;
                                             if (value == null ||
                                                 value.isEmpty) {
                                               return 'Cannot be empty';
                                             }
                                             return null;
                                           },
-                                          onSaved: (newValue) {
-                                            creditCardCVV = newValue!;
-                                          },
                                         ),
                                       ),
                                     ],
                                   ),
-
                                   Row(
                                     children: [
                                       Expanded(
@@ -690,7 +940,6 @@ class _ShippingPageState extends State<ShippingPage> {
                   ),
                 ],
               ),
-
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: GreenGradientButton(

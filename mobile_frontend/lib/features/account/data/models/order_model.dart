@@ -12,7 +12,7 @@ class OrderModel extends Order {
   OrderModel({
     super.id,
     super.orderItem = const [],
-    required super.createdAt,
+    required super.datePlaced,
     required super.address,
     required super.creditCard,
     required super.shippingMethod,
@@ -21,7 +21,7 @@ class OrderModel extends Order {
   factory OrderModel.fromEntity(Order entity) => OrderModel(
         id: entity.id,
         orderItem: entity.orderItem,
-        createdAt: entity.createdAt,
+        datePlaced: entity.datePlaced,
         address: entity.address,
         creditCard: entity.creditCard,
         shippingMethod: entity.shippingMethod,

@@ -89,7 +89,7 @@ class TrackOrderPage extends StatelessWidget {
                           Text(
                             DateFormat(
                               'MMM d, y',
-                            ).format(order.createdAt),
+                            ).format(order.datePlaced),
                             style: Fonts.paragraphMedium(),
                             textAlign: TextAlign.start,
                           ),
@@ -106,7 +106,7 @@ class TrackOrderPage extends StatelessWidget {
                           Text(
                             DateFormat(
                               'MMM d, y',
-                            ).format(order.createdAt),
+                            ).format(order.datePlaced),
                             style: Fonts.paragraphMedium(),
                             textAlign: TextAlign.start,
                           ),
@@ -123,7 +123,7 @@ class TrackOrderPage extends StatelessWidget {
                           Text(
                             DateFormat(
                               'MMM d, y',
-                            ).format(order.createdAt),
+                            ).format(order.datePlaced),
                             style: Fonts.paragraphMedium(),
                             textAlign: TextAlign.start,
                           ),
@@ -140,7 +140,7 @@ class TrackOrderPage extends StatelessWidget {
                           Text(
                             DateFormat(
                               'MMM d, y',
-                            ).format(order.createdAt),
+                            ).format(order.datePlaced),
                             style: Fonts.paragraphMedium(),
                             textAlign: TextAlign.start,
                           ),
@@ -157,7 +157,7 @@ class TrackOrderPage extends StatelessWidget {
                           Text(
                             DateFormat(
                               'MMM d, y',
-                            ).format(order.createdAt),
+                            ).format(order.datePlaced),
                             style: Fonts.paragraphMedium(),
                             textAlign: TextAlign.start,
                           ),

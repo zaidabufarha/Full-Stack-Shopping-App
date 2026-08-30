@@ -14,7 +14,7 @@ OrderModel _$OrderModelFromJson(Map<String, dynamic> json) =>
                 ?.map(const CartItemConverter().fromJson)
                 .toList() ??
             const [],
-        createdAt: DateTime.parse(json['created_at'] as String),
+        datePlaced: DateTime.parse(json['date_placed'] as String),
         address: const AddressConverter().fromJson(json['address']),
         creditCard: const CreditCardConverter().fromJson(json['credit_card']),
         shippingMethod: json['shipping_method'] as String,
@@ -41,7 +41,7 @@ Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
       'address': const AddressConverter().toJson(instance.address),
       'credit_card': const CreditCardConverter().toJson(instance.creditCard),
       'shipping_method': instance.shippingMethod,
-      'created_at': instance.createdAt.toIso8601String(),
+      'date_placed': instance.datePlaced.toIso8601String(),
       'date_confirmed': instance.dateConfirmed?.toIso8601String(),
       'date_shipped': instance.dateShipped?.toIso8601String(),
       'date_out_for_delivery': instance.dateOutForDelivery?.toIso8601String(),

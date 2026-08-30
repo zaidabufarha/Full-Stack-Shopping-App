@@ -8,7 +8,7 @@ class Order {
   Address address;
   CreditCard creditCard;
   String shippingMethod;
-  DateTime createdAt;
+  DateTime datePlaced;
   DateTime? dateConfirmed;
   DateTime? dateShipped;
   DateTime? dateOutForDelivery;
@@ -20,7 +20,7 @@ class Order {
     required this.address,
     required this.creditCard,
     required this.shippingMethod,
-    required this.createdAt,
+    required this.datePlaced,
     this.dateConfirmed,
     this.dateDelivered,
     this.dateOutForDelivery,

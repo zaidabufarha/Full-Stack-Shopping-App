@@ -51,7 +51,7 @@ class OrderConverter implements JsonConverter<Order, dynamic> {
     if (json is Map) return OrderModel.fromJson(Map<String, dynamic>.from(json));
     return OrderModel(
       orderItem: [],
-      createdAt: DateTime.now(),
+      datePlaced: DateTime.now(),
       address: AddressModel(name: '', street: '', city: '', country: '', phone: '', zipCode: ''),
       creditCard: CreditCardModel(cardHolderName: '', last4: '', expiryDate: '', processor: PaymentProcessor.mastercard),
       shippingMethod: '',

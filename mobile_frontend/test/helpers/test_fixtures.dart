@@ -86,7 +86,7 @@ final testOrder = Order(
   address: testAddress,
   creditCard: testCreditCard,
   shippingMethod: 'Standard',
-  createdAt: DateTime(2026, 1, 1),
+  datePlaced: DateTime(2026, 1, 1),
 );
 
 final testTransaction = Transaction(

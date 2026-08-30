@@ -1,7 +1,6 @@
 import 'package:big_cart/features/account/domain/entities/user.dart';
-import 'package:big_cart/features/auth/domain/use%20cases/cache_user.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/forgot_password.dart';
-import 'package:big_cart/features/auth/domain/use%20cases/get_cached_user.dart';
+import 'package:big_cart/features/auth/domain/use%20cases/get_token.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/log_in.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/send_otp.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/sign_up.dart';
@@ -20,11 +19,10 @@ part 'auth_cubit.freezed.dart';
 @injectable
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit(
-    this.getCachedUser,
+    this.getToken,
     this.logIn,
     this.signUp,
     this.sendOtp,
-    this.cacheUser,
     this.verifyOtp,
     this.forgotPassword,
     this.signOut,
@@ -32,11 +30,10 @@ class AuthCubit extends Cubit<AuthState> {
     this.getSavedCredentials,
     this.clearCredentials,
   ) : super(AuthState.initial());
-  GetCachedUser getCachedUser;
+  GetToken getToken;
   LogIn logIn;
   SignUp signUp;
   SendOtp sendOtp;
-  CacheUser cacheUser;
   VerifyOtp verifyOtp;
   ForgotPassword forgotPassword;
   SignOut signOut;
@@ -45,11 +42,11 @@ class AuthCubit extends Cubit<AuthState> {
   ClearCredentials clearCredentials;
 
   void checkIfLoggedIn() async {
-    final user = await getCachedUser();
-    if (user == null) {
-      emit(AuthState.initial());
+    final token = await getToken.call();
+    if (token == null || token.isEmpty) {
+      emit(const AuthState.initial());
     } else {
-      emit(AuthState.success(user));
+      emit(AuthState.success(User(name: '', email: '', phone: '')));
     }
   }
 
@@ -68,7 +65,6 @@ class AuthCubit extends Cubit<AuthState> {
       } else {
         await clearCredentials.call();
       }
-      await cacheUser.call(user);
       emit(AuthState.success(user));
     });
   }
@@ -121,7 +117,6 @@ class AuthCubit extends Cubit<AuthState> {
         loginRes.fold(
           (failure) => emit(AuthState.error(failure.message)),
           (loggedInUser) async {
-            await cacheUser.call(loggedInUser);
             emit(AuthState.success(loggedInUser));
           },
         );

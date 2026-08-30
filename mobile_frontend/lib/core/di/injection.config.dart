@@ -65,16 +65,14 @@ import 'package:big_cart/features/auth/data/repositories/auth_repository_impl.da
     as _i731;
 import 'package:big_cart/features/auth/domain/repositories/auth_repository.dart'
     as _i832;
-import 'package:big_cart/features/auth/domain/use%20cases/cache_user.dart'
-    as _i290;
 import 'package:big_cart/features/auth/domain/use%20cases/clear_credentials.dart'
     as _i515;
 import 'package:big_cart/features/auth/domain/use%20cases/forgot_password.dart'
     as _i211;
-import 'package:big_cart/features/auth/domain/use%20cases/get_cached_user.dart'
-    as _i1036;
 import 'package:big_cart/features/auth/domain/use%20cases/get_saved_credentials.dart'
     as _i372;
+import 'package:big_cart/features/auth/domain/use%20cases/get_token.dart'
+    as _i557;
 import 'package:big_cart/features/auth/domain/use%20cases/log_in.dart' as _i270;
 import 'package:big_cart/features/auth/domain/use%20cases/save_credentials.dart'
     as _i77;
@@ -275,8 +273,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i211.ForgotPassword>(
       () => _i211.ForgotPassword(repository: gh<_i832.AuthRepository>()),
     );
-    gh.lazySingleton<_i1036.GetCachedUser>(
-      () => _i1036.GetCachedUser(repository: gh<_i832.AuthRepository>()),
+    gh.lazySingleton<_i557.GetToken>(
+      () => _i557.GetToken(repository: gh<_i832.AuthRepository>()),
     );
     gh.lazySingleton<_i491.SendOtp>(
       () => _i491.SendOtp(repository: gh<_i832.AuthRepository>()),
@@ -286,9 +284,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i210.VerifyOtp>(
       () => _i210.VerifyOtp(repository: gh<_i832.AuthRepository>()),
-    );
-    gh.lazySingleton<_i290.CacheUser>(
-      () => _i290.CacheUser(gh<_i832.AuthRepository>()),
     );
     gh.lazySingleton<_i515.ClearCredentials>(
       () => _i515.ClearCredentials(gh<_i832.AuthRepository>()),
@@ -355,6 +350,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i270.LogIn>(
       () => _i270.LogIn(authRepository: gh<_i832.AuthRepository>()),
     );
+    gh.factory<_i194.OrdersCubit>(
+      () => _i194.OrdersCubit(gh<_i856.GetOrders>()),
+    );
     gh.factory<_i9.ShopCubit>(
       () => _i9.ShopCubit(
         gh<_i564.AddReview>(),
@@ -362,19 +360,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1020.GetProductList>(),
         gh<_i950.GetProductReviews>(),
         gh<_i826.ToggleFavorite>(),
-        gh<_i1036.GetCachedUser>(),
       ),
-    );
-    gh.factory<_i194.OrdersCubit>(
-      () => _i194.OrdersCubit(gh<_i856.GetOrders>()),
     );
     gh.factory<_i832.AuthCubit>(
       () => _i832.AuthCubit(
-        gh<_i1036.GetCachedUser>(),
+        gh<_i557.GetToken>(),
         gh<_i270.LogIn>(),
         gh<_i357.SignUp>(),
         gh<_i491.SendOtp>(),
-        gh<_i290.CacheUser>(),
         gh<_i210.VerifyOtp>(),
         gh<_i211.ForgotPassword>(),
         gh<_i937.SignOut>(),

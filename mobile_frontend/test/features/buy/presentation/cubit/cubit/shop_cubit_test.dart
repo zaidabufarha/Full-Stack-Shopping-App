@@ -1,4 +1,3 @@
-import 'package:big_cart/features/auth/domain/use%20cases/get_cached_user.dart';
 import 'package:big_cart/features/buy/domain/use%20cases/add_review.dart';
 import 'package:big_cart/features/buy/domain/use%20cases/get_category_list.dart';
 import 'package:big_cart/features/buy/domain/use%20cases/get_product_list.dart';
@@ -17,7 +16,6 @@ class MockGetCategoryList extends Mock implements GetCategoryList {}
 class MockGetProductList extends Mock implements GetProductList {}
 class MockGetProductReviews extends Mock implements GetProductReviews {}
 class MockToggleFavorite extends Mock implements ToggleFavorite {}
-class MockGetCachedUser extends Mock implements GetCachedUser {}
 
 void main() {
   late MockAddReview mockAddReview;
@@ -25,7 +23,6 @@ void main() {
   late MockGetProductList mockGetProductList;
   late MockGetProductReviews mockGetProductReviews;
   late MockToggleFavorite mockToggleFavorite;
-  late MockGetCachedUser mockGetCachedUser;
   late ShopCubit shopCubit;
 
   setUpAll(() {
@@ -38,7 +35,6 @@ void main() {
     mockGetProductList = MockGetProductList();
     mockGetProductReviews = MockGetProductReviews();
     mockToggleFavorite = MockToggleFavorite();
-    mockGetCachedUser = MockGetCachedUser();
 
     shopCubit = ShopCubit(
       mockAddReview,
@@ -46,7 +42,6 @@ void main() {
       mockGetProductList,
       mockGetProductReviews,
       mockToggleFavorite,
-      mockGetCachedUser,
     );
   });
 
@@ -62,7 +57,6 @@ void main() {
     blocTest<ShopCubit, ShopState>(
       'emits [loading, success] when review is added successfully',
       build: () {
-        when(() => mockGetCachedUser.call()).thenAnswer((_) async => testUser);
         when(() => mockAddReview.call(any(), any()))
             .thenAnswer((_) async => const Right(unit));
         return shopCubit;
@@ -73,7 +67,6 @@ void main() {
         const ShopState.success('Added review successfully'),
       ],
       verify: (_) {
-        verify(() => mockGetCachedUser.call()).called(1);
         verify(() => mockAddReview.call('prod_1', any())).called(1);
       },
     );
@@ -81,7 +74,6 @@ void main() {
     blocTest<ShopCubit, ShopState>(
       'emits [loading, error] when addReview fails',
       build: () {
-        when(() => mockGetCachedUser.call()).thenAnswer((_) async => testUser);
         when(() => mockAddReview.call(any(), any()))
             .thenAnswer((_) async => Left(DummyFailure('Failed to add review')));
         return shopCubit;
@@ -94,9 +86,10 @@ void main() {
     );
 
     blocTest<ShopCubit, ShopState>(
-      'emits [loading, error] when exception is thrown (e.g. no cached user)',
+      'emits [loading, error] when exception is thrown',
       build: () {
-        when(() => mockGetCachedUser.call()).thenAnswer((_) async => null);
+        when(() => mockAddReview.call(any(), any()))
+            .thenThrow(Exception('Unexpected error'));
         return shopCubit;
       },
       act: (cubit) => cubit.attemptAddReview('prod_1', 'Great product!', 5.0),

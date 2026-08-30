@@ -173,7 +173,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       final user = UserModel.fromJson(userMap);
-      await userLocalDataSource.cacheUser(user);
       return user;
     } on DioException {
       throw NoInternetException();

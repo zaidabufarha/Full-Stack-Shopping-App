@@ -176,12 +176,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
         query: mutation,
         variables: {'imagePath': secureUrl},
       );
-
-      final cachedUser = await userLocalDataSource.getCachedUser();
-      if (cachedUser != null) {
-        cachedUser.imagePath = secureUrl;
-        await userLocalDataSource.cacheUser(cachedUser);
-      }
     } on DioException {
       throw NoInternetException();
     }
@@ -457,7 +451,6 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
     try {
       final data = await apiConsumer.graphql(query: query);
       final user = UserModel.fromJson(Map<String, dynamic>.from(data['me']));
-      await userLocalDataSource.cacheUser(user);
       return user;
     } on DioException {
       throw NoInternetException();

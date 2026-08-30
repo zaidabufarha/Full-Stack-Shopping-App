@@ -121,25 +121,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> cacheUser(User user) async {
-    final userModel = UserModel(
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      password: user.password,
-    );
-    await authLocalDataSource.cacheUser(userModel);
-  }
-
-  @override
   Future<void> clearCache() async {
     await authLocalDataSource.clearCache();
   }
 
   @override
-  Future<User?> getCachedUser() async {
-    UserModel? userModel = await authLocalDataSource.getCachedUser();
-    return userModel;
+  Future<String?> getToken() async {
+    return await authLocalDataSource.getToken();
   }
 
   @override

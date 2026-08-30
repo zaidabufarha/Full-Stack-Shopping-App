@@ -1,8 +1,8 @@
-import 'package:big_cart/features/auth/domain/use%20cases/cache_user.dart';
+import 'package:big_cart/features/account/domain/entities/user.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/clear_credentials.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/forgot_password.dart';
-import 'package:big_cart/features/auth/domain/use%20cases/get_cached_user.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/get_saved_credentials.dart';
+import 'package:big_cart/features/auth/domain/use%20cases/get_token.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/log_in.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/save_credentials.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/send_otp.dart';
@@ -17,15 +17,13 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../../../helpers/test_fixtures.dart';
 
-class MockGetCachedUser extends Mock implements GetCachedUser {}
+class MockGetToken extends Mock implements GetToken {}
 
 class MockLogIn extends Mock implements LogIn {}
 
 class MockSignUp extends Mock implements SignUp {}
 
 class MockSendOtp extends Mock implements SendOtp {}
-
-class MockCacheUser extends Mock implements CacheUser {}
 
 class MockVerifyOtp extends Mock implements VerifyOtp {}
 
@@ -40,11 +38,10 @@ class MockGetSavedCredentials extends Mock implements GetSavedCredentials {}
 class MockClearCredentials extends Mock implements ClearCredentials {}
 
 void main() {
-  late MockGetCachedUser mockGetCachedUser;
+  late MockGetToken mockGetToken;
   late MockLogIn mockLogIn;
   late MockSignUp mockSignUp;
   late MockSendOtp mockSendOtp;
-  late MockCacheUser mockCacheUser;
   late MockVerifyOtp mockVerifyOtp;
   late MockForgotPassword mockForgotPassword;
   late MockSignOut mockSignOut;
@@ -58,11 +55,10 @@ void main() {
   });
 
   setUp(() {
-    mockGetCachedUser = MockGetCachedUser();
+    mockGetToken = MockGetToken();
     mockLogIn = MockLogIn();
     mockSignUp = MockSignUp();
     mockSendOtp = MockSendOtp();
-    mockCacheUser = MockCacheUser();
     mockVerifyOtp = MockVerifyOtp();
     mockForgotPassword = MockForgotPassword();
     mockSignOut = MockSignOut();
@@ -71,11 +67,10 @@ void main() {
     mockClearCredentials = MockClearCredentials();
 
     authCubit = AuthCubit(
-      mockGetCachedUser,
+      mockGetToken,
       mockLogIn,
       mockSignUp,
       mockSendOtp,
-      mockCacheUser,
       mockVerifyOtp,
       mockForgotPassword,
       mockSignOut,
@@ -95,29 +90,34 @@ void main() {
 
   group('checkIfLoggedIn', () {
     blocTest<AuthCubit, AuthState>(
-      'emits [AuthState.success(user)] when cached user exists',
+      'emits [AuthState.success(user)] when token exists',
       build: () {
-        when(() => mockGetCachedUser.call()).thenAnswer((_) async => testUser);
+        when(() => mockGetToken.call()).thenAnswer((_) async => 'sample_token');
         return authCubit;
       },
       act: (cubit) => cubit.checkIfLoggedIn(),
-      expect: () => [AuthState.success(testUser)],
+      expect: () => [
+        predicate<AuthState>((state) => state.maybeWhen(
+              success: (_) => true,
+              orElse: () => false,
+            )),
+      ],
       verify: (_) {
-        verify(() => mockGetCachedUser.call()).called(1);
+        verify(() => mockGetToken.call()).called(1);
       },
     );
 
     blocTest<AuthCubit, AuthState>(
-      'emits [AuthState.initial()] when cached user is null (from non-initial seed)',
+      'emits [AuthState.initial()] when token is null (from non-initial seed)',
       seed: () => const AuthState.loading(),
       build: () {
-        when(() => mockGetCachedUser.call()).thenAnswer((_) async => null);
+        when(() => mockGetToken.call()).thenAnswer((_) async => null);
         return authCubit;
       },
       act: (cubit) => cubit.checkIfLoggedIn(),
       expect: () => [const AuthState.initial()],
       verify: (_) {
-        verify(() => mockGetCachedUser.call()).called(1);
+        verify(() => mockGetToken.call()).called(1);
       },
     );
   });
@@ -134,7 +134,6 @@ void main() {
           ),
         ).thenAnswer((_) async => Right(testUser));
         when(() => mockSaveCredentials.call(any())).thenAnswer((_) async {});
-        when(() => mockCacheUser.call(any())).thenAnswer((_) async {});
         return authCubit;
       },
       act: (cubit) =>
@@ -152,7 +151,6 @@ void main() {
           ),
         ).called(1);
         verify(() => mockSaveCredentials.call('john@example.com')).called(1);
-        verify(() => mockCacheUser.call(testUser)).called(1);
       },
     );
 
@@ -167,7 +165,6 @@ void main() {
           ),
         ).thenAnswer((_) async => Right(testUser));
         when(() => mockClearCredentials.call()).thenAnswer((_) async {});
-        when(() => mockCacheUser.call(any())).thenAnswer((_) async {});
         return authCubit;
       },
       act: (cubit) =>
@@ -185,7 +182,6 @@ void main() {
           ),
         ).called(1);
         verify(() => mockClearCredentials.call()).called(1);
-        verify(() => mockCacheUser.call(testUser)).called(1);
       },
     );
 
@@ -221,7 +217,6 @@ void main() {
             number: '+1234567890',
           ),
         ).thenAnswer((_) async => Right(testUser));
-        when(() => mockCacheUser.call(any())).thenAnswer((_) async {});
         return authCubit;
       },
       act: (cubit) =>
@@ -230,9 +225,6 @@ void main() {
         const AuthState.loading(),
         AuthState.success(testUser),
       ],
-      verify: (_) {
-        verifyNever(() => mockCacheUser.call(any()));
-      },
     );
 
     blocTest<AuthCubit, AuthState>(
@@ -325,7 +317,6 @@ void main() {
             remember: true,
           ),
         ).thenAnswer((_) async => Right(testUser));
-        when(() => mockCacheUser.call(any())).thenAnswer((_) async {});
         return authCubit;
       },
       act: (cubit) => cubit.verifyUserOtp(
@@ -338,9 +329,6 @@ void main() {
         const AuthState.loading(),
         AuthState.success(testUser),
       ],
-      verify: (_) {
-        verify(() => mockCacheUser.call(testUser)).called(1);
-      },
     );
 
     blocTest<AuthCubit, AuthState>(

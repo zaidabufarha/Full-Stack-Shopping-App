@@ -28,8 +28,7 @@ abstract class AuthRepository {
   });
 
   Future<bool> isFirstTime();
-  Future<void> cacheUser(User user);
-  Future<User?> getCachedUser();
+  Future<String?> getToken();
   Future<void> clearCache();
   Future<void> saveEmail(String email);
   Future<String?> getSavedEmail();

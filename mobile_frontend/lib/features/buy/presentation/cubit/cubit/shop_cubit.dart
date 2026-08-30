@@ -1,4 +1,4 @@
-import 'package:big_cart/features/auth/domain/use%20cases/get_cached_user.dart';
+import 'package:big_cart/features/account/domain/entities/user.dart';
 import 'package:big_cart/features/buy/domain/entities/category.dart';
 import 'package:big_cart/features/buy/domain/entities/product.dart';
 import 'package:big_cart/features/buy/domain/entities/review.dart';
@@ -22,21 +22,19 @@ class ShopCubit extends Cubit<ShopState> {
     this.getProductList,
     this.getProductReviews,
     this.toggleFavorite,
-    this.getCachedUser,
   ) : super(ShopState.initial());
   GetCategoryList getCategoryList;
   GetProductList getProductList;
   GetProductReviews getProductReviews;
   AddReview addReview;
   ToggleFavorite toggleFavorite;
-  GetCachedUser getCachedUser;
 
   void attemptAddReview(String id, String content, double rating) async {
     emit(ShopState.loading());
     print('review with rating $rating and content: $content');
     try {
       final review = Review(
-        user: (await getCachedUser.call())!,
+        user: User(name: '', email: '', phone: ''),
         comment: content,
         rating: rating,
         createdAt: DateTime.now(),

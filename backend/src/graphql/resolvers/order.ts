@@ -75,6 +75,12 @@ export default {
 
                 return {
                     ...newOrder,
+                    //.iso on not null, but i dont want to use it on null values
+                    date_placed: newOrder.date_placed ? new Date(newOrder.date_placed).toISOString() : newOrder.date_placed,
+                    date_confirmed: newOrder.date_confirmed ? new Date(newOrder.date_confirmed).toISOString() : null,
+                    date_shipped: newOrder.date_shipped ? new Date(newOrder.date_shipped).toISOString() : null,
+                    date_out_for_delivery: newOrder.date_out_for_delivery ? new Date(newOrder.date_out_for_delivery).toISOString() : null,
+                    date_delivered: newOrder.date_delivered ? new Date(newOrder.date_delivered).toISOString() : null,
                     order_item: newOrder.order_item.map((oi: any) => ({
                         ...oi,
                         product: {
@@ -121,6 +127,11 @@ export default {
         else {
             return {
                 ...order,
+                date_placed: order.date_placed ? new Date(order.date_placed).toISOString() : order.date_placed,
+                date_confirmed: order.date_confirmed ? new Date(order.date_confirmed).toISOString() : null,
+                date_shipped: order.date_shipped ? new Date(order.date_shipped).toISOString() : null,
+                date_out_for_delivery: order.date_out_for_delivery ? new Date(order.date_out_for_delivery).toISOString() : null,
+                date_delivered: order.date_delivered ? new Date(order.date_delivered).toISOString() : null,
                 order_item: order.order_item.map((oi: any) => ({
                     ...oi,
                     product: {

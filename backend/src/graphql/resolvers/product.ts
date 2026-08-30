@@ -79,19 +79,29 @@ export default {
             color: prod.color.toString(),
             category: prod.category ? { ...prod.category, color: prod.category.color.toString() } : undefined,
             is_favorite: Boolean((prod as any).favorite && (prod as any).favorite.length > 0),
-            review: () => prisma.review.findMany({ where: { product_id: +id } })
+            review: async () => {
+                const list = await prisma.review.findMany({ where: { product_id: +id } });
+                return list.map(r => ({
+                    ...r,
+                    created_at: r.created_at ? new Date(r.created_at).toISOString() : r.created_at
+                }));
+            }
         };
     },
 
     productReviews: async function ({ product_id }: { product_id: string }) {
-        return await prisma.review.findMany({
+        const list = await prisma.review.findMany({
             where: { product_id: +product_id }
         });
+        return list.map(r => ({
+            ...r,
+            created_at: r.created_at ? new Date(r.created_at).toISOString() : r.created_at
+        }));
     },
 
     addReview: async function ({ product_id, rating, comment }: { product_id: string; rating: number; comment: string }, req: AuthRequest) {
         checkAuth(req);
-        return await prisma.review.create({
+        const review = await prisma.review.create({
             data: {
                 product_id: +product_id,
                 user_id: req.id!,
@@ -99,6 +109,10 @@ export default {
                 comment
             }
         });
+        return {
+            ...review,
+            created_at: review.created_at ? new Date(review.created_at).toISOString() : review.created_at
+        };
     },
 
     toggleFavorite: async function ({ product_id }: { product_id: string }, req: AuthRequest) {

@@ -12,9 +12,8 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
     const existingProducts = await prisma.product.count();
     if (existingProducts > 0) {
-        console.log(`Database has existing products. Clearing before seeding fresh data...`);
-        await prisma.product.deleteMany();
-        await prisma.category.deleteMany();
+        console.log('Database already has products. Skipping seed.');
+        return;
     }
 
     const categoryEntries = Object.values(categories);

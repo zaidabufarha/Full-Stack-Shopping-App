@@ -106,17 +106,22 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     try {
       await authRemoteDataSource.verifyOtp(email: email, otp: otp);
-      User newUser = User(
-        name: 'User',
+      final user = await authRemoteDataSource.signUp(
         email: email,
-        phone: number,
         password: password,
+        number: number,
       );
-      return Right(newUser);
+      return Right(user);
     } on WrongOTPException {
       return Left(WrongOTPFailure());
+    } on InvalidEmailException {
+      return Left(InvalidEmailFailure());
+    } on InvalidNumberException {
+      return Left(InvalidNumberFailure());
     } on NoInternetException {
       return Left(NoInternetFailure());
+    } catch (e) {
+      return Left(ServerFailure(e.toString().replaceAll('Exception: ', '')));
     }
   }
 

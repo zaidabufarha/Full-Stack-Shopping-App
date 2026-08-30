@@ -28,7 +28,7 @@ class _AboutPageState extends State<AboutPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onClick(int? index) {
+    void onClick() {
       bool isValid = formKey.currentState!.validate();
       if (isValid) {
         formKey.currentState!.save();

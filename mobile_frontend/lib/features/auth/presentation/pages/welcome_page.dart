@@ -13,7 +13,7 @@ class WelcomePage extends StatelessWidget {
   //stateless because there's no input to validate
   @override
   Widget build(BuildContext context) {
-    void onClick(int? index) {
+    void onClick() {
       Navigator.of(
         context,
       ).push(MaterialPageRoute(builder: ((context) => SignUpPage())));

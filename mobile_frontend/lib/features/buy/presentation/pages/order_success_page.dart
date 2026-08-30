@@ -12,7 +12,7 @@ class OrderSuccessPage extends StatelessWidget {
   OrderSuccessPage(this.order, {super.key});
   @override
   Widget build(BuildContext context) {
-    void onClick(int? index) {
+    void onClick() {
       Navigator.of(
         context,
       ).push(

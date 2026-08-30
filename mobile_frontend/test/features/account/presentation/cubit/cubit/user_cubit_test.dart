@@ -1,5 +1,3 @@
-import 'package:big_cart/features/account/domain/entities/notification_preferences.dart';
-import 'package:big_cart/features/account/domain/entities/user.dart';
 import 'package:big_cart/features/account/domain/use_cases/add_profile_picture.dart';
 import 'package:big_cart/features/account/domain/use_cases/get_notification_preferences.dart';
 import 'package:big_cart/features/account/domain/use_cases/get_user_data.dart';
@@ -14,11 +12,15 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../../helpers/test_fixtures.dart';
 
 class MockAddProfilePicture extends Mock implements AddProfilePicture {}
+
 class MockGetNotificationPreferences extends Mock
     implements GetNotificationPreferences {}
+
 class MockGetUserData extends Mock implements GetUserData {}
+
 class MockSetNotificationPreferences extends Mock
     implements SetNotificationPreferences {}
+
 class MockUpdateProfile extends Mock implements UpdateProfile {}
 
 void main() {
@@ -61,23 +63,26 @@ void main() {
     blocTest<UserCubit, UserState>(
       'emits [UserState.success("Image changed successfully")] on success without loading',
       build: () {
-        when(() => mockAddProfilePicture.call(path: any(named: 'path')))
-            .thenAnswer((_) async => const Right(unit));
+        when(
+          () => mockAddProfilePicture.call(path: any(named: 'path')),
+        ).thenAnswer((_) async => const Right(unit));
         return userCubit;
       },
       act: (cubit) => cubit.attemptAddProfilePicture('path/to/img.png'),
       expect: () => [const UserState.success('Image changed successfully')],
       verify: (_) {
-        verify(() => mockAddProfilePicture.call(path: 'path/to/img.png'))
-            .called(1);
+        verify(
+          () => mockAddProfilePicture.call(path: 'path/to/img.png'),
+        ).called(1);
       },
     );
 
     blocTest<UserCubit, UserState>(
       'emits [UserState.error(message)] on failure without loading',
       build: () {
-        when(() => mockAddProfilePicture.call(path: any(named: 'path')))
-            .thenAnswer((_) async => Left(DummyFailure('Upload failed')));
+        when(
+          () => mockAddProfilePicture.call(path: any(named: 'path')),
+        ).thenAnswer((_) async => Left(DummyFailure('Upload failed')));
         return userCubit;
       },
       act: (cubit) => cubit.attemptAddProfilePicture('path/to/img.png'),
@@ -89,8 +94,9 @@ void main() {
     blocTest<UserCubit, UserState>(
       'emits [UserState.loadedPreferences(prefs)] on success without loading',
       build: () {
-        when(() => mockGetNotificationPreferences.call())
-            .thenAnswer((_) async => Right(testNotificationPreferences));
+        when(
+          () => mockGetNotificationPreferences.call(),
+        ).thenAnswer((_) async => Right(testNotificationPreferences));
         return userCubit;
       },
       act: (cubit) => cubit.attemptGetNotificationPreferences(),
@@ -103,8 +109,9 @@ void main() {
     blocTest<UserCubit, UserState>(
       'emits [UserState.error(message)] on failure without loading',
       build: () {
-        when(() => mockGetNotificationPreferences.call())
-            .thenAnswer((_) async => Left(DummyFailure('Preferences failed')));
+        when(
+          () => mockGetNotificationPreferences.call(),
+        ).thenAnswer((_) async => Left(DummyFailure('Preferences failed')));
         return userCubit;
       },
       act: (cubit) => cubit.attemptGetNotificationPreferences(),
@@ -116,8 +123,9 @@ void main() {
     blocTest<UserCubit, UserState>(
       'emits [UserState.loadedUser(user)] on success without loading',
       build: () {
-        when(() => mockGetUserData.call())
-            .thenAnswer((_) async => Right(testUser));
+        when(
+          () => mockGetUserData.call(),
+        ).thenAnswer((_) async => Right(testUser));
         return userCubit;
       },
       act: (cubit) => cubit.attemptGetUserData(),
@@ -130,8 +138,9 @@ void main() {
     blocTest<UserCubit, UserState>(
       'emits [UserState.error(message)] on failure without loading',
       build: () {
-        when(() => mockGetUserData.call())
-            .thenAnswer((_) async => Left(DummyFailure('User data failed')));
+        when(
+          () => mockGetUserData.call(),
+        ).thenAnswer((_) async => Left(DummyFailure('User data failed')));
         return userCubit;
       },
       act: (cubit) => cubit.attemptGetUserData(),
@@ -159,7 +168,9 @@ void main() {
         allowOrderNotifications: true,
         allowGeneralNotifications: true,
       ),
-      expect: () => [const UserState.success('Preferences updated successfully')],
+      expect: () => [
+        const UserState.success('Preferences updated successfully'),
+      ],
       verify: (_) {
         verify(
           () => mockSetNotificationPreferences.call(

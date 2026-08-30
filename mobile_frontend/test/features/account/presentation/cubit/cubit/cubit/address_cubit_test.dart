@@ -1,4 +1,3 @@
-import 'package:big_cart/features/account/domain/entities/address.dart';
 import 'package:big_cart/features/account/domain/use_cases/add_address.dart';
 import 'package:big_cart/features/account/domain/use_cases/get_addresses.dart';
 import 'package:big_cart/features/account/domain/use_cases/update_address.dart';
@@ -11,7 +10,9 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../../../helpers/test_fixtures.dart';
 
 class MockAddAddress extends Mock implements AddAddress {}
+
 class MockGetAddresses extends Mock implements GetAddresses {}
+
 class MockUpdateAddress extends Mock implements UpdateAddress {}
 
 void main() {
@@ -125,8 +126,9 @@ void main() {
     blocTest<AddressCubit, AddressState>(
       'emits [loading, success] when address updated successfully',
       build: () {
-        when(() => mockUpdateAddress.call(any()))
-            .thenAnswer((_) async => const Right(unit));
+        when(
+          () => mockUpdateAddress.call(any()),
+        ).thenAnswer((_) async => const Right(unit));
         return addressCubit;
       },
       act: (cubit) => cubit.attemptUpdateAddress(address: testAddress),
@@ -142,8 +144,9 @@ void main() {
     blocTest<AddressCubit, AddressState>(
       'emits [loading, error] when update address fails',
       build: () {
-        when(() => mockUpdateAddress.call(any()))
-            .thenAnswer((_) async => Left(DummyFailure('Update address failed')));
+        when(
+          () => mockUpdateAddress.call(any()),
+        ).thenAnswer((_) async => Left(DummyFailure('Update address failed')));
         return addressCubit;
       },
       act: (cubit) => cubit.attemptUpdateAddress(address: testAddress),
@@ -158,8 +161,9 @@ void main() {
     blocTest<AddressCubit, AddressState>(
       'emits [loading, loaded] when fetching addresses succeeds',
       build: () {
-        when(() => mockGetAddresses.call())
-            .thenAnswer((_) async => Right([testAddress]));
+        when(
+          () => mockGetAddresses.call(),
+        ).thenAnswer((_) async => Right([testAddress]));
         return addressCubit;
       },
       act: (cubit) => cubit.attemptGetAddressesCubit(),
@@ -175,8 +179,9 @@ void main() {
     blocTest<AddressCubit, AddressState>(
       'emits [loading, error] when fetching addresses fails',
       build: () {
-        when(() => mockGetAddresses.call())
-            .thenAnswer((_) async => Left(DummyFailure('Fetch failed')));
+        when(
+          () => mockGetAddresses.call(),
+        ).thenAnswer((_) async => Left(DummyFailure('Fetch failed')));
         return addressCubit;
       },
       act: (cubit) => cubit.attemptGetAddressesCubit(),

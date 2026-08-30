@@ -28,7 +28,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    void onClick(int? index) {
+    void onClick() {
       bool isValid = formKey.currentState!.validate();
       if (country == null) {
         setState(() {

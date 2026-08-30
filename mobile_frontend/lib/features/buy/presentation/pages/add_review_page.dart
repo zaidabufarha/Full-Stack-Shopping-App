@@ -24,7 +24,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onClick(int? index) {
+    void onClick() {
       formKey.currentState!.save();
       context.read<ShopCubit>().attemptAddReview(widget.id, review, rating);
     }

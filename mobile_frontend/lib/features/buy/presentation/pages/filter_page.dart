@@ -25,7 +25,7 @@ class _FilterPageState extends State<FilterPage> {
   bool freeShippingOnly = false;
   bool sameDayDeliveryOnly = false;
 
-  void onClick(int? index) {
+  void onClick() {
     _formKey.currentState?.save();
     Navigator.of(context).pop(
       Filters(

@@ -44,3 +44,12 @@ jobs:
       - name: Run Flutter unit tests
         run: flutter test
         working-directory: mobile_frontend
+
+  deploy-backend:
+    name: Deploy Backend to Render
+    needs: [ backend-test ]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: curl -f -X POST "https://api.render.com/deploy/srv-da5dubojo6nc73c9jugg?key=ptoSPS2PvrM"

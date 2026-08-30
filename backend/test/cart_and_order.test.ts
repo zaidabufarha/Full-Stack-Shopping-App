@@ -98,6 +98,7 @@ describe('Cart & Order GraphQL API (Protected Operations)', () => {
             image_path: 'assets/vegetables.png',
             color: '0xFFE6F2EA',
           },
+          favorite: [],
         },
       };
 
@@ -146,7 +147,14 @@ describe('Cart & Order GraphQL API (Protected Operations)', () => {
           product_id: 1,
           quantity: 2,
         },
-        include: { product: { include: { category: true } } },
+        include: {
+          product: {
+            include: {
+              category: true,
+              favorite: { where: { user_id: testUserId } },
+            },
+          },
+        },
       });
     });
 
@@ -201,6 +209,7 @@ describe('Cart & Order GraphQL API (Protected Operations)', () => {
                 image_path: 'assets/vegetables.png',
                 color: '0xFFE6F2EA',
               },
+              favorite: [],
             },
           },
         ],

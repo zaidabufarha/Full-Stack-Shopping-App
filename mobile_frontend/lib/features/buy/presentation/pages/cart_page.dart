@@ -37,7 +37,7 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onClick(int? index) {
+    void onClick() {
       if (checkOutList.isNotEmpty) {
         //context.read<CartCubit>().attemptCheckOut(checkOutList);
         Navigator.of(context).push(

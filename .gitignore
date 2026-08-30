@@ -7,3 +7,5 @@ build/
 .flutter-plugins-dependencies
 .env
 *.env
+repomix-*.xml
+repomix-output.*

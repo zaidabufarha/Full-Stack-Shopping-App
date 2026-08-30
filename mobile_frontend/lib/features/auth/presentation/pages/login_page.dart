@@ -40,8 +40,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  //this function doesnt use int but it's still a bit cleaner than reusing button code
-  void onClick(int? index) {
+  void onClick() {
     bool isValid = formKey.currentState!.validate();
     if (isValid) {
       formKey.currentState!.save();

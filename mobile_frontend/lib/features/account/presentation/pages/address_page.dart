@@ -31,7 +31,7 @@ class _AddressPageState extends State<AddressPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onClick(int? index) async {
+    void onClick() async {
       bool isValid = formKey.currentState!.validate();
       if (isValid) {
         formKey.currentState!.save();

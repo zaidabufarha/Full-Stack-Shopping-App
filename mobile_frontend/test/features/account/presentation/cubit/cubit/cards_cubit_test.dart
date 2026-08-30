@@ -1,4 +1,3 @@
-import 'package:big_cart/features/account/domain/entities/credit_card.dart';
 import 'package:big_cart/features/account/domain/entities/transaction.dart';
 import 'package:big_cart/features/account/domain/use_cases/add_credit_card.dart';
 import 'package:big_cart/features/account/domain/use_cases/get_credit_cards.dart';
@@ -13,8 +12,11 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../../helpers/test_fixtures.dart';
 
 class MockAddCreditCard extends Mock implements AddCreditCard {}
+
 class MockGetCreditCards extends Mock implements GetCreditCards {}
+
 class MockUpdateCreditCard extends Mock implements UpdateCreditCard {}
+
 class MockSetDefaultCreditCard extends Mock implements SetDefaultCreditCard {}
 
 void main() {
@@ -115,8 +117,9 @@ void main() {
     blocTest<CardsCubit, CardsState>(
       'emits [CardsState.success("Updated successfully")] on success without loading',
       build: () {
-        when(() => mockUpdateCreditCard.call(any()))
-            .thenAnswer((_) async => const Right(unit));
+        when(
+          () => mockUpdateCreditCard.call(any()),
+        ).thenAnswer((_) async => const Right(unit));
         return cardsCubit;
       },
       act: (cubit) => cubit.attemptUpdateCreditCard(card: testCreditCard),
@@ -129,8 +132,9 @@ void main() {
     blocTest<CardsCubit, CardsState>(
       'emits [CardsState.error(message)] on failure without loading',
       build: () {
-        when(() => mockUpdateCreditCard.call(any()))
-            .thenAnswer((_) async => Left(DummyFailure('Update failed')));
+        when(
+          () => mockUpdateCreditCard.call(any()),
+        ).thenAnswer((_) async => Left(DummyFailure('Update failed')));
         return cardsCubit;
       },
       act: (cubit) => cubit.attemptUpdateCreditCard(card: testCreditCard),
@@ -142,12 +146,15 @@ void main() {
     blocTest<CardsCubit, CardsState>(
       'emits [CardsState.success("Updated default card successfully")] on success without loading',
       build: () {
-        when(() => mockSetDefaultCreditCard.call(any()))
-            .thenAnswer((_) async => const Right(unit));
+        when(
+          () => mockSetDefaultCreditCard.call(any()),
+        ).thenAnswer((_) async => const Right(unit));
         return cardsCubit;
       },
       act: (cubit) => cubit.attemptSetDefaultCreditCard('card_1'),
-      expect: () => [const CardsState.success('Updated default card successfully')],
+      expect: () => [
+        const CardsState.success('Updated default card successfully'),
+      ],
       verify: (_) {
         verify(() => mockSetDefaultCreditCard.call('card_1')).called(1);
       },
@@ -156,8 +163,9 @@ void main() {
     blocTest<CardsCubit, CardsState>(
       'emits [CardsState.error(message)] on failure without loading',
       build: () {
-        when(() => mockSetDefaultCreditCard.call(any()))
-            .thenAnswer((_) async => Left(DummyFailure('Set default card failed')));
+        when(() => mockSetDefaultCreditCard.call(any())).thenAnswer(
+          (_) async => Left(DummyFailure('Set default card failed')),
+        );
         return cardsCubit;
       },
       act: (cubit) => cubit.attemptSetDefaultCreditCard('card_1'),
@@ -169,12 +177,15 @@ void main() {
     blocTest<CardsCubit, CardsState>(
       'emits [CardsState.loaded(list)] on success without loading',
       build: () {
-        when(() => mockGetCreditCards.call())
-            .thenAnswer((_) async => Right([testCreditCard]));
+        when(
+          () => mockGetCreditCards.call(),
+        ).thenAnswer((_) async => Right([testCreditCard]));
         return cardsCubit;
       },
       act: (cubit) => cubit.attemptGetCreditCards(),
-      expect: () => [CardsState.loaded([testCreditCard])],
+      expect: () => [
+        CardsState.loaded([testCreditCard]),
+      ],
       verify: (_) {
         verify(() => mockGetCreditCards.call()).called(1);
       },
@@ -183,8 +194,9 @@ void main() {
     blocTest<CardsCubit, CardsState>(
       'emits [CardsState.error(message)] on failure without loading',
       build: () {
-        when(() => mockGetCreditCards.call())
-            .thenAnswer((_) async => Left(DummyFailure('Fetch cards failed')));
+        when(
+          () => mockGetCreditCards.call(),
+        ).thenAnswer((_) async => Left(DummyFailure('Fetch cards failed')));
         return cardsCubit;
       },
       act: (cubit) => cubit.attemptGetCreditCards(),

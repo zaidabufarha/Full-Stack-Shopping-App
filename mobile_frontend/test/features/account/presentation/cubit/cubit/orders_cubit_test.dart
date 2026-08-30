@@ -1,4 +1,3 @@
-import 'package:big_cart/features/account/domain/entities/order.dart';
 import 'package:big_cart/features/account/domain/use_cases/get_orders.dart';
 import 'package:big_cart/features/account/presentation/cubit/cubit/orders_cubit.dart';
 import 'package:bloc_test/bloc_test.dart';
@@ -35,8 +34,9 @@ void main() {
     blocTest<OrdersCubit, OrdersState>(
       'emits [loading, loadedList] when getOrders succeeds',
       build: () {
-        when(() => mockGetOrders.call())
-            .thenAnswer((_) async => Right([testOrder]));
+        when(
+          () => mockGetOrders.call(),
+        ).thenAnswer((_) async => Right([testOrder]));
         return ordersCubit;
       },
       act: (cubit) => cubit.attemptGetOrders(),
@@ -52,8 +52,9 @@ void main() {
     blocTest<OrdersCubit, OrdersState>(
       'emits [loading, error] when getOrders fails',
       build: () {
-        when(() => mockGetOrders.call())
-            .thenAnswer((_) async => Left(DummyFailure('Fetch orders failed')));
+        when(
+          () => mockGetOrders.call(),
+        ).thenAnswer((_) async => Left(DummyFailure('Fetch orders failed')));
         return ordersCubit;
       },
       act: (cubit) => cubit.attemptGetOrders(),

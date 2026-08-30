@@ -27,16 +27,17 @@ class _SignUpPage extends State<SignUpPage> {
     late String inputPhoneNumber;
     late String inputPassword;
 
-    //this function doesnt use int but it's still a bit cleaner than reusing button code
-    void onClick(int? index) {
-      bool isValid = formKey.currentState!.validate();
-      if (isValid) {
-        formKey.currentState!.save();
-        context.read<AuthCubit>().attemptSignUp(
-          inputEmail,
-          inputPassword,
-          inputPhoneNumber,
-        );
+    void onClick(bool isLoading) {
+      if (!isLoading) {
+        bool isValid = formKey.currentState!.validate();
+        if (isValid) {
+          formKey.currentState!.save();
+          context.read<AuthCubit>().attemptSignUp(
+            inputEmail,
+            inputPassword,
+            inputPhoneNumber,
+          );
+        }
       }
     }
 
@@ -221,9 +222,18 @@ class _SignUpPage extends State<SignUpPage> {
                                 inputPassword = newValue!;
                               },
                             ),
-                            GreenGradientButton(
-                              onClick,
-                              'Signup',
+                            BlocBuilder<AuthCubit, AuthState>(
+                              builder: (context, state) {
+                                final isLoading = state.maybeWhen(
+                                  loading: () => true,
+                                  orElse: () => false,
+                                );
+                                return GreenGradientButton(
+                                  () => onClick(isLoading),
+                                  'Signup',
+                                  isLoading: isLoading,
+                                );
+                              },
                             ),
 
                             SizedBox(

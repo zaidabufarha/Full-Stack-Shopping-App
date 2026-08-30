@@ -1,21 +1,13 @@
-import prisma from '../../prisma'
-import { AuthRequest } from '../../types/auth-request'
-const bcrypt = require('bcryptjs')
-const fs = require('fs')
-const jwt = require('jsonwebtoken')
-const validator = require('validator')
-import { HttpError } from '../../types/error'
-import {
-    OrderInput
-} from '../../types/graphql-inputs'
-import product from './product'
-
+import prisma from '../../prisma';
+import { AuthRequest } from '../../types/auth-request';
+import { HttpError } from '../../types/error';
+import { OrderInput } from '../../types/graphql-inputs';
 
 function checkAuth(req: any) {
     if (!req.isAuth) {
-        const err: HttpError = new Error('Not authorized')
-        err.statusCode = 401
-        throw err
+        const err: HttpError = new Error('Not authorized');
+        err.statusCode = 401;
+        throw err;
     }
 }
 
@@ -61,7 +53,16 @@ export default {
                         }
                     },
                     include: {
-                        order_item: { include: { product: { include: { category: true } } } },
+                        order_item: {
+                            include: {
+                                product: {
+                                    include: {
+                                        category: true,
+                                        favorite: { where: { user_id: req.id! } }
+                                    }
+                                }
+                            }
+                        },
                         address: true,
                         credit_card: true
                     }
@@ -72,7 +73,18 @@ export default {
                     where: { user_id: req.id! }
                 })
 
-                return newOrder
+                return {
+                    ...newOrder,
+                    order_item: newOrder.order_item.map((oi: any) => ({
+                        ...oi,
+                        product: {
+                            ...oi.product,
+                            color: oi.product.color.toString(),
+                            category: oi.product.category ? { ...oi.product.category, color: oi.product.category.color.toString() } : undefined,
+                            is_favorite: Boolean(oi.product.favorite?.length)
+                        }
+                    }))
+                };
             })
         }
     },
@@ -81,7 +93,20 @@ export default {
         checkAuth(req)
         const order = await prisma.order.findUnique({
             where: { id: +id },
-            include: { order_item: { include: { product: { include: { category: true } } } }, address: true, credit_card: true }
+            include: {
+                order_item: {
+                    include: {
+                        product: {
+                            include: {
+                                category: true,
+                                favorite: { where: { user_id: req.id! } }
+                            }
+                        }
+                    }
+                },
+                address: true,
+                credit_card: true
+            }
         });
         if (!order) {
             const err: HttpError = new Error('Order not found')
@@ -94,8 +119,18 @@ export default {
             throw err
         }
         else {
-            return order
+            return {
+                ...order,
+                order_item: order.order_item.map((oi: any) => ({
+                    ...oi,
+                    product: {
+                        ...oi.product,
+                        color: oi.product.color.toString(),
+                        category: oi.product.category ? { ...oi.product.category, color: oi.product.category.color.toString() } : undefined,
+                        is_favorite: oi.product.favorite.length > 0
+                    }
+                }))
+            };
         }
     }
-
-}
+};

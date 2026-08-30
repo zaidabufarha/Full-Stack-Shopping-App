@@ -30,7 +30,7 @@ class _CardsPageState extends State<CardsPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onClick(int? index) async {
+    void onClick() async {
       final isValid = formKey.currentState?.validate() ?? false;
       if (isValid) {
         formKey.currentState!.save();

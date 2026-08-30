@@ -13,15 +13,31 @@ function checkAuth(req: any) {
 export default {
     cart: async function (args: any, req: AuthRequest) {
         checkAuth(req);
-        return await prisma.cart_item.findMany({
+        const list = await prisma.cart_item.findMany({
             where: { user_id: req.id! },
-            include: { product: { include: { category: true } } }
+            include: {
+                product: {
+                    include: {
+                        category: true,
+                        favorite: { where: { user_id: req.id! } }
+                    }
+                }
+            }
         });
+        return list.map(item => ({
+            ...item,
+            product: {
+                ...item.product,
+                color: item.product.color.toString(),
+                category: item.product.category ? { ...item.product.category, color: item.product.category.color.toString() } : undefined,
+                is_favorite: Boolean(item.product.favorite?.length)
+            }
+        }));
     },
 
     addToCart: async function ({ product_id, quantity }: { product_id: string; quantity: number }, req: AuthRequest) {
         checkAuth(req);
-        return await prisma.cart_item.upsert({
+        const item = await prisma.cart_item.upsert({
             where: {
                 user_id_product_id: {
                     user_id: req.id!,
@@ -36,8 +52,24 @@ export default {
                 product_id: +product_id,
                 quantity
             },
-            include: { product: { include: { category: true } } }
+            include: {
+                product: {
+                    include: {
+                        category: true,
+                        favorite: { where: { user_id: req.id! } }
+                    }
+                }
+            }
         });
+        return {
+            ...item,
+            product: {
+                ...item.product,
+                color: item.product.color.toString(),
+                category: item.product.category ? { ...item.product.category, color: item.product.category.color.toString() } : undefined,
+                is_favorite: Boolean(item.product.favorite?.length)
+            }
+        };
     },
 
     updateCartItem: async function ({ cart_item_id, quantity }: { cart_item_id: string; quantity: number }, req: AuthRequest) {
@@ -53,11 +85,27 @@ export default {
             err.statusCode = 401;
             throw err;
         }
-        return await prisma.cart_item.update({
+        const updated = await prisma.cart_item.update({
             where: { id: +cart_item_id },
             data: { quantity },
-            include: { product: { include: { category: true } } }
+            include: {
+                product: {
+                    include: {
+                        category: true,
+                        favorite: { where: { user_id: req.id! } }
+                    }
+                }
+            }
         });
+        return {
+            ...updated,
+            product: {
+                ...updated.product,
+                color: updated.product.color.toString(),
+                category: updated.product.category ? { ...updated.product.category, color: updated.product.category.color.toString() } : undefined,
+                is_favorite: Boolean(updated.product.favorite?.length)
+            }
+        };
     },
 
     removeFromCart: async function ({ cart_item_id }: { cart_item_id: string }, req: AuthRequest) {

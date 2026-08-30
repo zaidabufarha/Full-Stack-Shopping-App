@@ -33,8 +33,7 @@ class _VerifyNumberPageState extends State<VerifyNumberPage> {
   String? inputOtp;
   @override
   Widget build(BuildContext context) {
-    //this function doesnt use int but it's still a bit cleaner than reusing button code
-    void onClick(int? index) {
+    void onClick() {
       if (numberValid && !otpSent) {
         context.read<AuthCubit>().sendOtpToUser(inputNumber!.toString());
         setState(() {

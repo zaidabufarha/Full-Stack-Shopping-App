@@ -24,7 +24,7 @@ class _AddCreditCardPageState extends State<AddCreditCardPage> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    void onClick(int? index) {
+    void onClick() {
       bool isValid = formKey.currentState!.validate();
       if (isValid) {
         formKey.currentState!.save();

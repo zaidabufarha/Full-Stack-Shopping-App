@@ -31,7 +31,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onClick(int? index) {
+    void onClick() {
       if (loaded) {
         context.read<UserCubit>().attemptSetNotificationPreferences(
           allowNotifications: allowNotifications,

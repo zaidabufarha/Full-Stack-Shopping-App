@@ -4,31 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 
 class GreenGradientButton extends StatelessWidget {
-  final void Function(int? index) onClick;
-  final int? index;
+  final VoidCallback onClick;
   final Icon? icon;
   final String text;
+  final bool isLoading;
 
   const GreenGradientButton(
     this.onClick,
     this.text, {
+    this.isLoading = false,
     super.key,
-  }) : index = null,
-       icon = null;
+  }) : icon = null;
 
   const GreenGradientButton.icon(
     this.onClick,
     this.text, {
     this.icon,
+    this.isLoading = false,
     super.key,
-  }) : index = null;
+  });
 
-  const GreenGradientButton.index(
-    this.onClick,
-    this.index,
-    this.text, {
-    super.key,
-  }) : icon = null;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,30 +37,38 @@ class GreenGradientButton extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(10.r),
       ),
-      child: (icon == null)
+      child: isLoading
           ? TextButton(
-              onPressed: () {
-                (index == null) ? onClick(null) : onClick(index!);
-              },
-              child: Text(
-                text,
-                style: Fonts.titleBold(
-                  size: 20,
-                ).copyWith(color: Colors.white),
+              onPressed: null,
+              child: SizedBox(
+                height: 24.h,
+                width: 24.h,
+                child: const CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
               ),
             )
-          : TextButton.icon(
-              onPressed: () {
-                (index == null) ? onClick(null) : onClick(index!);
-              },
-              icon: icon,
-              label: Text(
-                text,
-                style: Fonts.titleBold(
-                  size: 20,
-                ).copyWith(color: Colors.white),
-              ),
-            ),
+          : (icon == null)
+              ? TextButton(
+                  onPressed: onClick,
+                  child: Text(
+                    text,
+                    style: Fonts.titleBold(
+                      size: 20,
+                    ).copyWith(color: Colors.white),
+                  ),
+                )
+              : TextButton.icon(
+                  onPressed: onClick,
+                  icon: icon,
+                  label: Text(
+                    text,
+                    style: Fonts.titleBold(
+                      size: 20,
+                    ).copyWith(color: Colors.white),
+                  ),
+                ),
     );
   }
 }

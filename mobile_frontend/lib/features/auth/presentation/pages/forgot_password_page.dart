@@ -21,8 +21,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    //this function doesnt use int but it's still a bit cleaner than reusing button code
-    void onClick(int? index) {
+    void onClick() {
       isValid = formKey.currentState!.validate();
       if (isValid) {
         formKey.currentState!.save();

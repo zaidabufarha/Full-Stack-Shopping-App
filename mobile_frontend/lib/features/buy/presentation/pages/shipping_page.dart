@@ -57,7 +57,7 @@ class _ShippingPageState extends State<ShippingPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onClick(int? index) {
+    void onClick() {
       setState(() {
         if (step == 2) {
           bool isValid = formKey.currentState!.validate();

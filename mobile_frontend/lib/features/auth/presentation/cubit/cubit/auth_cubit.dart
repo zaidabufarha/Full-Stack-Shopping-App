@@ -74,6 +74,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void attemptSignUp(String email, String password, String number) async {
+    if (state is _Loading) return;
     emit(AuthState.loading());
     final result = await signUp.call(
       email: email,

@@ -90,9 +90,8 @@ class _SplashScreenState extends State<SplashScreen> {
                         SizedBox(
                           height: 30.h,
                         ),
-                        GreenGradientButton.index(
-                          onClick,
-                          index,
+                        GreenGradientButton(
+                          () => onClick(index),
                           'Get Started',
                         ),
                       ],
@@ -107,10 +106,10 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  void onClick(int? index) {
+  void onClick(int index) {
     {
       setState(() {
-        if (index! < 3) {
+        if (index < 3) {
           pageController.nextPage(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeInOut,

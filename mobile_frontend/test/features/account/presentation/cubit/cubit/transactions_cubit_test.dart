@@ -1,4 +1,3 @@
-import 'package:big_cart/features/account/domain/entities/transaction.dart';
 import 'package:big_cart/features/account/domain/use_cases/get_transactions.dart';
 import 'package:big_cart/features/account/presentation/cubit/cubit/transactions_cubit.dart';
 import 'package:bloc_test/bloc_test.dart';
@@ -35,8 +34,9 @@ void main() {
     blocTest<TransactionsCubit, TransactionsState>(
       'emits [loading, loaded] when getTransactions succeeds',
       build: () {
-        when(() => mockGetTransactions.call())
-            .thenAnswer((_) async => Right([testTransaction]));
+        when(
+          () => mockGetTransactions.call(),
+        ).thenAnswer((_) async => Right([testTransaction]));
         return transactionsCubit;
       },
       act: (cubit) => cubit.attemptGetTransactions(),
@@ -52,8 +52,9 @@ void main() {
     blocTest<TransactionsCubit, TransactionsState>(
       'emits [loading, error] when getTransactions fails',
       build: () {
-        when(() => mockGetTransactions.call())
-            .thenAnswer((_) async => Left(DummyFailure('Fetch transactions failed')));
+        when(() => mockGetTransactions.call()).thenAnswer(
+          (_) async => Left(DummyFailure('Fetch transactions failed')),
+        );
         return transactionsCubit;
       },
       act: (cubit) => cubit.attemptGetTransactions(),

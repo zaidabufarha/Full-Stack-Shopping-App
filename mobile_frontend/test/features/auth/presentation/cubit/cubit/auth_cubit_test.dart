@@ -1,4 +1,3 @@
-import 'package:big_cart/features/account/domain/entities/user.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/clear_credentials.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/forgot_password.dart';
 import 'package:big_cart/features/auth/domain/use%20cases/get_saved_credentials.dart';
@@ -97,10 +96,12 @@ void main() {
       },
       act: (cubit) => cubit.checkIfLoggedIn(),
       expect: () => [
-        predicate<AuthState>((state) => state.maybeWhen(
-              success: (_) => true,
-              orElse: () => false,
-            )),
+        predicate<AuthState>(
+          (state) => state.maybeWhen(
+            success: (_) => true,
+            orElse: () => false,
+          ),
+        ),
       ],
       verify: (_) {
         verify(() => mockGetToken.call()).called(1);

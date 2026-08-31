@@ -5,7 +5,7 @@ part 'address_model.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class AddressModel extends Address {
-  AddressModel({
+  const AddressModel({
     super.id,
     required super.name,
     required super.street,
@@ -17,15 +17,15 @@ class AddressModel extends Address {
   });
 
   factory AddressModel.fromEntity(Address entity) => AddressModel(
-        id: entity.id,
-        name: entity.name,
-        street: entity.street,
-        city: entity.city,
-        country: entity.country,
-        phone: entity.phone,
-        zipCode: entity.zipCode,
-        isDefault: entity.isDefault,
-      );
+    id: entity.id,
+    name: entity.name,
+    street: entity.street,
+    city: entity.city,
+    country: entity.country,
+    phone: entity.phone,
+    zipCode: entity.zipCode,
+    isDefault: entity.isDefault,
+  );
 
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
       _$AddressModelFromJson(json);

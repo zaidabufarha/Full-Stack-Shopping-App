@@ -150,7 +150,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                               });
                               context
                                   .read<UserCubit>()
-                                  .getNotificationPreferences();
+                                  .attemptGetNotificationPreferences();
                             }
                           },
                         ),

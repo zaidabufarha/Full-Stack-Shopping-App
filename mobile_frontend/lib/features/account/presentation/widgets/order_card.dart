@@ -24,10 +24,14 @@ class _OrderCardState extends State<OrderCard> {
   final formKey = GlobalKey();
   bool isClosed = true;
   int numberOfItems = 0;
+  double total = 0;
   @override
   void initState() {
     for (CartItem item in widget.order.orderItem) {
       numberOfItems += item.quantity;
+      total +=
+          (item.product.price * (100 - item.product.discount) / 100) *
+          item.quantity;
       //print('${item.product.name} has ${item.quantity}');
     }
     super.initState();
@@ -115,7 +119,7 @@ class _OrderCardState extends State<OrderCard> {
                               ),
                               children: [
                                 TextSpan(
-                                  text: '\$67.67',
+                                  text: '\$${total.toStringAsFixed(2)}',
                                   style: Fonts.label().copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.textPrimary,

@@ -295,6 +295,8 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
             created_at
             user {
               name
+              email
+              phone
               image_path
             }
           }
@@ -326,6 +328,8 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
           created_at
           user {
             name
+            email
+            phone
             image_path
           }
         }

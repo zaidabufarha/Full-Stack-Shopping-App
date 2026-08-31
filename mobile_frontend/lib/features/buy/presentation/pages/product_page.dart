@@ -193,7 +193,7 @@ class _ProductPageState extends State<ProductPage> {
                                       .read<ShopCubit>()
                                       .attemptToggleFavorite(
                                         product.id,
-                                        !isFavorite,
+                                        isFavorite,
                                       );
                                 },
                                 icon: Icon(

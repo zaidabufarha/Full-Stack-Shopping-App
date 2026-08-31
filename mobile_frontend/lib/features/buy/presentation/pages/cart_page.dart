@@ -173,10 +173,9 @@ class _CartPageState extends State<CartPage> {
                                 spacing: 10.h,
                                 children: [
                                   for (CartItem item in products)
-                                    CartCard(
-                                      item,
-                                      isFavorites: widget.favorites,
-                                    ),
+                                    (widget.favorites)
+                                        ? CartCard.favorite(item)
+                                        : CartCard(item),
                                 ],
                               ),
                             ),

@@ -99,14 +99,16 @@ class TrackOrderPage extends StatelessWidget {
                             color: AppColors.textSecondary.withAlpha(128),
                           ),
                           Text(
-                            'Order Placed',
+                            'Order Confirmed',
                             style: Fonts.titleBold(size: 20),
                             textAlign: TextAlign.start,
                           ),
                           Text(
-                            DateFormat(
-                              'MMM d, y',
-                            ).format(order.datePlaced),
+                            order.dateConfirmed != null
+                                ? DateFormat(
+                                    'MMM d, y',
+                                  ).format(order.dateConfirmed!)
+                                : 'Pending',
                             style: Fonts.paragraphMedium(),
                             textAlign: TextAlign.start,
                           ),
@@ -116,14 +118,16 @@ class TrackOrderPage extends StatelessWidget {
                             color: AppColors.textSecondary.withAlpha(128),
                           ),
                           Text(
-                            'Order Placed',
+                            'Order Shipped',
                             style: Fonts.titleBold(size: 20),
                             textAlign: TextAlign.start,
                           ),
                           Text(
-                            DateFormat(
-                              'MMM d, y',
-                            ).format(order.datePlaced),
+                            order.dateShipped != null
+                                ? DateFormat(
+                                    'MMM d, y',
+                                  ).format(order.dateShipped!)
+                                : 'Pending',
                             style: Fonts.paragraphMedium(),
                             textAlign: TextAlign.start,
                           ),
@@ -133,14 +137,16 @@ class TrackOrderPage extends StatelessWidget {
                             color: AppColors.textSecondary.withAlpha(128),
                           ),
                           Text(
-                            'Order Placed',
+                            'Out for Delivery',
                             style: Fonts.titleBold(size: 20),
                             textAlign: TextAlign.start,
                           ),
                           Text(
-                            DateFormat(
-                              'MMM d, y',
-                            ).format(order.datePlaced),
+                            order.dateOutForDelivery != null
+                                ? DateFormat(
+                                    'MMM d, y',
+                                  ).format(order.dateOutForDelivery!)
+                                : 'Pending',
                             style: Fonts.paragraphMedium(),
                             textAlign: TextAlign.start,
                           ),
@@ -150,14 +156,16 @@ class TrackOrderPage extends StatelessWidget {
                             color: AppColors.textSecondary.withAlpha(128),
                           ),
                           Text(
-                            'Order Placed',
+                            'Order Delivered',
                             style: Fonts.titleBold(size: 20),
                             textAlign: TextAlign.start,
                           ),
                           Text(
-                            DateFormat(
-                              'MMM d, y',
-                            ).format(order.datePlaced),
+                            order.dateDelivered != null
+                                ? DateFormat(
+                                    'MMM d, y',
+                                  ).format(order.dateDelivered!)
+                                : 'Pending',
                             style: Fonts.paragraphMedium(),
                             textAlign: TextAlign.start,
                           ),

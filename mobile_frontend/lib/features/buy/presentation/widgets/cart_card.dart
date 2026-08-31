@@ -11,8 +11,9 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class CartCard extends StatefulWidget {
   final CartItem data;
-  final bool isFavorites;
-  const CartCard(this.data, {this.isFavorites = false, super.key});
+  final bool isFavorite;
+  const CartCard(this.data, {super.key}) : isFavorite = false;
+  const CartCard.favorite(this.data, {super.key}) : isFavorite = true;
 
   @override
   State<StatefulWidget> createState() {
@@ -37,7 +38,7 @@ class _CartCardState extends State<CartCard> {
               size: 30.r,
             ),
             onPressed: (BuildContext context) {
-              if (widget.isFavorites) {
+              if (widget.isFavorite) {
                 context.read<ShopCubit>().attemptToggleFavorite(
                   widget.data.product.id,
                   false,
@@ -77,7 +78,9 @@ class _CartCardState extends State<CartCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '\$${widget.data.product.price} x ${widget.data.quantity}',
+                    widget.isFavorite
+                        ? '\$${widget.data.product.price}'
+                        : '\$${widget.data.product.price} x ${widget.data.quantity}',
                     style: Fonts.paragraphMedium().copyWith(
                       color: AppColors.primaryDark,
                     ),
@@ -93,59 +96,51 @@ class _CartCardState extends State<CartCard> {
                 ],
               ),
             ),
-            Column(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      context.read<CartCubit>().attemptUpdateQuantity(
-                        widget.data,
-                        widget.data.quantity + 1,
-                      );
-                    });
-                  },
-                  icon: Icon(
-                    Icons.add,
-                    color: AppColors.primaryDark,
-                  ),
-                ),
-                Text(
-                  widget.data.quantity.toString(),
-                  style: Fonts.paragraphRegular(),
-                ),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (widget.data.quantity > 1) {
+            if (!widget.isFavorite)
+              Column(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
                         context.read<CartCubit>().attemptUpdateQuantity(
                           widget.data,
-                          widget.data.quantity - 1,
+                          widget.data.quantity + 1,
                         );
-                      } else {
-                        setState(() {
-                          if (widget.isFavorites) {
-                            context.read<ShopCubit>().attemptToggleFavorite(
-                              widget.data.product.id,
-                              false,
-                            );
-                          } else {
-                            context.read<CartCubit>().attemptRemoveFromCart(
-                              widget.data,
-                            );
-                          }
-                        });
-                      }
-                    });
-                  },
-                  icon: Icon(
-                    Icons.remove,
-                    color: (widget.data.quantity > 1)
-                        ? AppColors.primaryDark
-                        : Colors.red,
+                      });
+                    },
+                    icon: Icon(
+                      Icons.add,
+                      color: AppColors.primaryDark,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                  Text(
+                    widget.data.quantity.toString(),
+                    style: Fonts.paragraphRegular(),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        if (widget.data.quantity > 1) {
+                          context.read<CartCubit>().attemptUpdateQuantity(
+                            widget.data,
+                            widget.data.quantity - 1,
+                          );
+                        } else {
+                          context.read<CartCubit>().attemptRemoveFromCart(
+                            widget.data,
+                          );
+                        }
+                      });
+                    },
+                    icon: Icon(
+                      Icons.remove,
+                      color: (widget.data.quantity > 1)
+                          ? AppColors.primaryDark
+                          : Colors.red,
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),

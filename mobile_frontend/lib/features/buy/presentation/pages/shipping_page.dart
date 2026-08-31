@@ -642,7 +642,7 @@ class _ShippingPageState extends State<ShippingPage> {
                                           child: SwitchListTile(
                                             value: addressSave,
                                             title: Text(
-                                              'Save this address',
+                                              'Set as default',
                                               style: Fonts.titleBold(),
                                             ),
                                             contentPadding: EdgeInsets.all(0),
@@ -904,7 +904,7 @@ class _ShippingPageState extends State<ShippingPage> {
                                           child: SwitchListTile(
                                             value: creditCardSave,
                                             title: Text(
-                                              'Save card',
+                                              'Set as default',
                                               style: Fonts.titleBold(),
                                             ),
                                             contentPadding: EdgeInsets.all(0),

@@ -252,7 +252,7 @@ class _AddCreditCardPageState extends State<AddCreditCardPage> {
                                   child: SwitchListTile(
                                     value: saveCard,
                                     title: Text(
-                                      'Make default',
+                                      'Set as default',
                                       style: Fonts.titleBold(),
                                     ),
                                     contentPadding: EdgeInsets.all(0),

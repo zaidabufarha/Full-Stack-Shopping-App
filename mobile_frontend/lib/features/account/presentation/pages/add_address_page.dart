@@ -308,7 +308,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                                 child: SwitchListTile(
                                   value: saveAddress,
                                   title: Text(
-                                    'Save this address',
+                                    'Set as default',
                                     style: Fonts.titleBold(),
                                   ),
                                   contentPadding: EdgeInsets.all(0),

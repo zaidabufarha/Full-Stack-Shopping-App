@@ -1,6 +1,7 @@
 import 'package:big_cart/core/colors.dart';
 import 'package:big_cart/core/fonts.dart';
 import 'package:big_cart/features/buy/domain/entities/review.dart';
+import 'package:big_cart/core/widgets/app_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar_plus/flutter_rating_bar_plus.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
@@ -22,7 +23,7 @@ class ReviewCard extends StatelessWidget {
             spacing: 10.w,
             children: [
               CircleAvatar(
-                backgroundImage: AssetImage(review.user.imagePath),
+                backgroundImage: appImageProvider(review.user.imagePath),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

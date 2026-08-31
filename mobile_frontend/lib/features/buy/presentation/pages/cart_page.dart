@@ -37,11 +37,11 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    void onClick() {
-      if (checkOutList.isNotEmpty) {
+    void onClick([List<CartItem>? items]) {
+      if (items != null && items.isNotEmpty) {
         //context.read<CartCubit>().attemptCheckOut(checkOutList);
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => ShippingPage(checkOutList)),
+          MaterialPageRoute(builder: (context) => ShippingPage(items)),
         );
       } else {
         Navigator.push(
@@ -198,7 +198,7 @@ class _CartPageState extends State<CartPage> {
                                           style: Fonts.paragraphMedium(),
                                         ),
                                         Text(
-                                          '\$${sumOfPrices(products)}',
+                                          '\$${sumOfPrices(products).toStringAsFixed(2)}',
                                           style: Fonts.paragraphMedium(),
                                         ),
                                       ],
@@ -213,7 +213,7 @@ class _CartPageState extends State<CartPage> {
                                           style: Fonts.paragraphMedium(),
                                         ),
                                         Text(
-                                          '\$${widget.shipping}',
+                                          '\$${widget.shipping.toStringAsFixed(2)}',
                                           style: Fonts.paragraphMedium(),
                                         ),
                                       ],
@@ -230,13 +230,16 @@ class _CartPageState extends State<CartPage> {
                                           style: Fonts.titleBold(size: 18),
                                         ),
                                         Text(
-                                          '\$${sumOfPrices(products) + widget.shipping}',
+                                          '\$${(sumOfPrices(products) + widget.shipping).toStringAsFixed(2)}',
                                           style: Fonts.titleBold(size: 18),
                                         ),
                                       ],
                                     ),
                                     SizedBox(),
-                                    GreenGradientButton(onClick, 'Checkout'),
+                                    GreenGradientButton(
+                                      () => onClick(products),
+                                      'Checkout',
+                                    ),
                                   ],
                                 ),
                               ),

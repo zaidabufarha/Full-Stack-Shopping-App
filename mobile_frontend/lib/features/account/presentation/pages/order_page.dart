@@ -34,9 +34,6 @@ class _OrderPageState extends State<OrderPage> {
           },
           icon: Icon(Icons.arrow_back_outlined),
         ),
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.tune_outlined)),
-        ],
         centerTitle: true,
         title: Text(
           'My Orders',

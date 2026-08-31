@@ -23,10 +23,11 @@ class OrderCard extends StatefulWidget {
 class _OrderCardState extends State<OrderCard> {
   final formKey = GlobalKey();
   bool isClosed = true;
-  int numberOfItems = 0;
-  double total = 0;
+
   @override
-  void initState() {
+  Widget build(BuildContext context) {
+    int numberOfItems = 0;
+    double total = 0;
     for (CartItem item in widget.order.orderItem) {
       numberOfItems += item.quantity;
       total +=
@@ -34,11 +35,6 @@ class _OrderCardState extends State<OrderCard> {
           item.quantity;
       //print('${item.product.name} has ${item.quantity}');
     }
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(

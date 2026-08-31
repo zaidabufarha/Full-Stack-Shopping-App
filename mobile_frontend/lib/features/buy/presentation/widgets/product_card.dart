@@ -100,6 +100,8 @@ class _ProductCardState extends State<ProductCard> {
                       Text(
                         widget.product.name,
                         style: Fonts.titleBold(size: 20),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         widget.product.amount,

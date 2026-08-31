@@ -74,10 +74,10 @@ class _FilterPageState extends State<FilterPage> {
       ),
       body: Form(
         key: _formKey,
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            spacing: 20.h,
             children: [
               Container(
                 color: AppColors.backgroundPrimary,

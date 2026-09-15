@@ -1,4 +1,5 @@
 import 'package:big_cart/core/converter/entity_converters.dart';
+import 'package:big_cart/features/account/domain/entities/user.dart';
 import 'package:big_cart/features/buy/domain/entities/review.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -8,12 +9,17 @@ part 'review_model.g.dart';
   fieldRename: FieldRename.snake,
   converters: [UserConverter()],
 )
-class ReviewModel extends Review {
+class ReviewModel {
+  final User user;
+  final String comment;
+  final double rating;
+  final DateTime createdAt;
+
   ReviewModel({
-    required super.user,
-    required super.comment,
-    required super.rating,
-    required super.createdAt,
+    required this.user,
+    required this.comment,
+    required this.rating,
+    required this.createdAt,
   });
 
   factory ReviewModel.fromEntity(Review entity) => ReviewModel(
@@ -21,6 +27,13 @@ class ReviewModel extends Review {
         comment: entity.comment,
         rating: entity.rating,
         createdAt: entity.createdAt,
+      );
+
+  Review toEntity() => Review(
+        user: user,
+        comment: comment,
+        rating: rating,
+        createdAt: createdAt,
       );
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) =>

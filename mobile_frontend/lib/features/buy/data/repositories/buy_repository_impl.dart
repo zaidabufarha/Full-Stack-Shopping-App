@@ -76,7 +76,7 @@ class BuyRepositoryImpl implements BuyRepository {
       final response = await buyRemoteDataSource.getCartItems(
         isFavorites: isFavorites,
       );
-      return Right(response);
+      return Right(response.map((e) => e.toEntity()).toList());
     } on NoDataException {
       return Left(NoDataFailure());
     } on NoInternetException {
@@ -92,7 +92,7 @@ class BuyRepositoryImpl implements BuyRepository {
   Future<Either<Failure, List<Category>>> getCategoryList() async {
     try {
       final response = await buyRemoteDataSource.getCategoryList();
-      return Right(response);
+      return Right(response.map((e) => e.toEntity()).toList());
     } on NoDataException {
       return Left(NoDataFailure());
     } on NoInternetException {
@@ -108,7 +108,7 @@ class BuyRepositoryImpl implements BuyRepository {
   Future<Either<Failure, List<Product>>> getProductList() async {
     try {
       final response = await buyRemoteDataSource.getProductList();
-      return Right(response);
+      return Right(response.map((e) => e.toEntity()).toList());
     } on NoDataException {
       return Left(NoDataFailure());
     } on NoInternetException {
@@ -124,7 +124,7 @@ class BuyRepositoryImpl implements BuyRepository {
   Future<Either<Failure, List<Review>>> getProductReviews(String id) async {
     try {
       final response = await buyRemoteDataSource.getProductReviews(id);
-      return Right(response);
+      return Right(response.map((e) => e.toEntity()).toList());
     } on NoDataException {
       return Left(NoDataFailure());
     } on NoInternetException {

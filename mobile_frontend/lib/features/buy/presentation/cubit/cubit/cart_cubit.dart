@@ -1,10 +1,10 @@
 import 'package:big_cart/features/account/domain/entities/order.dart';
 import 'package:big_cart/features/buy/domain/entities/cart_item.dart';
-import 'package:big_cart/features/buy/domain/use%20cases/add_to_cart.dart';
-import 'package:big_cart/features/buy/domain/use%20cases/check_out.dart';
-import 'package:big_cart/features/buy/domain/use%20cases/get_cart_items.dart';
-import 'package:big_cart/features/buy/domain/use%20cases/remove_from_cart.dart';
-import 'package:big_cart/features/buy/domain/use%20cases/update_quantity.dart';
+import 'package:big_cart/features/buy/domain/use_cases/add_to_cart.dart';
+import 'package:big_cart/features/buy/domain/use_cases/check_out.dart';
+import 'package:big_cart/features/buy/domain/use_cases/get_cart_items.dart';
+import 'package:big_cart/features/buy/domain/use_cases/remove_from_cart.dart';
+import 'package:big_cart/features/buy/domain/use_cases/update_quantity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart' hide Order;

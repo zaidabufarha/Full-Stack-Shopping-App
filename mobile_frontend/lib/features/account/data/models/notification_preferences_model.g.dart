@@ -17,7 +17,7 @@ NotificationPreferencesModel _$NotificationPreferencesModelFromJson(
 Map<String, dynamic> _$NotificationPreferencesModelToJson(
   NotificationPreferencesModel instance,
 ) => <String, dynamic>{
+  'allow_email': instance.allowEmail,
   'allow_general': instance.allowGeneral,
   'allow_order': instance.allowOrder,
-  'allow_email': instance.allowEmail,
 };

@@ -165,7 +165,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       final user = UserModel.fromJson(userMap);
-      return user;
+      return user.toEntity();
     } on DioException {
       throw NoInternetException();
     }
@@ -205,7 +205,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       final userMap = Map<String, dynamic>.from(data['signUp']);
       userMap['password'] = password;
-      return UserModel.fromJson(userMap);
+      return UserModel.fromJson(userMap).toEntity();
     } on DioException {
       throw NoInternetException();
     }

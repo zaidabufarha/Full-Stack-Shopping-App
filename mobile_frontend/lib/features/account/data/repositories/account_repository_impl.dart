@@ -99,7 +99,7 @@ class AccountRepositoryImpl implements AccountRepository {
   Future<Either<Failure, List<Address>>> getAddresses() async {
     try {
       final response = await accountRemoteDataSource.getAddresses();
-      return Right(response);
+      return Right(response.map((e) => e.toEntity()).toList());
     } on NoInternetException {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
@@ -113,7 +113,7 @@ class AccountRepositoryImpl implements AccountRepository {
   Future<Either<Failure, List<CreditCard>>> getCreditCards() async {
     try {
       final response = await accountRemoteDataSource.getCreditCards();
-      return Right(response);
+      return Right(response.map((e) => e.toEntity()).toList());
     } on NoInternetException {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
@@ -129,7 +129,7 @@ class AccountRepositoryImpl implements AccountRepository {
     try {
       final response = await accountRemoteDataSource
           .getNotificationPreferences();
-      return Right(response);
+      return Right(response.toEntity());
     } on NoInternetException {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
@@ -143,7 +143,7 @@ class AccountRepositoryImpl implements AccountRepository {
   Future<Either<Failure, List<Order>>> getOrders() async {
     try {
       final response = await accountRemoteDataSource.getOrders();
-      return Right(response);
+      return Right(response.map((e) => e.toEntity()).toList());
     } on NoDataException {
       return Left(NoDataFailure());
     } on NoInternetException {
@@ -159,7 +159,7 @@ class AccountRepositoryImpl implements AccountRepository {
   Future<Either<Failure, List<Transaction>>> getTransactions() async {
     try {
       final response = await accountRemoteDataSource.getTransactions();
-      return Right(response);
+      return Right(response.map((e) => e.toEntity()).toList());
     } on NoDataException {
       return Left(NoDataFailure());
     } on NoInternetException {
@@ -175,7 +175,7 @@ class AccountRepositoryImpl implements AccountRepository {
   Future<Either<Failure, User>> getUserData() async {
     try {
       final response = await accountRemoteDataSource.getUserData();
-      return Right(response);
+      return Right(response.toEntity());
     } on NoInternetException {
       return Left(NoInternetFailure());
     } on EmptyCacheException {
@@ -211,16 +211,7 @@ class AccountRepositoryImpl implements AccountRepository {
   @override
   Future<Either<Failure, Unit>> updateAddress(Address address) async {
     try {
-      final addressModel = AddressModel(
-        id: address.id,
-        name: address.name,
-        street: address.street,
-        city: address.city,
-        country: address.country,
-        phone: address.phone,
-        zipCode: address.zipCode,
-        isDefault: address.isDefault,
-      );
+      final addressModel = AddressModel.fromEntity(address);
       await accountRemoteDataSource.updateAddress(addressModel);
       return Right(unit);
     } on NoInternetException {
@@ -235,15 +226,7 @@ class AccountRepositoryImpl implements AccountRepository {
   @override
   Future<Either<Failure, Unit>> updateCreditCard(CreditCard card) async {
     try {
-      final cardModel = CreditCardModel(
-        id: card.id,
-        cardHolderName: card.cardHolderName,
-        last4: card.last4,
-        expiryDate: card.expiryDate,
-        stripePaymentId: card.stripePaymentId,
-        processor: card.processor,
-        isDefault: card.isDefault,
-      );
+      final cardModel = CreditCardModel.fromEntity(card);
       await accountRemoteDataSource.updateCreditCard(cardModel);
       return Right(unit);
     } on NoInternetException {

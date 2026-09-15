@@ -1,15 +1,14 @@
 import 'package:big_cart/features/account/domain/entities/user.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Review {
-  User user;
-  DateTime createdAt;
-  double rating;
-  String comment;
+part 'review.freezed.dart';
 
-  Review({
-    required this.user,
-    required this.comment,
-    required this.rating,
-    required this.createdAt,
-  });
+@freezed
+abstract class Review with _$Review {
+  const factory Review({
+    required User user,
+    required String comment,
+    required double rating,
+    required DateTime createdAt,
+  }) = _Review;
 }

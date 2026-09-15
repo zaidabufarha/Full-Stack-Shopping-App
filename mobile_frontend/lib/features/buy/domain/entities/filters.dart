@@ -1,17 +1,15 @@
-class Filters {
-  final double minRating;
-  final double? minPrice;
-  final double? maxPrice;
-  final bool discountOnly;
-  final bool freeShippingOnly;
-  final bool sameDayDeliveryOnly;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Filters({
-    required this.minRating,
-    this.minPrice,
-    this.maxPrice,
-    this.discountOnly = false,
-    this.freeShippingOnly = false,
-    this.sameDayDeliveryOnly = false,
-  });
+part 'filters.freezed.dart';
+
+@freezed
+abstract class Filters with _$Filters {
+  const factory Filters({
+    required double minRating,
+    double? minPrice,
+    double? maxPrice,
+    @Default(false) bool discountOnly,
+    @Default(false) bool freeShippingOnly,
+    @Default(false) bool sameDayDeliveryOnly,
+  }) = _Filters;
 }

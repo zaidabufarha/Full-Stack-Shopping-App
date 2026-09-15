@@ -1,8 +1,8 @@
-import 'package:big_cart/features/buy/domain/use%20cases/add_review.dart';
-import 'package:big_cart/features/buy/domain/use%20cases/get_category_list.dart';
-import 'package:big_cart/features/buy/domain/use%20cases/get_product_list.dart';
-import 'package:big_cart/features/buy/domain/use%20cases/get_product_reviews.dart';
-import 'package:big_cart/features/buy/domain/use%20cases/toggle_favorite.dart';
+import 'package:big_cart/features/buy/domain/use_cases/add_review.dart';
+import 'package:big_cart/features/buy/domain/use_cases/get_category_list.dart';
+import 'package:big_cart/features/buy/domain/use_cases/get_product_list.dart';
+import 'package:big_cart/features/buy/domain/use_cases/get_product_reviews.dart';
+import 'package:big_cart/features/buy/domain/use_cases/toggle_favorite.dart';
 import 'package:big_cart/features/buy/presentation/cubit/cubit/shop_cubit.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';

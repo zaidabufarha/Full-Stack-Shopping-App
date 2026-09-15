@@ -190,8 +190,9 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
         final data = await apiConsumer.graphql(query: favQuery);
         final favList = (data['me']['favorite'] as List? ?? []);
         return favList.map((item) {
-          final prod = ProductModel.fromJson(Map<String, dynamic>.from(item));
-          prod.isFavorite = true;
+          final prod = ProductModel.fromJson(
+            Map<String, dynamic>.from(item),
+          ).toEntity().copyWith(isFavorite: true);
           return CartItemModel(prod, 1);
         }).toList();
       } else {
@@ -229,7 +230,7 @@ class BuyRemoteDataSourceImpl implements BuyRemoteDataSource {
         return list.map((item) {
           final prod = ProductModel.fromJson(
             Map<String, dynamic>.from(item['product']),
-          );
+          ).toEntity();
           return CartItemModel(prod, item['quantity'] as int);
         }).toList();
       }

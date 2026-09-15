@@ -65,25 +65,22 @@ import 'package:big_cart/features/auth/data/repositories/auth_repository_impl.da
     as _i731;
 import 'package:big_cart/features/auth/domain/repositories/auth_repository.dart'
     as _i832;
-import 'package:big_cart/features/auth/domain/use%20cases/clear_credentials.dart'
-    as _i515;
-import 'package:big_cart/features/auth/domain/use%20cases/forgot_password.dart'
-    as _i211;
-import 'package:big_cart/features/auth/domain/use%20cases/get_saved_credentials.dart'
-    as _i372;
-import 'package:big_cart/features/auth/domain/use%20cases/get_token.dart'
-    as _i557;
-import 'package:big_cart/features/auth/domain/use%20cases/log_in.dart' as _i270;
-import 'package:big_cart/features/auth/domain/use%20cases/save_credentials.dart'
-    as _i77;
-import 'package:big_cart/features/auth/domain/use%20cases/send_otp.dart'
-    as _i491;
-import 'package:big_cart/features/auth/domain/use%20cases/sign_out.dart'
-    as _i937;
-import 'package:big_cart/features/auth/domain/use%20cases/sign_up.dart'
-    as _i357;
-import 'package:big_cart/features/auth/domain/use%20cases/verify_otp.dart'
-    as _i210;
+import 'package:big_cart/features/auth/domain/use_cases/clear_credentials.dart'
+    as _i226;
+import 'package:big_cart/features/auth/domain/use_cases/forgot_password.dart'
+    as _i461;
+import 'package:big_cart/features/auth/domain/use_cases/get_saved_credentials.dart'
+    as _i669;
+import 'package:big_cart/features/auth/domain/use_cases/get_token.dart'
+    as _i287;
+import 'package:big_cart/features/auth/domain/use_cases/log_in.dart' as _i146;
+import 'package:big_cart/features/auth/domain/use_cases/save_credentials.dart'
+    as _i512;
+import 'package:big_cart/features/auth/domain/use_cases/send_otp.dart' as _i877;
+import 'package:big_cart/features/auth/domain/use_cases/sign_out.dart' as _i867;
+import 'package:big_cart/features/auth/domain/use_cases/sign_up.dart' as _i625;
+import 'package:big_cart/features/auth/domain/use_cases/verify_otp.dart'
+    as _i98;
 import 'package:big_cart/features/auth/presentation/cubit/cubit/auth_cubit.dart'
     as _i832;
 import 'package:big_cart/features/buy/data/data_sources/buy_remote_data_source.dart'
@@ -92,26 +89,25 @@ import 'package:big_cart/features/buy/data/repositories/buy_repository_impl.dart
     as _i396;
 import 'package:big_cart/features/buy/domain/repositories/buy_repository.dart'
     as _i72;
-import 'package:big_cart/features/buy/domain/use%20cases/add_review.dart'
-    as _i564;
-import 'package:big_cart/features/buy/domain/use%20cases/add_to_cart.dart'
-    as _i384;
-import 'package:big_cart/features/buy/domain/use%20cases/check_out.dart'
-    as _i316;
-import 'package:big_cart/features/buy/domain/use%20cases/get_cart_items.dart'
-    as _i738;
-import 'package:big_cart/features/buy/domain/use%20cases/get_category_list.dart'
-    as _i410;
-import 'package:big_cart/features/buy/domain/use%20cases/get_product_list.dart'
-    as _i1020;
-import 'package:big_cart/features/buy/domain/use%20cases/get_product_reviews.dart'
-    as _i950;
-import 'package:big_cart/features/buy/domain/use%20cases/remove_from_cart.dart'
-    as _i954;
-import 'package:big_cart/features/buy/domain/use%20cases/toggle_favorite.dart'
-    as _i826;
-import 'package:big_cart/features/buy/domain/use%20cases/update_quantity.dart'
-    as _i513;
+import 'package:big_cart/features/buy/domain/use_cases/add_review.dart'
+    as _i971;
+import 'package:big_cart/features/buy/domain/use_cases/add_to_cart.dart'
+    as _i66;
+import 'package:big_cart/features/buy/domain/use_cases/check_out.dart' as _i929;
+import 'package:big_cart/features/buy/domain/use_cases/get_cart_items.dart'
+    as _i48;
+import 'package:big_cart/features/buy/domain/use_cases/get_category_list.dart'
+    as _i658;
+import 'package:big_cart/features/buy/domain/use_cases/get_product_list.dart'
+    as _i311;
+import 'package:big_cart/features/buy/domain/use_cases/get_product_reviews.dart'
+    as _i465;
+import 'package:big_cart/features/buy/domain/use_cases/remove_from_cart.dart'
+    as _i670;
+import 'package:big_cart/features/buy/domain/use_cases/toggle_favorite.dart'
+    as _i584;
+import 'package:big_cart/features/buy/domain/use_cases/update_quantity.dart'
+    as _i60;
 import 'package:big_cart/features/buy/presentation/cubit/cubit/cart_cubit.dart'
     as _i984;
 import 'package:big_cart/features/buy/presentation/cubit/cubit/shop_cubit.dart'
@@ -270,73 +266,82 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i134.UpdateProfile>(),
       ),
     );
-    gh.lazySingleton<_i211.ForgotPassword>(
-      () => _i211.ForgotPassword(repository: gh<_i832.AuthRepository>()),
+    gh.lazySingleton<_i461.ForgotPassword>(
+      () => _i461.ForgotPassword(repository: gh<_i832.AuthRepository>()),
     );
-    gh.lazySingleton<_i557.GetToken>(
-      () => _i557.GetToken(repository: gh<_i832.AuthRepository>()),
+    gh.lazySingleton<_i287.GetToken>(
+      () => _i287.GetToken(repository: gh<_i832.AuthRepository>()),
     );
-    gh.lazySingleton<_i491.SendOtp>(
-      () => _i491.SendOtp(repository: gh<_i832.AuthRepository>()),
+    gh.lazySingleton<_i877.SendOtp>(
+      () => _i877.SendOtp(repository: gh<_i832.AuthRepository>()),
     );
-    gh.lazySingleton<_i357.SignUp>(
-      () => _i357.SignUp(repository: gh<_i832.AuthRepository>()),
+    gh.lazySingleton<_i625.SignUp>(
+      () => _i625.SignUp(repository: gh<_i832.AuthRepository>()),
     );
-    gh.lazySingleton<_i210.VerifyOtp>(
-      () => _i210.VerifyOtp(repository: gh<_i832.AuthRepository>()),
+    gh.lazySingleton<_i98.VerifyOtp>(
+      () => _i98.VerifyOtp(repository: gh<_i832.AuthRepository>()),
     );
-    gh.lazySingleton<_i515.ClearCredentials>(
-      () => _i515.ClearCredentials(gh<_i832.AuthRepository>()),
+    gh.lazySingleton<_i226.ClearCredentials>(
+      () => _i226.ClearCredentials(gh<_i832.AuthRepository>()),
     );
-    gh.lazySingleton<_i372.GetSavedCredentials>(
-      () => _i372.GetSavedCredentials(gh<_i832.AuthRepository>()),
+    gh.lazySingleton<_i669.GetSavedCredentials>(
+      () => _i669.GetSavedCredentials(gh<_i832.AuthRepository>()),
     );
-    gh.lazySingleton<_i77.SaveCredentials>(
-      () => _i77.SaveCredentials(gh<_i832.AuthRepository>()),
+    gh.lazySingleton<_i512.SaveCredentials>(
+      () => _i512.SaveCredentials(gh<_i832.AuthRepository>()),
     );
-    gh.lazySingleton<_i937.SignOut>(
-      () => _i937.SignOut(gh<_i832.AuthRepository>()),
+    gh.lazySingleton<_i867.SignOut>(
+      () => _i867.SignOut(gh<_i832.AuthRepository>()),
     );
-    gh.lazySingleton<_i564.AddReview>(
-      () => _i564.AddReview(gh<_i72.BuyRepository>()),
+    gh.lazySingleton<_i971.AddReview>(
+      () => _i971.AddReview(gh<_i72.BuyRepository>()),
     );
-    gh.lazySingleton<_i384.AddToCart>(
-      () => _i384.AddToCart(gh<_i72.BuyRepository>()),
+    gh.lazySingleton<_i66.AddToCart>(
+      () => _i66.AddToCart(gh<_i72.BuyRepository>()),
     );
-    gh.lazySingleton<_i316.CheckOut>(
-      () => _i316.CheckOut(gh<_i72.BuyRepository>()),
+    gh.lazySingleton<_i929.CheckOut>(
+      () => _i929.CheckOut(gh<_i72.BuyRepository>()),
     );
-    gh.lazySingleton<_i738.GetCartItems>(
-      () => _i738.GetCartItems(gh<_i72.BuyRepository>()),
+    gh.lazySingleton<_i48.GetCartItems>(
+      () => _i48.GetCartItems(gh<_i72.BuyRepository>()),
     );
-    gh.lazySingleton<_i410.GetCategoryList>(
-      () => _i410.GetCategoryList(gh<_i72.BuyRepository>()),
+    gh.lazySingleton<_i658.GetCategoryList>(
+      () => _i658.GetCategoryList(gh<_i72.BuyRepository>()),
     );
-    gh.lazySingleton<_i1020.GetProductList>(
-      () => _i1020.GetProductList(gh<_i72.BuyRepository>()),
+    gh.lazySingleton<_i311.GetProductList>(
+      () => _i311.GetProductList(gh<_i72.BuyRepository>()),
     );
-    gh.lazySingleton<_i950.GetProductReviews>(
-      () => _i950.GetProductReviews(gh<_i72.BuyRepository>()),
+    gh.lazySingleton<_i465.GetProductReviews>(
+      () => _i465.GetProductReviews(gh<_i72.BuyRepository>()),
     );
-    gh.lazySingleton<_i954.RemoveFromCart>(
-      () => _i954.RemoveFromCart(gh<_i72.BuyRepository>()),
+    gh.lazySingleton<_i670.RemoveFromCart>(
+      () => _i670.RemoveFromCart(gh<_i72.BuyRepository>()),
     );
-    gh.lazySingleton<_i826.ToggleFavorite>(
-      () => _i826.ToggleFavorite(gh<_i72.BuyRepository>()),
+    gh.lazySingleton<_i584.ToggleFavorite>(
+      () => _i584.ToggleFavorite(gh<_i72.BuyRepository>()),
     );
-    gh.lazySingleton<_i513.UpdateQuantity>(
-      () => _i513.UpdateQuantity(gh<_i72.BuyRepository>()),
+    gh.lazySingleton<_i60.UpdateQuantity>(
+      () => _i60.UpdateQuantity(gh<_i72.BuyRepository>()),
     );
     gh.factory<_i475.TransactionsCubit>(
       () => _i475.TransactionsCubit(gh<_i526.GetTransactions>()),
     );
     gh.factory<_i984.CartCubit>(
       () => _i984.CartCubit(
-        gh<_i384.AddToCart>(),
-        gh<_i316.CheckOut>(),
-        gh<_i738.GetCartItems>(),
-        gh<_i954.RemoveFromCart>(),
-        gh<_i513.UpdateQuantity>(),
+        gh<_i66.AddToCart>(),
+        gh<_i929.CheckOut>(),
+        gh<_i48.GetCartItems>(),
+        gh<_i670.RemoveFromCart>(),
+        gh<_i60.UpdateQuantity>(),
+      ),
+    );
+    gh.factory<_i9.ShopCubit>(
+      () => _i9.ShopCubit(
+        gh<_i971.AddReview>(),
+        gh<_i658.GetCategoryList>(),
+        gh<_i311.GetProductList>(),
+        gh<_i465.GetProductReviews>(),
+        gh<_i584.ToggleFavorite>(),
       ),
     );
     gh.factory<_i435.CardsCubit>(
@@ -347,33 +352,24 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i604.SetDefaultCreditCard>(),
       ),
     );
-    gh.lazySingleton<_i270.LogIn>(
-      () => _i270.LogIn(authRepository: gh<_i832.AuthRepository>()),
+    gh.lazySingleton<_i146.LogIn>(
+      () => _i146.LogIn(authRepository: gh<_i832.AuthRepository>()),
     );
     gh.factory<_i194.OrdersCubit>(
       () => _i194.OrdersCubit(gh<_i856.GetOrders>()),
     );
-    gh.factory<_i9.ShopCubit>(
-      () => _i9.ShopCubit(
-        gh<_i564.AddReview>(),
-        gh<_i410.GetCategoryList>(),
-        gh<_i1020.GetProductList>(),
-        gh<_i950.GetProductReviews>(),
-        gh<_i826.ToggleFavorite>(),
-      ),
-    );
     gh.factory<_i832.AuthCubit>(
       () => _i832.AuthCubit(
-        gh<_i557.GetToken>(),
-        gh<_i270.LogIn>(),
-        gh<_i357.SignUp>(),
-        gh<_i491.SendOtp>(),
-        gh<_i210.VerifyOtp>(),
-        gh<_i211.ForgotPassword>(),
-        gh<_i937.SignOut>(),
-        gh<_i77.SaveCredentials>(),
-        gh<_i372.GetSavedCredentials>(),
-        gh<_i515.ClearCredentials>(),
+        gh<_i287.GetToken>(),
+        gh<_i146.LogIn>(),
+        gh<_i625.SignUp>(),
+        gh<_i877.SendOtp>(),
+        gh<_i98.VerifyOtp>(),
+        gh<_i461.ForgotPassword>(),
+        gh<_i867.SignOut>(),
+        gh<_i512.SaveCredentials>(),
+        gh<_i669.GetSavedCredentials>(),
+        gh<_i226.ClearCredentials>(),
       ),
     );
     return this;

@@ -1,37 +1,26 @@
 import 'package:big_cart/features/buy/domain/entities/category.dart';
 import 'package:big_cart/features/buy/domain/entities/review.dart';
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Product {
-  String id;
-  String name;
-  String imagePath;
-  String amount;
-  String description;
-  double discount;
-  double price;
-  bool isNew;
-  bool isFavorite;
-  bool freeShipping;
-  bool sameDayDelivery;
-  Category category;
-  Color color;
-  List<Review> review;
+part 'product.freezed.dart';
 
-  Product({
-    required this.id,
-    required this.name,
-    required this.imagePath,
-    required this.amount,
-    required this.description,
-    required this.discount,
-    required this.price,
-    required this.isNew,
-    this.isFavorite = false,
-    required this.category,
-    required this.color,
-    this.review = const [],
-    this.sameDayDelivery = false,
-    this.freeShipping = false,
-  });
+@freezed
+abstract class Product with _$Product {
+  const factory Product({
+    required String id,
+    required String name,
+    required String imagePath,
+    required String amount,
+    required String description,
+    required double discount,
+    required double price,
+    required bool isNew,
+    @Default(false) bool isFavorite,
+    required Category category,
+    required Color color,
+    @Default([]) List<Review> review,
+    @Default(false) bool sameDayDelivery,
+    @Default(false) bool freeShipping,
+  }) = _Product;
 }

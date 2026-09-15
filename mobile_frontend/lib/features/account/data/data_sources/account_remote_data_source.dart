@@ -207,7 +207,7 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
         final map = Map<String, dynamic>.from(item);
         final addr = AddressModel.fromJson(map);
         if (defaultId != null && addr.id == defaultId) {
-          return AddressModel.fromEntity(addr.copyWith(isDefault: true));
+          return AddressModel.fromEntity(addr.toEntity().copyWith(isDefault: true));
         }
         return addr;
       }).toList();
@@ -241,7 +241,7 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
         final map = Map<String, dynamic>.from(item);
         final card = CreditCardModel.fromJson(map);
         if (defaultId != null && card.id == defaultId) {
-          return CreditCardModel.fromEntity(card.copyWith(isDefault: true));
+          return CreditCardModel.fromEntity(card.toEntity().copyWith(isDefault: true));
         }
         return card;
       }).toList();

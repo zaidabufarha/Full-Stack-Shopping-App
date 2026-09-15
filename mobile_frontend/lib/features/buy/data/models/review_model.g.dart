@@ -16,7 +16,7 @@ ReviewModel _$ReviewModelFromJson(Map<String, dynamic> json) => ReviewModel(
 Map<String, dynamic> _$ReviewModelToJson(ReviewModel instance) =>
     <String, dynamic>{
       'user': const UserConverter().toJson(instance.user),
-      'created_at': instance.createdAt.toIso8601String(),
-      'rating': instance.rating,
       'comment': instance.comment,
+      'rating': instance.rating,
+      'created_at': instance.createdAt.toIso8601String(),
     };

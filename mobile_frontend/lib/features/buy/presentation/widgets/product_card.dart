@@ -11,8 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 
 class ProductCard extends StatefulWidget {
-  Product product;
-  ProductCard(this.product, {super.key});
+  final Product product;
+  const ProductCard(this.product, {super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -21,6 +21,14 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+  late bool isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorite = widget.product.isFavorite;
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -29,7 +37,7 @@ class _ProductCardState extends State<ProductCard> {
           context,
         ).push(
           MaterialPageRoute(
-            builder: ((context) => ProductPage(widget.product)),
+            builder: ((context) => ProductPage(widget.product.copyWith(isFavorite: isFavorite))),
           ),
         );
       },
@@ -48,15 +56,15 @@ class _ProductCardState extends State<ProductCard> {
                 child: IconButton(
                   onPressed: () {
                     setState(() {
-                      widget.product.isFavorite = !widget.product.isFavorite;
+                      isFavorite = !isFavorite;
                       context.read<ShopCubit>().attemptToggleFavorite(
                         widget.product.id,
-                        widget.product.isFavorite,
+                        isFavorite,
                       );
                     });
                   },
                   icon: Icon(
-                    (widget.product.isFavorite)
+                    isFavorite
                         ? Icons.favorite
                         : Icons.favorite_border,
                     color: Colors.red,

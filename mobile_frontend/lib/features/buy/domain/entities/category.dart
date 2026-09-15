@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Category {
-  String name;
-  String imagePath;
-  Color color;
-  Category({
-    required this.name,
-    required this.imagePath,
-    required this.color,
-  });
+part 'category.freezed.dart';
+
+@freezed
+abstract class Category with _$Category {
+  const factory Category({
+    required String name,
+    required String imagePath,
+    required Color color,
+  }) = _Category;
 }

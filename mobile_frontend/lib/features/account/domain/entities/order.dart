@@ -1,29 +1,22 @@
 import 'package:big_cart/features/account/domain/entities/address.dart';
 import 'package:big_cart/features/account/domain/entities/credit_card.dart';
 import 'package:big_cart/features/buy/domain/entities/cart_item.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Order {
-  String? id;
-  List<CartItem> orderItem;
-  Address address;
-  CreditCard creditCard;
-  String shippingMethod;
-  DateTime datePlaced;
-  DateTime? dateConfirmed;
-  DateTime? dateShipped;
-  DateTime? dateOutForDelivery;
-  DateTime? dateDelivered;
+part 'order.freezed.dart';
 
-  Order({
-    this.id,
-    required this.orderItem,
-    required this.address,
-    required this.creditCard,
-    required this.shippingMethod,
-    required this.datePlaced,
-    this.dateConfirmed,
-    this.dateDelivered,
-    this.dateOutForDelivery,
-    this.dateShipped,
-  });
+@freezed
+abstract class Order with _$Order {
+  const factory Order({
+    String? id,
+    required List<CartItem> orderItem,
+    required Address address,
+    required CreditCard creditCard,
+    required String shippingMethod,
+    required DateTime datePlaced,
+    DateTime? dateConfirmed,
+    DateTime? dateDelivered,
+    DateTime? dateOutForDelivery,
+    DateTime? dateShipped,
+  }) = _Order;
 }

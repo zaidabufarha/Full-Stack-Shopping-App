@@ -4,11 +4,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'notification_preferences_model.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class NotificationPreferencesModel extends NotificationPreferences {
+class NotificationPreferencesModel {
+  final bool allowEmail;
+  final bool allowGeneral;
+  final bool allowOrder;
+
   NotificationPreferencesModel({
-    required super.allowEmail,
-    required super.allowGeneral,
-    required super.allowOrder,
+    required this.allowEmail,
+    required this.allowGeneral,
+    required this.allowOrder,
   });
 
   factory NotificationPreferencesModel.fromEntity(
@@ -17,6 +21,12 @@ class NotificationPreferencesModel extends NotificationPreferences {
         allowEmail: entity.allowEmail,
         allowGeneral: entity.allowGeneral,
         allowOrder: entity.allowOrder,
+      );
+
+  NotificationPreferences toEntity() => NotificationPreferences(
+        allowEmail: allowEmail,
+        allowGeneral: allowGeneral,
+        allowOrder: allowOrder,
       );
 
   factory NotificationPreferencesModel.fromJson(Map<String, dynamic> json) =>

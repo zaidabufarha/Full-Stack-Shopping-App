@@ -8,18 +8,28 @@ part 'transaction_model.g.dart';
   fieldRename: FieldRename.snake,
   converters: [PaymentProcessorConverter()],
 )
-class TransactionModel extends Transaction {
+class TransactionModel {
+  final double amount;
+  final DateTime createdAt;
+  final PaymentProcessor paymentMethod;
+
   TransactionModel({
-    required super.amount,
-    required super.createdAt,
-    required super.paymentMethod,
+    required this.amount,
+    required this.createdAt,
+    required this.paymentMethod,
   });
 
   factory TransactionModel.fromEntity(Transaction entity) => TransactionModel(
-    amount: entity.amount,
-    createdAt: entity.createdAt,
-    paymentMethod: entity.paymentMethod,
-  );
+        amount: entity.amount,
+        createdAt: entity.createdAt,
+        paymentMethod: entity.paymentMethod,
+      );
+
+  Transaction toEntity() => Transaction(
+        amount: amount,
+        createdAt: createdAt,
+        paymentMethod: paymentMethod,
+      );
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) =>
       _$TransactionModelFromJson(json);

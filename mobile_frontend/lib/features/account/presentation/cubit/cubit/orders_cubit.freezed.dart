@@ -308,7 +308,7 @@ $Res call({
 });
 
 
-
+$OrderCopyWith<$Res> get order;
 
 }
 /// @nodoc
@@ -328,7 +328,16 @@ as Order,
   ));
 }
 
-
+/// Create a copy of OrdersState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$OrderCopyWith<$Res> get order {
+  
+  return $OrderCopyWith<$Res>(_self.order, (value) {
+    return _then(_self.copyWith(order: value));
+  });
+}
 }
 
 /// @nodoc

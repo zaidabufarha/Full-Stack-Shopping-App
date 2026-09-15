@@ -4,16 +4,25 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'address_model.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class AddressModel extends Address {
+class AddressModel {
+  final String? id;
+  final String name;
+  final String street;
+  final String city;
+  final String country;
+  final String phone;
+  final String zipCode;
+  final bool isDefault;
+
   const AddressModel({
-    super.id,
-    required super.name,
-    required super.street,
-    required super.city,
-    required super.country,
-    required super.phone,
-    required super.zipCode,
-    super.isDefault = false,
+    this.id,
+    required this.name,
+    required this.street,
+    required this.city,
+    required this.country,
+    required this.phone,
+    required this.zipCode,
+    this.isDefault = false,
   });
 
   factory AddressModel.fromEntity(Address entity) => AddressModel(
@@ -25,6 +34,17 @@ class AddressModel extends Address {
     phone: entity.phone,
     zipCode: entity.zipCode,
     isDefault: entity.isDefault,
+  );
+
+  Address toEntity() => Address(
+    id: id,
+    name: name,
+    street: street,
+    city: city,
+    country: country,
+    phone: phone,
+    zipCode: zipCode,
+    isDefault: isDefault,
   );
 
   factory AddressModel.fromJson(Map<String, dynamic> json) =>

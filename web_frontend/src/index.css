@@ -1,0 +1,70 @@
+@import '@fontsource/poppins/latin-400.css';
+@import '@fontsource/poppins/latin-500.css';
+@import '@fontsource/poppins/latin-600.css';
+
+:root {
+  /* Primary palette */
+  --bc-primary: #aedc81;
+  --bc-primary-dark: #6cc51d;
+  --bc-primary-light: #ebffd7;
+
+  /* Backgrounds */
+  --bc-bg-primary: #ffffff;
+  --bc-bg-secondary: #f4f5f9;
+  --bc-bg-tertiary: #f5f5f5;
+
+  /* Text */
+  --bc-text-primary: #1e1e1e;
+  --bc-text-secondary: #7b7b7b;
+
+  /* Extras */
+  --bc-link: #1a0dab;
+  --bc-border: #ebebeb;
+
+  --bc-font: 'Poppins', system-ui, -apple-system, sans-serif;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--bc-font);
+  font-weight: 400;
+  background-color: var(--bc-bg-primary);
+  color: var(--bc-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--bc-link);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font-family: inherit;
+}

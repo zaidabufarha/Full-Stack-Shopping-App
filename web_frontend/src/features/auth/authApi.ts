@@ -52,12 +52,22 @@ const FORGOT_PASSWORD = /* GraphQL */ `
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    logIn: build.mutation<LogInMutation["logIn"], LogInMutationVariables>({
-      query: (variables) => ({ document: LOG_IN, variables }),
+    logIn: build.mutation<
+      LogInMutation["logIn"],
+      // `remember` is client-only — it picks the storage, and never reaches the
+      // server, so it's stripped out before the variables are sent
+      LogInMutationVariables & { remember?: boolean }
+    >({
+      query: ({ email, password }) => ({
+        document: LOG_IN,
+        variables: { email, password },
+      }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setToken(data.token));
+          dispatch(
+            setToken({ token: data.token, remember: arg.remember ?? false }),
+          );
         } catch {
           //handled elsewhere, just used a try-catch here to pass it along
         }

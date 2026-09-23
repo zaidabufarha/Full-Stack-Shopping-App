@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 function LoginPage() {
   const form = useForm({
     mode: "controlled",
-    initialValues: { email: "", password: "" },
+    initialValues: { email: "", password: "", remember: true },
     validateInputOnChange: true,
     clearInputErrorOnChange: false,
     validate: {
@@ -38,7 +38,11 @@ function LoginPage() {
 
   const handleSubmit = async (values: typeof form.values) => {
     try {
-      await logIn({ email: values.email, password: values.password }).unwrap();
+      await logIn({
+        email: values.email,
+        password: values.password,
+        remember: values.remember,
+      }).unwrap();
       navigate("/shop");
     } catch {
       // shown below the form via `error`
@@ -106,7 +110,9 @@ function LoginPage() {
               />
               <Group justify="space-between" w={500}>
                 <Group>
-                  <Switch />
+                  <Switch
+                    {...form.getInputProps("remember", { type: "checkbox" })}
+                  />
                   <Text>Remember me</Text>
                 </Group>
                 <Text>Forgot password?</Text>

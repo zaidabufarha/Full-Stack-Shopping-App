@@ -1,18 +1,19 @@
 import { createTheme, type MantineColorsTuple } from '@mantine/core';
 
-// BigCart green. Index 6 is the primary shade — it matches AppColors.primaryDark
-// from the Flutter app, with primaryLight at 0 and primary at 3.
+// BigCart green. Generated from #13C906 (the web design's green) — hue 116 held
+// across the ramp, lightness stepped. Index 6 is primary; 7 and 9 are the button
+// gradient's two stops.
 const green: MantineColorsTuple = [
-  '#ebffd7', // primaryLight
-  '#dbf7bf',
-  '#c9efa3',
-  '#aedc81', // primary
-  '#9bd466',
-  '#83cb41',
-  '#6cc51d', // primaryDark  <- default shade
-  '#5ead19',
-  '#4f9214',
-  '#3f760f',
+  '#EBFAEA',
+  '#D0F3CE',
+  '#AFE9AA',
+  '#8CDF86',
+  '#62D85A',
+  '#2DDF20',
+  '#13C906',  // primary  <- default shade
+  '#12A807',  // gradient from
+  '#0E8406',
+  '#096303',  // gradient to
 ];
 
 const FONT = 'Poppins, system-ui, -apple-system, sans-serif';
@@ -35,11 +36,10 @@ export const theme = createTheme({
   components: {
     Button: {
       defaultProps: {
-        w: 300,
         h: 50,
-        fz:20,
+        fz: 20,
         variant: 'gradient',
-        gradient: { from: 'green.3', to: 'green.6' },
+        gradient: { from: 'green.7', to: 'green.9', deg: 90 },
       },
     },
     Text: {
@@ -65,8 +65,7 @@ export const theme = createTheme({
   // Tokens with no Mantine slot, read via theme.other.*
   other: {
     textSecondary: '#7b7b7b',
-    bgSecondary: '#f4f5f9',
-    bgTertiary: '#f5f5f5',
+    bgSecondary: '#F4F6F6',
     border: '#ebebeb',
     link: '#1a0dab',
   },

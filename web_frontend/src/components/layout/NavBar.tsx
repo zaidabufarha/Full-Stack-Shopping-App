@@ -89,7 +89,7 @@ function NavBar() {
           >
             <IconBell size={40} />
           </ActionIcon>
-          <Button bg={"#13C906"} w={83} h={40} fz={16} p={0} bdrs={16}>
+          <Button bg={"green"} w={83} h={40} fz={16} p={0} bdrs={16}>
             Sign In
           </Button>
         </Group>

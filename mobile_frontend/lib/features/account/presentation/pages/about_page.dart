@@ -279,8 +279,8 @@ class _AboutPageState extends State<AboutPage> {
                               if (val == null || val.isEmpty) {
                                 return 'New password required';
                               }
-                              if (val.length < 8) {
-                                return 'Password must be at least 8 characters';
+                              if (val.length < 8 || val.length > 72) {
+                                return 'Password must be between 8 and 72 characters';
                               }
                             }
                             return null;

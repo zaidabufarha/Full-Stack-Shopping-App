@@ -10,7 +10,8 @@
     "start": "tsx watch src/app.ts",
     "dev": "tsx watch src/app.ts",
     "test": "vitest run",
-    "test:journey": "tsx test-journey.ts"
+    "test:journey": "tsx test-journey.ts",
+    "schema:export": "tsx scripts/export-schema.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

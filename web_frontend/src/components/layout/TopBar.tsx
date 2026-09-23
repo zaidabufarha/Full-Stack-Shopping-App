@@ -4,7 +4,7 @@ import TopBarItem from "./TopBarItem";
 
 function TopBar() {
   return (
-    <Box bg={"#13C906"} p={20} h={60}>
+    <Box bg={"green"} p={20} h={60}>
       <Group justify="flex-end" gap={30} pr={100}>
         <TopBarItem icon={IconMapPin}>Los Angeles, USA</TopBarItem>
         <TopBarItem icon={IconAlarm}>

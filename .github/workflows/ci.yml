@@ -2,9 +2,9 @@ name: Full-Stack CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   backend-test:
@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
           cache-dependency-path: backend/package.json
       - name: Install backend dependencies
         run: npm install
@@ -36,7 +36,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
           cache: true
       - name: Install Flutter dependencies
         run: flutter pub get
@@ -47,9 +47,11 @@ jobs:
 
   deploy-backend:
     name: Deploy Backend to Render
-    needs: [ backend-test ]
+    needs: [backend-test]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Render Deploy Hook
-        run: curl -f -X POST "https://api.render.com/deploy/srv-da5dubojo6nc73c9jugg?key=ptoSPS2PvrM"
+        # i accidentally had the hook key here so i regenerated it and replaced it with a new private one.
+        # the key used for past pushes wont work.
+        run: curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"

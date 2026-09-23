@@ -213,8 +213,8 @@ class _SignUpPage extends State<SignUpPage> {
                                 if (value == null || value.isEmpty) {
                                   return 'Cannot be empty';
                                 }
-                                if (value.length < 8) {
-                                  return 'Must be at least 8 characters';
+                                if (value.length < 8 || value.length > 72) {
+                                  return 'Password must be between 8 and 72 characters';
                                 }
                                 return null;
                               },

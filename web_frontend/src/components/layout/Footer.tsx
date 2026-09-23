@@ -87,7 +87,7 @@ function Footer() {
                 setEmail(e.currentTarget.value);
               }}
               rightSection={
-                <ActionIcon bg={"#13C906"} size={40} mr={20}>
+                <ActionIcon bg={"green"} size={40} mr={20}>
                   <IconSend2 color="white" />
                 </ActionIcon>
               }

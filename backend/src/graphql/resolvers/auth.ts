@@ -86,8 +86,8 @@ export default {
             err.statusCode = 422
             throw err
         }
-        else if (!validator.isLength(password, { min: 8, max: 30 })) {
-            const err: HttpError = new Error('Password must be between 8 and 30 characters')
+        else if (!validator.isLength(password, { min: 8, max: 72 })) {
+            const err: HttpError = new Error('Password must be between 8 and 72 characters')
             err.statusCode = 422
             throw err
         }
@@ -226,8 +226,8 @@ export default {
     },
     changePassword: async function ({ oldPassword, newPassword }: { oldPassword: string, newPassword: string }, req: AuthRequest) {
         checkAuth(req);
-        if (!validator.isLength(newPassword, { min: 8, max: 30 })) {
-            const err: HttpError = new Error('Password must be between 8 and 30 characters');
+        if (!validator.isLength(newPassword, { min: 8, max: 72 })) {
+            const err: HttpError = new Error('Password must be between 8 and 72 characters');
             err.statusCode = 422;
             throw err;
         }

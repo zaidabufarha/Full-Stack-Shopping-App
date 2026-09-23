@@ -4,14 +4,13 @@
 
 :root {
   /* Primary palette */
-  --bc-primary: #aedc81;
-  --bc-primary-dark: #6cc51d;
-  --bc-primary-light: #ebffd7;
+  --bc-primary: #13C906;
+  --bc-primary-dark: #096303;
+  --bc-primary-light: #EBFAEA;
 
   /* Backgrounds */
   --bc-bg-primary: #ffffff;
-  --bc-bg-secondary: #f4f5f9;
-  --bc-bg-tertiary: #f5f5f5;
+  --bc-bg-secondary: #F4F6F6;
 
   /* Text */
   --bc-text-primary: #1e1e1e;

@@ -1,15 +1,19 @@
 import { Outlet } from "react-router-dom";
-import { Box } from "@mantine/core";
+import { Box, useMantineTheme } from "@mantine/core";
 import TopBar from "./TopBar";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 
 function RootLayout() {
+  const theme = useMantineTheme();
+
   return (
     <>
       <TopBar />
       <NavBar />
-      <Outlet />
+      <Box bg={theme.other.bgSecondary} mih={"25vh"}>
+        <Outlet />
+      </Box>
       <Footer />
     </>
   );

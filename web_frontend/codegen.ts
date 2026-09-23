@@ -13,11 +13,22 @@ const config: CodegenConfig = {
   documents: ["src/**/*.{ts,tsx}"],
   ignoreNoDocuments: true,
   generates: {
-    "src/gql/graphql.ts": {
-      plugins: ["typescript", "typescript-operations"],
+    // Schema types (User, Product, AddressInput, ...) in one file, per-operation
+    // types in another. Kept separate because typescript-operations re-emits any
+    // input type used in variables unless told to import it from elsewhere.
+    "src/gql/schema.ts": {
+      plugins: ["typescript"],
       config: {
         skipTypename: true,
         avoidOptionals: { field: true },
+      },
+    },
+    "src/gql/operations.ts": {
+      plugins: ["typescript-operations"],
+      config: {
+        skipTypename: true,
+        avoidOptionals: { field: true },
+        importSchemaTypesFrom: "src/gql/schema",
       },
     },
   },

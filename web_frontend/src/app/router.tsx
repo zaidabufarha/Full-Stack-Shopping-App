@@ -1,11 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../components/layout/RootLayout";
-import HomePage from "../features/shop/pages/HomePage";
-import ShopPage from "../features/shop/pages/ShopPage";
-import CategoryPage from "../features/shop/pages/CategoryPage";
+import HomePage from "../features/buy/pages/HomePage";
+import ShopPage from "../features/buy/pages/ShopPage";
+import CategoryPage from "../features/buy/pages/CategoryPage";
 import LoginPage from "../features/auth/pages/LoginPage";
 import SignUpPage from "../features/auth/pages/SignUpPage";
-import CartPage from "../features/cart/pages/CartPage";
+import CartPage from "../features/buy/pages/CartPage";
 import ContactPage from "../pages/ContactPage";
 
 export const router = createBrowserRouter([

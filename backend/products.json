@@ -231,7 +231,7 @@
     "isFavorite": false,
     "freeShipping": true,
     "sameDayDelivery": true,
-    "color": 4293989571,
+    "color": 4294699509,
     "category": {
       "name": "Beverages",
       "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/apple-cider.png",
@@ -451,7 +451,7 @@
     "isFavorite": false,
     "freeShipping": true,
     "sameDayDelivery": true,
-    "color": 4293006846,
+    "color": 4294174207,
     "category": {
       "name": "Household",
       "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/vacuum-cleaner.png",
@@ -495,7 +495,7 @@
     "category": {
       "name": "Babycare",
       "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/baby-bottle.png",
-      "color": 4292022271
+      "color": 4293977855
     },
     "reviewList": []
   },
@@ -515,7 +515,7 @@
     "category": {
       "name": "Babycare",
       "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/baby-bottle.png",
-      "color": 4292022271
+      "color": 4293977855
     },
     "reviewList": []
   },
@@ -531,11 +531,11 @@
     "isFavorite": false,
     "freeShipping": true,
     "sameDayDelivery": true,
-    "color": 4293006846,
+    "color": 4294174207,
     "category": {
       "name": "Babycare",
       "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/baby-bottle.png",
-      "color": 4292022271
+      "color": 4293977855
     },
     "reviewList": []
   },
@@ -551,11 +551,11 @@
     "isFavorite": false,
     "freeShipping": true,
     "sameDayDelivery": true,
-    "color": 4292022271,
+    "color": 4293977855,
     "category": {
       "name": "Babycare",
       "imagePath": "https://res.cloudinary.com/jz8fffg2/image/upload/baby-bottle.png",
-      "color": 4292022271
+      "color": 4293977855
     },
     "reviewList": []
   }

@@ -15,7 +15,21 @@ import { useFieldProps } from "../../auth/useFieldProps";
 // Same idea as Flutter's country_picker: a searchable full list, and the
 // address stores the country's name. Reuses the phone field's bundled list
 // rather than adding a dependency.
-const COUNTRIES = defaultCountries.map((c) => parseCountry(c).name);
+//
+// That list names both Congos "Congo"; Mantine's Select rejects duplicate
+// options, so give them their real names and drop any other repeat.
+const COUNTRY_NAME_OVERRIDES: Record<string, string> = {
+  cd: "Congo (Democratic Republic)",
+  cg: "Congo (Republic)",
+};
+const COUNTRIES = [
+  ...new Set(
+    defaultCountries.map((c) => {
+      const { name, iso2 } = parseCountry(c);
+      return COUNTRY_NAME_OVERRIDES[iso2] ?? name;
+    }),
+  ),
+];
 
 export type AddressFormValues = {
   name: string;
@@ -42,14 +56,24 @@ type AddressFormProps = {
   initial?: Partial<AddressFormValues>;
   /** True when this address is already the default — the switch then can't be turned off, only another address can take over. */
   isCurrentDefault?: boolean;
-  isSaving: boolean;
+  /** Show the values locked, with no buttons — used at checkout to display the chosen address. */
+  readOnly?: boolean;
+  isSaving?: boolean;
   error?: { message?: string };
-  onSubmit: (input: AddressInput) => void;
-  onCancel: () => void;
+  onSubmit?: (input: AddressInput) => void;
+  onCancel?: () => void;
 };
 
-/** Add and edit share this. Every field is required, as in the Flutter app. */
-function AddressForm({ initial, isCurrentDefault = false, isSaving, error, onSubmit, onCancel }: AddressFormProps) {
+/** Add, edit and read-only display share this. Every field is required, as in the Flutter app. */
+function AddressForm({
+  initial,
+  isCurrentDefault = false,
+  readOnly = false,
+  isSaving = false,
+  error,
+  onSubmit,
+  onCancel,
+}: AddressFormProps) {
   const form = useForm<AddressFormValues>({
     mode: "controlled",
     initialValues: { ...EMPTY, ...initial },
@@ -69,7 +93,7 @@ function AddressForm({ initial, isCurrentDefault = false, isSaving, error, onSub
   return (
     <form
       onSubmit={form.onSubmit((values) =>
-        onSubmit({
+        onSubmit?.({
           name: values.name.trim(),
           street: values.street.trim(),
           city: values.city.trim(),
@@ -80,19 +104,33 @@ function AddressForm({ initial, isCurrentDefault = false, isSaving, error, onSub
         }), revealAll)}
     >
       <Stack gap="sm">
-        <TextInput label="Name" placeholder="Name" leftSection={<IconUser size={18} />} {...field("name")} />
+        <TextInput
+          label="Name"
+          placeholder="Name"
+          leftSection={<IconUser size={18} />}
+          disabled={readOnly}
+          {...field("name")}
+        />
         <TextInput
           label="Address"
           placeholder="Street address"
           leftSection={<IconMapPin size={18} />}
+          disabled={readOnly}
           {...field("street")}
         />
         <SimpleGrid cols={2} spacing="sm">
-          <TextInput label="City" placeholder="City" leftSection={<IconMap size={18} />} {...field("city")} />
+          <TextInput
+            label="City"
+            placeholder="City"
+            leftSection={<IconMap size={18} />}
+            disabled={readOnly}
+            {...field("city")}
+          />
           <TextInput
             label="Zip code"
             placeholder="Zip code"
             leftSection={<IconHome size={18} />}
+            disabled={readOnly}
             {...field("zip_code")}
           />
         </SimpleGrid>
@@ -103,21 +141,23 @@ function AddressForm({ initial, isCurrentDefault = false, isSaving, error, onSub
           searchable
           nothingFoundMessage="No such country"
           leftSection={<IconWorld size={18} />}
+          disabled={readOnly}
           {...field("country")}
         />
         <TextInput
           label="Phone number"
           placeholder="Phone number"
           leftSection={<IconPhone size={18} />}
+          disabled={readOnly}
           {...field("phone")}
         />
 
         <Switch
-          label="Make default"
+          label={readOnly && isCurrentDefault ? "Default address" : "Make default"}
           color="green"
           mt="xs"
           // once default, it stays default until another address takes over
-          disabled={isCurrentDefault}
+          disabled={readOnly || isCurrentDefault}
           {...form.getInputProps("is_default", { type: "checkbox" })}
           checked={isCurrentDefault || form.values.is_default}
         />
@@ -128,14 +168,16 @@ function AddressForm({ initial, isCurrentDefault = false, isSaving, error, onSub
           </Text>
         )}
 
-        <Group justify="flex-end" mt="xs">
-          <Button variant="subtle" color="gray" h={40} fz="md" onClick={onCancel} disabled={isSaving}>
-            Cancel
-          </Button>
-          <Button type="submit" h={40} fz="md" w={140} loading={isSaving}>
-            Save
-          </Button>
-        </Group>
+        {!readOnly && (
+          <Group justify="flex-end" mt="xs">
+            <Button variant="subtle" color="gray" h={40} fz="md" onClick={onCancel} disabled={isSaving}>
+              Cancel
+            </Button>
+            <Button type="submit" h={40} fz="md" w={140} loading={isSaving}>
+              Save
+            </Button>
+          </Group>
+        )}
       </Stack>
     </form>
   );

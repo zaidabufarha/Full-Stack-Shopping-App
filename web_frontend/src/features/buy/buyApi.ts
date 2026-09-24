@@ -341,7 +341,18 @@ export const buyApi = baseApi.injectEndpoints({
       CreateOrderMutationVariables
     >({
       query: (variables) => ({ document: CREATE_ORDER, variables }),
-      // empties the cart; orders and transactions hang off `me`
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          // the server cleared the cart; reflect that at once rather than
+          // waiting for the invalidation refetch, so the cart reads empty
+          // the moment the success page mounts
+          dispatch(buyApi.util.updateQueryData("getCart", undefined, () => []));
+        } catch {
+          // order failed; the cart is untouched, nothing to roll back
+        }
+      },
+      // orders and transactions hang off `me`; Cart refetches too, to be safe
       invalidatesTags: ["Cart", "User"],
     }),
   }),

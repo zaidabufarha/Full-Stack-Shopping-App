@@ -7,7 +7,13 @@ import {
   useToggleFavoriteMutation,
   useUpdateCartItemMutation,
 } from "./buyApi";
-import type { CardProduct } from "./components/ProductCard";
+import type { GetCartQuery } from "../../gql/operations";
+
+/**
+ * The product shape a cart row carries. The home-page product (which also has
+ * `review`) is a superset, so both cards and cart rows can call these.
+ */
+type CartProduct = GetCartQuery["cart"][number]["product"];
 
 /**
  * Everything a page needs to drive ProductCard's cart strip and heart:
@@ -40,7 +46,7 @@ export function useCart() {
   };
 
   /** Set the cart quantity for a product; 0 removes it. */
-  const changeQuantity = (product: CardProduct, next: number) => {
+  const changeQuantity = (product: CartProduct, next: number) => {
     if (!requireLogin()) return;
     const item = itemFor(product.id);
     if (!item) {
@@ -52,7 +58,7 @@ export function useCart() {
     }
   };
 
-  const toggleFavorite = (product: CardProduct) => {
+  const toggleFavorite = (product: { id: string }) => {
     if (!requireLogin()) return;
     toggleFavoriteMutation({ productId: product.id });
   };

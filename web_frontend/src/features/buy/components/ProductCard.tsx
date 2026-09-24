@@ -20,6 +20,7 @@ import {
 import { Link } from "react-router-dom";
 import type { GetProductsQuery } from "../../../gql/operations";
 import { argbToHex } from "../color";
+import RemoveConfirm from "./RemoveConfirm";
 
 export type CardProduct = GetProductsQuery["products"][number];
 
@@ -152,14 +153,19 @@ function ProductCard({
                 <Text fw={600} c="black">
                   {quantity}
                 </Text>
-                <ActionIcon
-                  variant="subtle"
-                  color="gray"
-                  aria-label="Decrease quantity"
-                  onClick={() => onChangeQuantity(quantity - 1)}
-                >
-                  <IconMinus size={18} />
-                </ActionIcon>
+                {quantity === 1 ? (
+                  // last one: the minus turns red and asks before removing
+                  <RemoveConfirm name={product.name} onConfirm={() => onChangeQuantity(0)} />
+                ) : (
+                  <ActionIcon
+                    variant="subtle"
+                    color="gray"
+                    aria-label="Decrease quantity"
+                    onClick={() => onChangeQuantity(quantity - 1)}
+                  >
+                    <IconMinus size={18} />
+                  </ActionIcon>
+                )}
               </Stack>
             )}
           </Box>

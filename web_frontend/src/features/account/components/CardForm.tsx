@@ -40,10 +40,12 @@ type CardFormProps = {
   /** Existing card to edit; omit to add. The number can't be changed on an existing card — only its last 4 are stored. */
   initial?: Partial<CardFormValues> & { last4?: string };
   isCurrentDefault?: boolean;
-  isSaving: boolean;
+  /** Show the values locked, with no buttons — used at checkout to display the chosen card. */
+  readOnly?: boolean;
+  isSaving?: boolean;
   error?: { message?: string };
-  onSubmit: (input: CardInput) => void;
-  onCancel: () => void;
+  onSubmit?: (input: CardInput) => void;
+  onCancel?: () => void;
 };
 
 const digits = (s: string) => s.replace(/\D/g, "");
@@ -51,7 +53,15 @@ const digits = (s: string) => s.replace(/\D/g, "");
 /** Formats "4242424242424242" as "4242 4242 4242 4242" while typing. */
 const groupDigits = (s: string) => digits(s).slice(0, 19).replace(/(.{4})/g, "$1 ").trim();
 
-function CardForm({ initial, isCurrentDefault = false, isSaving, error, onSubmit, onCancel }: CardFormProps) {
+function CardForm({
+  initial,
+  isCurrentDefault = false,
+  readOnly = false,
+  isSaving = false,
+  error,
+  onSubmit,
+  onCancel,
+}: CardFormProps) {
   const isEdit = Boolean(initial?.last4);
 
   const form = useForm<CardFormValues>({
@@ -72,7 +82,7 @@ function CardForm({ initial, isCurrentDefault = false, isSaving, error, onSubmit
     <form
       onSubmit={form.onSubmit((values) => {
         const number = digits(values.card_number);
-        onSubmit({
+        onSubmit?.({
           card_holder_name: values.card_holder_name.trim(),
           expiry_date: values.expiry_date,
           processor: values.processor,
@@ -87,6 +97,7 @@ function CardForm({ initial, isCurrentDefault = false, isSaving, error, onSubmit
           label="Name on the card"
           placeholder="Name on the card"
           leftSection={<IconUser size={18} />}
+          disabled={readOnly}
           {...field("card_holder_name")}
         />
 
@@ -114,6 +125,7 @@ function CardForm({ initial, isCurrentDefault = false, isSaving, error, onSubmit
             placeholder="MM/YY"
             maxLength={5}
             leftSection={<IconCalendar size={18} />}
+            disabled={readOnly}
             {...field("expiry_date")}
           />
           <Stack gap={4}>
@@ -125,15 +137,16 @@ function CardForm({ initial, isCurrentDefault = false, isSaving, error, onSubmit
               value={form.values.processor}
               onChange={(v) => form.setFieldValue("processor", v)}
               color="green"
+              disabled={readOnly}
             />
           </Stack>
         </SimpleGrid>
 
         <Switch
-          label="Make default"
+          label={readOnly && isCurrentDefault ? "Default card" : "Make default"}
           color="green"
           mt="xs"
-          disabled={isCurrentDefault}
+          disabled={readOnly || isCurrentDefault}
           {...form.getInputProps("is_default", { type: "checkbox" })}
           checked={isCurrentDefault || form.values.is_default}
         />
@@ -144,14 +157,16 @@ function CardForm({ initial, isCurrentDefault = false, isSaving, error, onSubmit
           </Text>
         )}
 
-        <Group justify="flex-end" mt="xs">
-          <Button variant="subtle" color="gray" h={40} fz="md" onClick={onCancel} disabled={isSaving}>
-            Cancel
-          </Button>
-          <Button type="submit" h={40} fz="md" w={140} loading={isSaving}>
-            Save
-          </Button>
-        </Group>
+        {!readOnly && (
+          <Group justify="flex-end" mt="xs">
+            <Button variant="subtle" color="gray" h={40} fz="md" onClick={onCancel} disabled={isSaving}>
+              Cancel
+            </Button>
+            <Button type="submit" h={40} fz="md" w={140} loading={isSaving}>
+              Save
+            </Button>
+          </Group>
+        )}
       </Stack>
     </form>
   );

@@ -6,11 +6,13 @@ import {
   Box,
   Button,
   Group,
+  Indicator,
   Menu,
   Stack,
   Text,
   TextInput,
   UnstyledButton,
+  useMantineTheme,
 } from "@mantine/core";
 import logo from "../../assets/logo.png";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -31,7 +33,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../../app/hooks";
 import { useGetUserDataQuery } from "../../features/account/accountApi";
 import { useLogOut } from "../../features/auth/useLogOut";
-import { useGetCategoriesQuery } from "../../features/buy/buyApi";
+import { useGetCartQuery, useGetCategoriesQuery } from "../../features/buy/buyApi";
 import { slugify } from "../../features/buy/slug";
 
 // The account dropdown mirrors the Flutter Account page, minus Favorites,
@@ -64,9 +66,24 @@ function NavBar() {
   const { data: categories = [] } = useGetCategoriesQuery();
   // name, email and picture for the account menu; per-user, so skipped logged out
   const { data: user } = useGetUserDataQuery(undefined, { skip: !isLoggedIn });
+  // same cached cart the pages use — the badge costs no extra request
+  const { data: cart = [] } = useGetCartQuery(undefined, { skip: !isLoggedIn });
+  const cartCount = cart.reduce((n, item) => n + item.quantity, 0);
+  const theme = useMantineTheme();
 
   return (
-    <Box h={105} pl={100} pr={100} pt={20}>
+    // sticky so the cart is always one click away; the green TopBar above
+    // scrolls off. Pure CSS — the Outlet below is untouched.
+    <Box
+      h={105}
+      pl={100}
+      pr={100}
+      pt={20}
+      pos="sticky"
+      top={0}
+      bg="white"
+      style={{ zIndex: 100, borderBottom: `1px solid ${theme.other.border}` }}
+    >
       <Group justify="space-between">
         <Link to="/" aria-label="BigCart home">
           <img src={logo} width={200} alt="BigCart" />
@@ -112,9 +129,23 @@ function NavBar() {
           </form>
         </Group>
         <Group gap={30}>
-          <ActionIcon component={Link} to="/cart" variant="subtle" size={40}>
-            <IconShoppingCart size={40} />
-          </ActionIcon>
+          <Indicator
+            label={cartCount}
+            size={18}
+            color="green"
+            offset={4}
+            disabled={cartCount === 0}
+          >
+            <ActionIcon
+              component={Link}
+              to="/cart"
+              variant="subtle"
+              size={40}
+              aria-label={`Cart, ${cartCount} ${cartCount === 1 ? "item" : "items"}`}
+            >
+              <IconShoppingCart size={40} />
+            </ActionIcon>
+          </Indicator>
           <ActionIcon
             component={Link}
             to="/favorites"

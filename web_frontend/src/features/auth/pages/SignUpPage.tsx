@@ -94,7 +94,7 @@ function SignUpPage() {
         password: form.values.password,
         remember: true,
       }).unwrap();
-      navigate("/shop");
+      navigate("/");
     } catch {
       // account exists but the session didn't start; logInError renders below
     }

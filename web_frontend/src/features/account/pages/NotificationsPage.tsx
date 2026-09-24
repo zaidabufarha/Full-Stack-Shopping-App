@@ -1,23 +1,12 @@
-import {
-  Button,
-  Center,
-  Container,
-  Group,
-  Loader,
-  Paper,
-  Stack,
-  Switch,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Button, Group, Paper, Stack, Switch, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect } from "react";
-import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../../../app/hooks";
 import {
   useGetNotificationPreferencesQuery,
   useUpdateNotificationPreferenceMutation,
 } from "../accountApi";
+import AccountShell from "../components/AccountShell";
 
 type Prefs = { allow_email: boolean; allow_order: boolean; allow_general: boolean };
 
@@ -58,8 +47,6 @@ function NotificationsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  if (!isLoggedIn) return <Navigate to="/login" replace />;
-
   // "Select all" pattern: the master switch reflects the rows (on if any row
   // is on) and clicking it sets all three. Rows are never disabled, so with
   // everything off you just tick the one you want and it flips on by itself.
@@ -73,17 +60,12 @@ function NotificationsPage() {
   };
 
   return (
-    <Container size="sm" py={60}>
-      <Stack gap="xl">
-        <Title order={2}>Notifications</Title>
-
-        {isLoading ? (
-          <Center h={200}>
-            <Loader color="green" />
-          </Center>
-        ) : error ? (
-          <Text c="red">{error.message}</Text>
-        ) : (
+    <AccountShell
+      title="Notifications"
+      description="Choose what BigCart can send you."
+      isLoading={isLoading}
+      error={error}
+    >
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <Stack gap="md">
               <PrefRow
@@ -119,9 +101,7 @@ function NotificationsPage() {
               </Button>
             </Stack>
           </form>
-        )}
-      </Stack>
-    </Container>
+    </AccountShell>
   );
 }
 

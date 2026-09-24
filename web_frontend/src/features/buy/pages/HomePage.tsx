@@ -16,20 +16,12 @@ import {
 } from "@mantine/core";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import aisle from "../../../assets/buy_aisle.jpg";
-import { useAppSelector } from "../../../app/hooks";
-import {
-  useAddToCartMutation,
-  useGetCartQuery,
-  useGetCategoriesQuery,
-  useGetProductsQuery,
-  useRemoveFromCartMutation,
-  useToggleFavoriteMutation,
-  useUpdateCartItemMutation,
-} from "../buyApi";
+import { useGetCategoriesQuery, useGetProductsQuery } from "../buyApi";
 import CategoryIcon from "../components/CategoryIcon";
 import { IconHeartFilled } from "@tabler/icons-react";
 import ProductCard, { type CardProduct } from "../components/ProductCard";
 import { slugify } from "../slug";
+import { useCart } from "../useCart";
 
 // Each chip is a product boolean. "All" is the absence of a filter, so it
 // doesn't need an entry — and the URL is the state, per the rest of the app.
@@ -91,42 +83,11 @@ function HomePage({ favorites = false }: HomePageProps) {
     maxPrice !== undefined ||
     minRating > 0;
 
-  const isLoggedIn = Boolean(useAppSelector((s) => s.auth.token));
+  // cart quantities + add/update/remove/favorite, shared with ProductPage
+  const { isLoggedIn, quantityOf, changeQuantity, toggleFavorite } = useCart();
 
   const { data: categories = [] } = useGetCategoriesQuery();
   const { data: products = [], isLoading, error } = useGetProductsQuery();
-  // cart is per-user; don't even ask while logged out
-  const { data: cart = [] } = useGetCartQuery(undefined, { skip: !isLoggedIn });
-
-  const [addToCart] = useAddToCartMutation();
-  const [updateCartItem] = useUpdateCartItemMutation();
-  const [removeFromCart] = useRemoveFromCartMutation();
-  const [toggleFavorite] = useToggleFavoriteMutation();
-
-  const cartByProductId = new Map(cart.map((item) => [item.product.id, item]));
-
-  const requireLogin = () => {
-    if (isLoggedIn) return true;
-    navigate("/login");
-    return false;
-  };
-
-  const handleChangeQuantity = (product: CardProduct, next: number) => {
-    if (!requireLogin()) return;
-    const item = cartByProductId.get(product.id);
-    if (!item) {
-      addToCart({ productId: product.id, quantity: next, product });
-    } else if (next <= 0) {
-      removeFromCart({ id: item.id });
-    } else {
-      updateCartItem({ id: item.id, quantity: next });
-    }
-  };
-
-  const handleToggleFavorite = (product: CardProduct) => {
-    if (!requireLogin()) return;
-    toggleFavorite({ productId: product.id });
-  };
 
   // A product must pass every active filter; an unset filter passes everything.
   // Price compares the base price (what the card shows), same as Flutter.
@@ -148,7 +109,13 @@ function HomePage({ favorites = false }: HomePageProps) {
   // Unfiltered it's a showcase; filtered, the useful thing is how many matched,
   // since the active filters are already visible right above.
   const count = visibleProducts.length;
-  const noun = search ? (count === 1 ? "result" : "results") : count === 1 ? "product" : "products";
+  const noun = search
+    ? count === 1
+      ? "result"
+      : "results"
+    : count === 1
+      ? "product"
+      : "products";
   const heading = favorites
     ? search
       ? `${count} favorite ${noun} for "${search}"`
@@ -213,7 +180,12 @@ function HomePage({ favorites = false }: HomePageProps) {
           </Stack>
 
           {/* filters */}
-          <Group justify="space-between" align="flex-end" gap="md" wrap="nowrap">
+          <Group
+            justify="space-between"
+            align="flex-end"
+            gap="md"
+            wrap="nowrap"
+          >
             <Group gap="sm" wrap="nowrap" style={{ flexShrink: 0 }}>
               {isLoggedIn && (
                 // Favorites is a route, not a URL param. It must sit OUTSIDE
@@ -240,7 +212,8 @@ function HomePage({ favorites = false }: HomePageProps) {
                 onChange={(values) => {
                   // "All" is exclusive: picking it clears the rest, and picking
                   // anything else drops it
-                  const pickedAll = values.includes("all") && activeFilters.length > 0;
+                  const pickedAll =
+                    values.includes("all") && activeFilters.length > 0;
                   const next = new URLSearchParams(searchParams);
                   next.delete("filter");
                   if (!pickedAll) {
@@ -256,7 +229,12 @@ function HomePage({ favorites = false }: HomePageProps) {
                     All
                   </Chip>
                   {FILTERS.map((f) => (
-                    <Chip key={f.value} value={f.value} color="green.8" size="md">
+                    <Chip
+                      key={f.value}
+                      value={f.value}
+                      color="green.8"
+                      size="md"
+                    >
                       {f.label}
                     </Chip>
                   ))}
@@ -264,7 +242,12 @@ function HomePage({ favorites = false }: HomePageProps) {
               </Chip.Group>
             </Group>
 
-            <Group gap="md" align="flex-end" wrap="nowrap" style={{ flexShrink: 0 }}>
+            <Group
+              gap="md"
+              align="flex-end"
+              wrap="nowrap"
+              style={{ flexShrink: 0 }}
+            >
               {/* first in a right-aligned group, so appearing doesn't shift the inputs */}
               <Button
                 variant="subtle"
@@ -289,7 +272,9 @@ function HomePage({ favorites = false }: HomePageProps) {
                 prefix="$"
                 decimalScale={2}
                 value={minPrice ?? ""}
-                onChange={(v) => setParam("min", v === "" ? null : String(v), true)}
+                onChange={(v) =>
+                  setParam("min", v === "" ? null : String(v), true)
+                }
               />
               <NumberInput
                 label="Max price"
@@ -299,7 +284,9 @@ function HomePage({ favorites = false }: HomePageProps) {
                 prefix="$"
                 decimalScale={2}
                 value={maxPrice ?? ""}
-                onChange={(v) => setParam("max", v === "" ? null : String(v), true)}
+                onChange={(v) =>
+                  setParam("max", v === "" ? null : String(v), true)
+                }
               />
               <Stack gap={4}>
                 <Text size="sm" fw={500} c="black">
@@ -339,11 +326,9 @@ function HomePage({ favorites = false }: HomePageProps) {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    quantity={cartByProductId.get(product.id)?.quantity ?? 0}
-                    onChangeQuantity={(next) =>
-                      handleChangeQuantity(product, next)
-                    }
-                    onToggleFavorite={() => handleToggleFavorite(product)}
+                    quantity={quantityOf(product.id)}
+                    onChangeQuantity={(next) => changeQuantity(product, next)}
+                    onToggleFavorite={() => toggleFavorite(product)}
                   />
                 ))}
               </SimpleGrid>

@@ -26,7 +26,8 @@ export function useFieldProps<V extends Record<string, unknown>>(
     return {
       ...props,
       error: blurred[name] || submitAttempted ? props.error : null,
-      onBlur: (event: FocusEvent<HTMLInputElement>) => {
+      // inputs and textareas both use this; the blur handling is identical
+      onBlur: (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setBlurred((prev) => ({ ...prev, [name]: true }));
         props.onBlur?.(event);
       },

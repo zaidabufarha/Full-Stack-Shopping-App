@@ -43,7 +43,7 @@ function LoginPage() {
         password: values.password,
         remember: values.remember,
       }).unwrap();
-      navigate("/shop");
+      navigate("/");
     } catch {
       // shown below the form via `error`
     }

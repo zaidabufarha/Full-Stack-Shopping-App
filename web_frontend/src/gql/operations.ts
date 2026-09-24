@@ -27,7 +27,7 @@ export type GetNotificationPreferencesQuery = { me: { notification_preference: {
 export type GetOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrdersQuery = { me: { order: Array<{ id: string, shipping_method: string, total_amount: number, status: string, date_placed: string, order_item: Array<{ id: string, quantity: number, price_at_purchase: number, product: { id: string, name: string, image_path: string, amount: string, description: string, discount: number, price: number, is_new: boolean, is_favorite: boolean, color: string, rating: number } }>, address: { id: string, name: string, street: string, city: string, zip_code: string, country: string, phone: string } | null, credit_card: { id: string, card_holder_name: string, last4: string, expiry_date: string, stripe_payment_id: string, processor: string } | null }> } };
+export type GetOrdersQuery = { me: { order: Array<{ id: string, shipping_method: string, total_amount: number, status: string, date_placed: string, date_confirmed: string | null, date_shipped: string | null, date_out_for_delivery: string | null, date_delivered: string | null, order_item: Array<{ id: string, quantity: number, price_at_purchase: number, product: { id: string, name: string, image_path: string, amount: string, description: string, discount: number, price: number, is_new: boolean, is_favorite: boolean, color: string, rating: number } }>, address: { id: string, name: string, street: string, city: string, zip_code: string, country: string, phone: string } | null, credit_card: { id: string, card_holder_name: string, last4: string, expiry_date: string, stripe_payment_id: string, processor: string } | null }> } };
 
 export type GetTransactionsQueryVariables = Exact<{ [key: string]: never; }>;
 

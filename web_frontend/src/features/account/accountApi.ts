@@ -165,6 +165,10 @@ const GET_ORDERS = /* GraphQL */ `
         total_amount
         status
         date_placed
+        date_confirmed
+        date_shipped
+        date_out_for_delivery
+        date_delivered
         order_item {
           id
           quantity

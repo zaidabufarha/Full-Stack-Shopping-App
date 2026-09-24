@@ -17,6 +17,7 @@ import {
   IconPlus,
   IconShoppingCart,
 } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
 import type { GetProductsQuery } from "../../../gql/operations";
 import { argbToHex } from "../color";
 
@@ -51,8 +52,16 @@ function ProductCard({
       style={{ borderColor: theme.other.border, overflow: "hidden" }}
     >
       <Group gap={0} wrap="nowrap" h="100%" align="stretch">
-        {/* main area: image, badges, name, price */}
-        <Box pos="relative" p="md" style={{ flex: 1, minWidth: 0 }}>
+        {/* main area: image, badges, name, price — links to the product page.
+            The strip on the right stays outside the link so its buttons don't
+            navigate. */}
+        <Box
+          component={Link}
+          to={`/product/${product.id}`}
+          pos="relative"
+          p="md"
+          style={{ flex: 1, minWidth: 0, textDecoration: "none", color: "inherit" }}
+        >
           {product.is_new ? (
             <Badge pos="absolute" top={12} left={12} color="#E8AD41" variant="light">
               New

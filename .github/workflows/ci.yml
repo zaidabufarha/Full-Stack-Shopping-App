@@ -51,7 +51,18 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      # Only redeploy when the backend itself changed. Web/mobile-only pushes
+      # would otherwise restart the API for nothing.
+      - name: Check for backend changes
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
       - name: Trigger Render Deploy Hook
+        if: steps.changes.outputs.backend == 'true'
         # i accidentally had the hook key here so i regenerated it and replaced it with a new private one.
         # the key used for past pushes wont work.
         run: curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"

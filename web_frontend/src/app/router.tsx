@@ -7,6 +7,7 @@ import LoginPage from "../features/auth/pages/LoginPage";
 import SignUpPage from "../features/auth/pages/SignUpPage";
 import CartPage from "../features/buy/pages/CartPage";
 import ContactPage from "../pages/ContactPage";
+import NotificationsPage from "../features/account/pages/NotificationsPage";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +20,8 @@ export const router = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       { path: "signup", element: <SignUpPage /> },
       { path: "cart", element: <CartPage /> },
+      { path: "notifications", element: <NotificationsPage /> },
+      { path: "favorites", element: <HomePage favorites /> },
     ],
   },
 ]);

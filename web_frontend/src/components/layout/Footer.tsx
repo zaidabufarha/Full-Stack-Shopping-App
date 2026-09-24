@@ -20,15 +20,30 @@ import {
   IconBrandLinkedin,
   IconBrandTiktok,
   IconBrandX,
-  IconSearch,
   IconSend2,
 } from "@tabler/icons-react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useForm, isEmail } from "@mantine/form";
+import { useFieldProps } from "../../features/auth/useFieldProps";
 
 function Footer() {
-  const [email, setEmail] = useState("");
-  const navigate = useNavigate();
+  // same setup as the login form: errors appear after the first blur (or a
+  // submit attempt), then update live until the address is valid
+  const form = useForm({
+    mode: "controlled",
+    initialValues: { email: "" },
+    validateInputOnChange: true,
+    clearInputErrorOnChange: false,
+    validate: { email: isEmail("Enter a valid email") },
+  });
+  const { field, revealAll } = useFieldProps(form);
+
+  const handleSubmit = ({ email }: { email: string }) => {
+    // Placeholder for the real call (GraphQL mutation -> Resend, rate-limited
+    // server-side). Clearing the field afterwards means a second send needs
+    // the address typed again — a mild speed bump, not a rate limit.
+    alert(`Subscribed ${email} to the newsletter (placeholder — no email is sent yet).`);
+    form.reset();
+  };
 
   return (
     <Box h={577} p={90}>
@@ -66,12 +81,7 @@ function Footer() {
         </Stack>
         <Stack ta={"left"} h={200} w={400} mr={40}>
           <Title order={1}>Join the BigCart newsletter</Title>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              //implement a newsletter confirmation. per api hourly limit.
-            }}
-          >
+          <form onSubmit={form.onSubmit(handleSubmit, revealAll)}>
             <TextInput
               w={400}
               styles={{
@@ -83,11 +93,18 @@ function Footer() {
               }}
               size="xl"
               placeholder="Your email address"
-              onChange={(e) => {
-                setEmail(e.currentTarget.value);
-              }}
+              {...field("email")}
+              // sections are pointer-events:none by default; the send button
+              // needs clicks
+              rightSectionPointerEvents="all"
               rightSection={
-                <ActionIcon bg={"green"} size={40} mr={20}>
+                <ActionIcon
+                  type="submit"
+                  bg={"green"}
+                  size={40}
+                  mr={20}
+                  aria-label="Subscribe"
+                >
                   <IconSend2 color="white" />
                 </ActionIcon>
               }
